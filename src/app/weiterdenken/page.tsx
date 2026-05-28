@@ -89,7 +89,7 @@ export default function SavedCareersPage() {
               Einen Moment.
             </p>
             <p className="mt-4 max-w-xl text-sm leading-6 text-muted-foreground">
-              Wir schauen kurz, ob du dir etwas aufgehoben hast.
+              Wir schauen kurz, ob du dir etwas gemerkt hast.
             </p>
           </Card>
         ) : savedCareers.length > 0 ? (
@@ -141,7 +141,7 @@ export default function SavedCareersPage() {
               className="mb-8 h-10 w-auto opacity-35"
             />
             <p className="text-2xl font-semibold leading-snug">
-              Hier ist noch nichts aufgehoben.
+              Hier ist noch nichts gemerkt.
             </p>
             <p className="mt-4 max-w-xl text-sm leading-6 text-muted-foreground">
               Manchmal reicht es, erstmal nur herumzuschauen.

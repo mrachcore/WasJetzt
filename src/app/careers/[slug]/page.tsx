@@ -1,18 +1,13 @@
 import Link from "next/link";
-import type React from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import {
-  ArrowLeft,
-  Circle,
-  Cloud,
-  ExternalLink,
-  Heart,
-  Zap,
-} from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { TrackCareerView, TrackedPathwayLink } from "@/components/exploration-tracker";
+import { LifeIndicatorSnapshot } from "@/components/life-indicators";
+import { PracticalSignals } from "@/components/practical-signals";
 import { SaveCareerButton } from "@/components/save-career-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,8 +17,6 @@ import {
   careers,
   getCareer,
   getEmotionalPathways,
-  getSituationCareers,
-  getSituationsForCareer,
 } from "@/data/careers";
 import { cn } from "@/lib/utils";
 
@@ -49,7 +42,7 @@ const defaultProfile: CareerPageProfile = {
   dayStyle: "lines",
   dayTitle: "Ein ganz normaler Dienstag",
   pathwayTitle:
-    "Nicht ähnliche Berufe. Eher andere Arten, sich im Alltag zu fühlen.",
+    "Nicht ähnliche Wege. Eher andere Arten, sich im Alltag zu fühlen.",
 };
 
 const careerPageProfiles: Record<string, CareerPageProfile> = {
@@ -397,13 +390,12 @@ export default async function CareerDetailPage({
   if (!career) notFound();
 
   const emotionalPathways = getEmotionalPathways(slug);
-  const careerSituations = getSituationsForCareer(slug).slice(0, 3);
   const profile = careerPageProfiles[career.slug] ?? defaultProfile;
-  const detailItems = getDetailItems(career, profile.detailOrder);
   const tone = getCareerTone(career.slug);
 
   return (
     <AppShell>
+      <TrackCareerView slug={career.slug} />
       <section className="mx-auto w-full max-w-5xl px-5 pb-24 pt-7 sm:px-8">
         <Button asChild variant="ghost" className="mb-9 -ml-4">
           <Link href="/results">
@@ -432,18 +424,27 @@ export default async function CareerDetailPage({
               <Badge key={tag}>{tag}</Badge>
             ))}
           </div>
+          <PracticalSignals
+            career={career}
+            className="mt-5"
+            label="typisch"
+          />
           <div className="mt-8">
             <SaveCareerButton slug={career.slug} />
           </div>
         </div>
 
+        <LifeIndicatorSnapshot
+          career={career}
+          className="mt-10 max-w-3xl sm:ml-[8%]"
+        />
         <FitSection career={career} profile={profile} />
         <ObservationStream career={career} profile={profile} />
-        <DetailTexture detailItems={detailItems} profile={profile} />
         <DayFragments career={career} profile={profile} tone={tone} />
+        <RealismLayer career={career} />
 
         {emotionalPathways.length > 0 ? (
-          <section className="mt-20">
+          <section className="mt-16 sm:mt-20">
             <div className="mb-10 max-w-2xl">
               <p className="text-sm text-primary">Von hier aus weiterdenken</p>
               <h2 className="mt-3 text-3xl font-semibold leading-tight">
@@ -470,9 +471,11 @@ export default async function CareerDetailPage({
 
                   <div className="grid gap-3 sm:grid-cols-2">
                     {pathway.careers.map((pathCareer) => (
-                      <Link
+                      <TrackedPathwayLink
                         href={`/careers/${pathCareer.slug}`}
                         key={pathCareer.slug}
+                        prompt={pathway.prompt}
+                        slugs={pathway.slugs}
                       >
                         <Card className="h-full p-5 transition duration-500 ease-out hover:-translate-y-0.5 hover:bg-white/[0.095]">
                           <p className="text-sm text-primary">
@@ -485,7 +488,7 @@ export default async function CareerDetailPage({
                             {pathCareer.discoveryNote}
                           </p>
                         </Card>
-                      </Link>
+                      </TrackedPathwayLink>
                     ))}
                   </div>
                 </div>
@@ -494,121 +497,10 @@ export default async function CareerDetailPage({
           </section>
         ) : null}
 
-        {careerSituations.length > 0 ? (
-          <section className="mt-20">
-            <div className="mb-10 max-w-2xl">
-              <p className="text-sm text-primary">Vielleicht bist du eher hierüber gekommen</p>
-              <h2 className="mt-3 text-3xl font-semibold leading-tight">
-                Man sucht selten nach Berufen. Meistens sucht man nach einem
-                Gefühl, das weniger falsch ist.
-              </h2>
-            </div>
-
-            <div className="space-y-10">
-              {careerSituations.map((situation, index) => {
-                const situationCareers = getSituationCareers(situation).filter(
-                  (situationCareer) => situationCareer.slug !== slug,
-                );
-
-                return (
-                  <div
-                    className={`${
-                      index % 2 === 0 ? "sm:mr-[14%]" : "sm:ml-[14%]"
-                    }`}
-                    key={situation.prompt}
-                  >
-                    <p className="text-2xl font-semibold leading-snug">
-                      {situation.prompt}
-                    </p>
-                    <p className="mt-4 max-w-xl text-sm leading-6 text-muted-foreground">
-                      {situation.note}
-                    </p>
-                    {situationCareers.length > 0 ? (
-                      <div className="mt-5 flex flex-wrap gap-2">
-                        {situationCareers.map((situationCareer) => (
-                          <Link
-                            className="rounded-full border border-white/10 bg-white/[0.045] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.08] hover:text-foreground"
-                            href={`/careers/${situationCareer.slug}`}
-                            key={`${situation.prompt}-${situationCareer.slug}`}
-                          >
-                            {situationCareer.title}
-                          </Link>
-                        ))}
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        ) : null}
-
         <NextSteps career={career} />
       </section>
     </AppShell>
   );
-}
-
-function InfoCard({
-  className,
-  icon,
-  title,
-  text,
-}: {
-  className?: string;
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-}) {
-  return (
-    <Card className={className}>
-      <CardHeader className="pb-4">
-        <span className="text-primary">{icon}</span>
-        <CardTitle className="text-lg leading-tight">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm leading-6 text-muted-foreground">{text}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
-type DetailItem = {
-  key: DetailKey;
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-};
-
-function getDetailItems(career: Career, order: DetailKey[]): DetailItem[] {
-  const details: Record<DetailKey, DetailItem> = {
-    atmosphere: {
-      key: "atmosphere",
-      icon: <Cloud className="size-5" />,
-      title: "Wie es sich anfühlen kann",
-      text: career.atmosphere,
-    },
-    secretlyLike: {
-      key: "secretlyLike",
-      icon: <Heart className="size-5" />,
-      title: "Was viele heimlich mögen",
-      text: career.secretlyLike,
-    },
-    annoys: {
-      key: "annoys",
-      icon: <Zap className="size-5" />,
-      title: "Was nerven kann",
-      text: career.annoys,
-    },
-    comfortableFor: {
-      key: "comfortableFor",
-      icon: <Circle className="size-5" />,
-      title: "Wer sich oft wohlfühlt",
-      text: career.comfortableFor,
-    },
-  };
-
-  return order.map((key) => details[key]);
 }
 
 function getCareerTone(slug: string) {
@@ -756,72 +648,6 @@ function ObservationStream({
   );
 }
 
-function DetailTexture({
-  detailItems,
-  profile,
-}: {
-  detailItems: DetailItem[];
-  profile: CareerPageProfile;
-}) {
-  if (profile.detailMode === "feature") {
-    const [featured, ...rest] = detailItems;
-
-    return (
-      <section className="mt-4">
-        <Card className="energy-surface p-6 sm:p-8">
-          <span className="text-primary">{featured.icon}</span>
-          <h2 className="mt-5 text-2xl font-semibold leading-tight sm:text-3xl">
-            {featured.title}
-          </h2>
-          <p className="mt-5 max-w-3xl text-base leading-8 text-muted-foreground sm:text-lg">
-            {featured.text}
-          </p>
-        </Card>
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
-          {rest.map((item, index) => (
-            <InfoCard
-              icon={item.icon}
-              key={item.key}
-              text={item.text}
-              title={item.title}
-              className={index === 1 ? "sm:mt-8" : undefined}
-            />
-          ))}
-        </div>
-      </section>
-    );
-  }
-
-  if (profile.detailMode === "stagger") {
-    return (
-      <section className="mt-4 grid gap-4 sm:grid-cols-2">
-        {detailItems.map((item, index) => (
-          <InfoCard
-            icon={item.icon}
-            key={item.key}
-            text={item.text}
-            title={item.title}
-            className={cn(index % 2 === 1 && "sm:mt-10")}
-          />
-        ))}
-      </section>
-    );
-  }
-
-  return (
-    <section className="mt-4 grid gap-4 sm:grid-cols-2">
-      {detailItems.map((item) => (
-        <InfoCard
-          icon={item.icon}
-          key={item.key}
-          text={item.text}
-          title={item.title}
-        />
-      ))}
-    </section>
-  );
-}
-
 function DayFragments({
   career,
   profile,
@@ -875,55 +701,96 @@ function DayFragments({
   return <section className="mt-18">{content}</section>;
 }
 
+function RealismLayer({ career }: { career: Career }) {
+  return (
+    <section className="mt-16 grid gap-8 border-y border-white/10 py-8 sm:mt-20 sm:grid-cols-[0.9fr_1.1fr] sm:py-10">
+      <div>
+        <p className="text-sm text-primary">Was viele unterschätzen</p>
+        <div className="mt-5 space-y-4">
+          {career.realism.underestimated.map((item) => (
+            <p
+              className="text-xl font-semibold leading-snug text-foreground/90 sm:text-2xl"
+              key={item}
+            >
+              {item}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-6 sm:pt-7">
+        <div>
+          <p className="text-sm text-primary/80">Nach der Arbeit eher</p>
+          <p className="mt-2 text-base leading-7 text-muted-foreground">
+            {career.realism.afterDay}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-primary/80">Einstieg wirkt oft</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {career.realism.entry.map((item) => (
+              <span
+                className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-muted-foreground"
+                key={item}
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+        <p className="max-w-xl text-sm leading-6 text-muted-foreground">
+          {career.realism.localTexture}
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function NextSteps({ career }: { career: Career }) {
   const links = getCareerNextStepLinks(career);
 
   return (
     <section className="mt-20 border-t border-white/10 pt-10 sm:mt-24 sm:pt-12">
-      <div className="max-w-2xl">
-        <p className="text-sm text-primary">Ganz praktisch, ohne Druck</p>
-        <h2 className="mt-3 text-3xl font-semibold leading-tight">
-          Wenn du jetzt weitergehen willst
-        </h2>
-        <p className="mt-5 text-base leading-7 text-muted-foreground">
-          Du musst dich nicht sofort bewerben. Aber du kannst schauen, ob es
-          diese Richtung in deiner Nähe überhaupt gibt.
-        </p>
-      </div>
+      <div className="grid gap-8 sm:grid-cols-[0.95fr_1.05fr] sm:items-start">
+        <div className="max-w-2xl">
+          <p className="text-sm text-primary">
+            Wenn du das gerade nicht komplett absurd findest
+          </p>
+          <h2 className="mt-3 text-3xl font-semibold leading-tight">
+            Du musst noch nichts entscheiden. Nur vielleicht einen nächsten
+            echten Blick nehmen.
+          </h2>
+          <p className="mt-5 text-base leading-7 text-muted-foreground">
+            Manchmal wird eine Richtung nicht durch Nachdenken klarer, sondern
+            durch einen kleinen Kontakt mit der Wirklichkeit.
+          </p>
+        </div>
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-2">
-        {links.map((link) => (
-          <a
-            className="group rounded-[1.35rem] border border-white/10 bg-white/[0.035] p-4 transition duration-500 hover:-translate-y-0.5 hover:bg-white/[0.07] sm:p-5"
-            href={link.href}
-            key={link.title}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <span className="flex items-start justify-between gap-4">
-              <span>
-                <span className="block text-base font-semibold leading-snug">
-                  {link.title}
+        <div className="space-y-3">
+          {links.map((link) => (
+            <a
+              className="group block border-t border-white/10 py-4 transition duration-500 ease-out hover:border-primary/20 first:border-t-0"
+              href={link.href}
+              key={link.title}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span className="flex items-start justify-between gap-4">
+                <span>
+                  <span className="block text-base font-semibold leading-snug text-foreground/90">
+                    {link.title}
+                  </span>
+                  <span className="mt-2 block text-sm leading-6 text-muted-foreground">
+                    {link.text}
+                  </span>
                 </span>
-                <span className="mt-3 block text-sm leading-6 text-muted-foreground">
-                  {link.text}
-                </span>
+                <ExternalLink className="mt-0.5 size-4 shrink-0 text-primary/80 transition duration-500 group-hover:translate-x-0.5 group-hover:text-primary" />
               </span>
-              <ExternalLink className="mt-0.5 size-4 shrink-0 text-primary/80 transition duration-500 group-hover:text-primary" />
-            </span>
-          </a>
-        ))}
-
-        <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.02] p-4 opacity-75 sm:p-5">
-          <p className="text-base font-semibold leading-snug">
-            Bewerbung später vorbereiten
-          </p>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            Noch nicht jetzt. Aber irgendwann vielleicht.
-          </p>
-          <p className="mt-4 text-xs text-primary/70">kommt später</p>
+            </a>
+          ))}
         </div>
       </div>
+
     </section>
   );
 }
@@ -941,7 +808,7 @@ function getCareerNextStepLinks(career: Career) {
       href: `https://www.arbeitsagentur.de/jobsuche/suche?angebotsart=4&was=${query}`,
     },
     {
-      title: "Beruf offiziell nachlesen",
+      title: "Weg offiziell nachlesen",
       text: "Für Fakten, Voraussetzungen und offizielle Infos.",
       href: `https://web.arbeitsagentur.de/berufenet/suche?suchwoerter=${query}`,
     },

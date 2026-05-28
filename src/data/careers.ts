@@ -1,3 +1,13 @@
+export type LifeIndicatorValue = "low" | "medium" | "high";
+
+export type LifeIndicators = {
+  ruhe: LifeIndicatorValue;
+  menschen: LifeIndicatorValue;
+  bewegung: LifeIndicatorValue;
+  struktur: LifeIndicatorValue;
+  sichtbaresErgebnis: LifeIndicatorValue;
+};
+
 export type Career = {
   slug: string;
   title: string;
@@ -8,6 +18,14 @@ export type Career = {
   comfortableFor: string;
   color: string;
   tags: string[];
+  lifeIndicators: LifeIndicators;
+  practicalSignals: string[];
+  realism: {
+    underestimated: string[];
+    afterDay: string;
+    entry: string[];
+    localTexture: string;
+  };
   searchKeywords?: string[];
   discoveryNote: string;
   discoveryGroup: string;
@@ -30,7 +48,10 @@ export type Situation = {
   slugs: string[];
 };
 
-export const careers: Career[] = [
+const careerEntries: Omit<
+  Career,
+  "lifeIndicators" | "practicalSignals" | "realism"
+>[] = [
   {
     slug: "fachinformatiker-systemintegration",
     title: "Fachinformatiker Systemintegration",
@@ -1339,6 +1360,406 @@ export const careers: Career[] = [
     ],
   },
 ];
+
+const defaultLifeIndicators: LifeIndicators = {
+  ruhe: "medium",
+  menschen: "medium",
+  bewegung: "medium",
+  struktur: "medium",
+  sichtbaresErgebnis: "medium",
+};
+
+const defaultPracticalSignals = ["Ausbildung", "echter Alltag", "regional abhängig"];
+const defaultCareerRealism = {
+  underestimated: [
+    "dass der Anfang oft weniger klar wirkt, als die Berufsbezeichnung klingt",
+    "wie stark Betrieb und Team den Alltag verändern",
+  ],
+  afterDay: "eher müde, aber mit ein paar echten Momenten im Kopf",
+  entry: ["Ausbildung", "Praktikum hilft", "regional unterschiedlich"],
+  localTexture:
+    "In manchen Regionen begegnet man solchen Wegen viel öfter als in anderen.",
+};
+
+const careerLifeIndicators: Record<string, LifeIndicators> = {
+  "fachinformatiker-systemintegration": {
+    ruhe: "high",
+    menschen: "low",
+    bewegung: "low",
+    struktur: "high",
+    sichtbaresErgebnis: "medium",
+  },
+  elektroniker: {
+    ruhe: "medium",
+    menschen: "medium",
+    bewegung: "high",
+    struktur: "medium",
+    sichtbaresErgebnis: "high",
+  },
+  pflegefachkraft: {
+    ruhe: "low",
+    menschen: "high",
+    bewegung: "high",
+    struktur: "medium",
+    sichtbaresErgebnis: "medium",
+  },
+  mediengestalter: {
+    ruhe: "high",
+    menschen: "medium",
+    bewegung: "low",
+    struktur: "medium",
+    sichtbaresErgebnis: "high",
+  },
+  notfallsanitaeter: {
+    ruhe: "low",
+    menschen: "high",
+    bewegung: "high",
+    struktur: "medium",
+    sichtbaresErgebnis: "high",
+  },
+  "fachkraft-lagerlogistik": {
+    ruhe: "medium",
+    menschen: "low",
+    bewegung: "high",
+    struktur: "high",
+    sichtbaresErgebnis: "high",
+  },
+  mechatroniker: {
+    ruhe: "medium",
+    menschen: "low",
+    bewegung: "high",
+    struktur: "high",
+    sichtbaresErgebnis: "high",
+  },
+  erzieher: {
+    ruhe: "low",
+    menschen: "high",
+    bewegung: "high",
+    struktur: "medium",
+    sichtbaresErgebnis: "medium",
+  },
+  verkaeufer: {
+    ruhe: "low",
+    menschen: "high",
+    bewegung: "medium",
+    struktur: "medium",
+    sichtbaresErgebnis: "medium",
+  },
+  koch: {
+    ruhe: "low",
+    menschen: "medium",
+    bewegung: "high",
+    struktur: "high",
+    sichtbaresErgebnis: "high",
+  },
+  tischler: {
+    ruhe: "medium",
+    menschen: "low",
+    bewegung: "high",
+    struktur: "high",
+    sichtbaresErgebnis: "high",
+  },
+  bauzeichner: {
+    ruhe: "high",
+    menschen: "low",
+    bewegung: "low",
+    struktur: "high",
+    sichtbaresErgebnis: "medium",
+  },
+  industriemechaniker: {
+    ruhe: "medium",
+    menschen: "low",
+    bewegung: "high",
+    struktur: "high",
+    sichtbaresErgebnis: "high",
+  },
+  veranstaltungstechniker: {
+    ruhe: "low",
+    menschen: "medium",
+    bewegung: "high",
+    struktur: "medium",
+    sichtbaresErgebnis: "high",
+  },
+  "medizinische-fachangestellte": {
+    ruhe: "low",
+    menschen: "high",
+    bewegung: "medium",
+    struktur: "high",
+    sichtbaresErgebnis: "medium",
+  },
+  "kaufmann-bueromanagement": {
+    ruhe: "high",
+    menschen: "medium",
+    bewegung: "low",
+    struktur: "high",
+    sichtbaresErgebnis: "medium",
+  },
+  friseur: {
+    ruhe: "low",
+    menschen: "high",
+    bewegung: "medium",
+    struktur: "medium",
+    sichtbaresErgebnis: "high",
+  },
+  florist: {
+    ruhe: "medium",
+    menschen: "medium",
+    bewegung: "medium",
+    struktur: "medium",
+    sichtbaresErgebnis: "high",
+  },
+  zugbegleiter: {
+    ruhe: "low",
+    menschen: "high",
+    bewegung: "high",
+    struktur: "medium",
+    sichtbaresErgebnis: "medium",
+  },
+  tierpfleger: {
+    ruhe: "high",
+    menschen: "low",
+    bewegung: "high",
+    struktur: "medium",
+    sichtbaresErgebnis: "medium",
+  },
+};
+
+const careerPracticalSignals: Record<string, string[]> = {
+  "fachinformatiker-systemintegration": [
+    "Ausbildung",
+    "eher drinnen",
+    "viel Fehlersuche",
+  ],
+  elektroniker: ["Ausbildung", "unterwegs möglich", "sichtbare Arbeit"],
+  pflegefachkraft: ["Ausbildung", "Schicht möglich", "direkter Alltag"],
+  mediengestalter: ["Ausbildung", "viel Bildschirm", "sichtbare Details"],
+  notfallsanitaeter: ["Ausbildung", "Schicht möglich", "viel Bewegung"],
+  "fachkraft-lagerlogistik": ["Ausbildung", "klare Abläufe", "körperlicher"],
+  mechatroniker: ["Ausbildung", "Werkstatt/Halle", "viel Fehlersuche"],
+  erzieher: ["Ausbildung", "viel Nähe", "lauter Alltag"],
+  verkaeufer: ["Ausbildung", "viel Kontakt", "Stehen gehört dazu"],
+  koch: ["Ausbildung", "Schicht möglich", "Tempo im Tag"],
+  tischler: ["Ausbildung", "Werkstatt", "sichtbare Arbeit"],
+  bauzeichner: ["Ausbildung", "eher ruhig", "viel Genauigkeit"],
+  industriemechaniker: ["Ausbildung", "Halle/Werkstatt", "praktisch"],
+  veranstaltungstechniker: ["Ausbildung", "späte Zeiten möglich", "viel Aufbau"],
+  "medizinische-fachangestellte": ["Ausbildung", "Praxisalltag", "viel Taktung"],
+  "kaufmann-bueromanagement": ["Ausbildung", "eher drinnen", "klare Abläufe"],
+  friseur: ["Ausbildung", "viel Kontakt", "sichtbare Veränderung"],
+  florist: ["Ausbildung", "Laden/Werkstatt", "feine Handarbeit"],
+  zugbegleiter: ["Ausbildung", "unterwegs", "Schicht möglich"],
+  tierpfleger: ["Ausbildung", "frühe Tage", "körperlicher"],
+};
+
+const careerRealism: Record<string, typeof defaultCareerRealism> = {
+  "fachinformatiker-systemintegration": {
+    underestimated: [
+      "wie viel Geduld stille Probleme brauchen",
+      "dass Ruhe nicht heißt, dass nichts Druck macht",
+    ],
+    afterDay: "oft noch ein bisschen im Kopf, aber selten komplett leergeredet",
+    entry: ["Ausbildung wirkt oft klar", "Praktikum macht viel verständlicher", "Betriebe sehr verschieden"],
+    localTexture:
+      "In kleinen Betrieben bist du oft näher an allem. In größeren Teams wird der Alltag spezieller.",
+  },
+  elektroniker: {
+    underestimated: [
+      "wie körperlich genaues Arbeiten sein kann",
+      "wie oft Pläne erst vor Ort wirklich Sinn ergeben",
+    ],
+    afterDay: "körperlich müde, aber öfter mit dem Gefühl: etwas läuft jetzt",
+    entry: ["Ausbildung meist gut auffindbar", "Praktikum zeigt schnell viel", "Betriebsgröße verändert den Tag"],
+    localTexture:
+      "In kleineren Orten kennt man solche Betriebe oft über Umwege, Familie oder Praktika.",
+  },
+  pflegefachkraft: {
+    underestimated: [
+      "wie viel Aufmerksamkeit zwischen kurzen Sätzen passiert",
+      "dass Nähe nicht immer laut oder dramatisch ist",
+    ],
+    afterDay: "müde von Menschen, aber manchmal auch seltsam klar",
+    entry: ["Ausbildung klar", "Schichten früh spürbar", "Praxisort macht viel aus"],
+    localTexture:
+      "Kleine Einrichtungen fühlen sich oft anders an als große Häuser. Nicht leichter, nur persönlicher.",
+  },
+  mediengestalter: {
+    underestimated: [
+      "wie viel Geduld Gestaltung mit Feedback braucht",
+      "dass Kreativität oft aus Korrigieren besteht",
+    ],
+    afterDay: "visuell satt, manchmal noch mit einem Detail im Kopf",
+    entry: ["Portfolio hilft", "Praktikum zeigt den Alltag", "Büros unterscheiden sich stark"],
+    localTexture:
+      "Agentur, Druckerei und internes Team können sich wie drei verschiedene Berufe anfühlen.",
+  },
+  notfallsanitaeter: {
+    underestimated: [
+      "wie viel Warten zwischen direkten Momenten liegt",
+      "dass ruhig wirken manchmal die eigentliche Arbeit ist",
+    ],
+    afterDay: "körperlich daheim, innerlich manchmal noch unterwegs",
+    entry: ["Ausbildung klar", "Schichtrealität früh prüfen", "Region verändert Einsätze"],
+    localTexture:
+      "Stadt, Land und Träger verändern den Rhythmus stärker, als man von außen denkt.",
+  },
+  "fachkraft-lagerlogistik": {
+    underestimated: [
+      "wie beruhigend klare Abläufe sein können",
+      "dass Ordnung im Lager selten von allein passiert",
+    ],
+    afterDay: "körperlich leerer, im Kopf oft angenehm sortiert",
+    entry: ["Ausbildung klar", "Praktikum schnell aussagekräftig", "Betriebe sehr unterschiedlich"],
+    localTexture:
+      "In manchen Regionen gibt es davon viel mehr, als man erst bemerkt. Oft sieht man es nicht von außen.",
+  },
+  mechatroniker: {
+    underestimated: [
+      "wie lange kleine Fehler unsichtbar bleiben können",
+      "dass Technik oft mehr Geduld als Action braucht",
+    ],
+    afterDay: "müde vom Suchen, aber zufrieden, wenn etwas wieder läuft",
+    entry: ["Ausbildung klar", "Werkstatt früh anschauen", "Anlagen prägen den Alltag"],
+    localTexture:
+      "Ein kleiner Betrieb fühlt sich hier oft ganz anders an als Industrie oder großes Autohaus.",
+  },
+  erzieher: {
+    underestimated: [
+      "wie viel Wahrnehmung ein voller Raum braucht",
+      "dass Lärm nicht das Einzige ist, was müde macht",
+    ],
+    afterDay: "menschlich voll, manchmal aber auch weich zufrieden",
+    entry: ["Ausbildung je nach Bundesland", "Praktikum sehr hilfreich", "Einrichtung macht viel aus"],
+    localTexture:
+      "Kita, Hort und Jugendhilfe fühlen sich oft weniger ähnlich an, als der Berufstitel klingt.",
+  },
+  verkaeufer: {
+    underestimated: [
+      "wie viel Stimmung man nebenbei abfedert",
+      "dass kurze Kontakte trotzdem Kraft kosten können",
+    ],
+    afterDay: "Beine müde, Kopf froh über weniger Fragen",
+    entry: ["Ausbildung klar", "Filiale prägt stark", "Teamgröße zählt"],
+    localTexture:
+      "Kleiner Laden und große Kette sind hier fast unterschiedliche Alltage.",
+  },
+  koch: {
+    underestimated: [
+      "wie körperlich Timing sein kann",
+      "dass Stolz oft erst nach dem Stress kommt",
+    ],
+    afterDay: "körperlich leer, manchmal zufrieden, weil etwas wirklich rausging",
+    entry: ["Ausbildung klar", "Küche vorher erleben", "Arbeitszeiten ernst nehmen"],
+    localTexture:
+      "Restaurant, Hotel, Kantine und kleines Café können völlig andere Tage bedeuten.",
+  },
+  tischler: {
+    underestimated: [
+      "wie viel Geduld in einem Millimeter steckt",
+      "dass sichtbare Arbeit trotzdem viel Kopfarbeit ist",
+    ],
+    afterDay: "müde in den Händen, oft ruhiger im Kopf",
+    entry: ["Ausbildung klar", "Werkstatt anschauen", "Betrieb prägt Material und Tempo"],
+    localTexture:
+      "Kleine Werkstätten wirken oft persönlicher. Große Betriebe können dafür planbarer sein.",
+  },
+  bauzeichner: {
+    underestimated: [
+      "wie real kleine Linien später werden",
+      "dass ruhige Arbeit trotzdem Verantwortung haben kann",
+    ],
+    afterDay: "eher ruhig im Kopf, manchmal mit einem Maß, das noch nachläuft",
+    entry: ["Ausbildung klar", "CAD früh ausprobieren", "Büroart verändert viel"],
+    localTexture:
+      "Architekturbüro, Ingenieurbüro und Verwaltung fühlen sich im Alltag deutlich anders an.",
+  },
+  industriemechaniker: {
+    underestimated: [
+      "wie genau schwere Arbeit sein kann",
+      "dass Maschinen Geduld erzwingen",
+    ],
+    afterDay: "körperlich müde, aber oft mit klarerem Kopf als vorher",
+    entry: ["Ausbildung klar", "Halle vorher erleben", "Industrie sehr unterschiedlich"],
+    localTexture:
+      "In Regionen mit Industrie taucht dieser Weg oft ganz selbstverständlich auf. Anderswo kaum.",
+  },
+  veranstaltungstechniker: {
+    underestimated: [
+      "wie unsichtbar gute Vorbereitung bleibt",
+      "dass späte Abende anders müde machen",
+    ],
+    afterDay: "wach vom Druck, später plötzlich sehr leer",
+    entry: ["Ausbildung klar", "Aufbau mitmachen hilft", "Zeiten vorher ernst nehmen"],
+    localTexture:
+      "Große Hallen, Theater und kleine Eventfirmen haben sehr unterschiedliche Rhythmen.",
+  },
+  "medizinische-fachangestellte": {
+    underestimated: [
+      "wie viel Taktung hinter freundlichen Sätzen steckt",
+      "dass kurze Kontakte trotzdem nah sein können",
+    ],
+    afterDay: "müde von Unterbrechungen, aber oft noch okay für Menschen",
+    entry: ["Ausbildung klar", "Praxis vorher erleben", "Fachrichtung verändert viel"],
+    localTexture:
+      "Eine kleine Hausarztpraxis fühlt sich anders an als eine große Facharztpraxis.",
+  },
+  "kaufmann-bueromanagement": {
+    underestimated: [
+      "wie viel Ruhe gute Organisation bringen kann",
+      "dass leise Arbeit oft erst auffällt, wenn sie fehlt",
+    ],
+    afterDay: "eher kopfmüde, aber nicht unbedingt sozial leer",
+    entry: ["Ausbildung klar", "Büro vorher anschauen", "Teamkultur macht viel aus"],
+    localTexture:
+      "Kleine Firmen geben oft mehr Überblick. Große eher klarere Zuständigkeiten.",
+  },
+  friseur: {
+    underestimated: [
+      "wie viel Nähe in scheinbar kleinen Gesprächen liegt",
+      "dass sichtbare Veränderung körperlich anstrengend ist",
+    ],
+    afterDay: "Beine müde, Kopf voll mit Stimmen und Spiegeln",
+    entry: ["Ausbildung klar", "Salon vorher erleben", "Kundenrhythmus zählt"],
+    localTexture:
+      "Ein kleiner Salon und eine große Kette fühlen sich im Alltag sehr verschieden an.",
+  },
+  florist: {
+    underestimated: [
+      "wie viel Arbeit schöne Dinge machen",
+      "dass Stimmung oft über kleine Entscheidungen läuft",
+    ],
+    afterDay: "kalte Hände, ruhiger Kopf, manchmal feine Zufriedenheit",
+    entry: ["Ausbildung klar", "Ladenalltag testen", "Saison macht viel aus"],
+    localTexture:
+      "Vor Feiertagen wirkt dieser Beruf anders als an normalen Dienstagen.",
+  },
+  zugbegleiter: {
+    underestimated: [
+      "wie viel Stimmung man unterwegs lesen muss",
+      "dass freundlich klar bleiben Kraft kostet",
+    ],
+    afterDay: "froh, irgendwo anzukommen und nicht mehr antworten zu müssen",
+    entry: ["Ausbildung klar", "Schichten prüfen", "Strecken verändern viel"],
+    localTexture:
+      "Regionalverkehr und Fernverkehr fühlen sich oft wie verschiedene Alltage an.",
+  },
+  tierpfleger: {
+    underestimated: [
+      "wie viel Putzen echte Fürsorge enthält",
+      "dass ruhiges Beobachten Arbeit ist",
+    ],
+    afterDay: "körperlich müde, aber oft leiser im Kopf",
+    entry: ["Ausbildung klar", "Praktikum wichtig", "Tierart verändert alles"],
+    localTexture:
+      "Zoo, Tierheim, Praxisnähe oder Landwirtschaft fühlen sich sehr unterschiedlich an.",
+  },
+};
+
+export const careers: Career[] = careerEntries.map((career) => ({
+  ...career,
+  lifeIndicators: careerLifeIndicators[career.slug] ?? defaultLifeIndicators,
+  practicalSignals: careerPracticalSignals[career.slug] ?? defaultPracticalSignals,
+  realism: careerRealism[career.slug] ?? defaultCareerRealism,
+}));
 
 export const situations: Situation[] = [
   {

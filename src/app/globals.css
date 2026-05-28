@@ -166,6 +166,12 @@ button:focus-visible {
   opacity: 1;
 }
 
+.compare-sheet-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 .brand-bloom {
   animation: soft-drift 12s ease-in-out infinite;
 }

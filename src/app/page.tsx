@@ -1,12 +1,24 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { TrackedSituationLink } from "@/components/exploration-tracker";
 import { SavedReturnMoment } from "@/components/saved-return-moment";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { careers, getSituationCareers, situations } from "@/data/careers";
+import {
+  EXPLORATION_MEMORY_EVENT,
+  getAdaptiveCareerSuggestions,
+  getAdaptiveFilterOrder,
+  getAdaptiveSituations,
+  getExplorationProfile,
+  trackFilterUse,
+} from "@/lib/exploration-memory";
 
 const moments = [
   {
@@ -29,6 +41,27 @@ const moments = [
     aside: "Fachkraft für Lagerlogistik",
     mood: "Scanner, Paletten, Bewegung. Nicht glänzend. Aber oft klar.",
     className: "sm:ml-auto sm:w-[82%]",
+  },
+  {
+    slug: "elektroniker",
+    line: "Manche Tage werden besser, wenn am Ende wirklich etwas funktioniert.",
+    aside: "Elektroniker",
+    mood: "Werkzeug, Wege, Messen. Weniger reden, mehr herausfinden.",
+    className: "sm:w-[82%]",
+  },
+  {
+    slug: "notfallsanitaeter",
+    line: "Nicht jeder direkte Moment ist laut. Manche brauchen nur Ruhe unter Druck.",
+    aside: "Notfallsanitäter",
+    mood: "Viel echter Alltag. Manchmal wach, manchmal schwer, selten abstrakt.",
+    className: "sm:ml-[10%] sm:w-[78%]",
+  },
+  {
+    slug: "veranstaltungstechniker",
+    line: "Hinten passiert oft mehr, als vorne jemand merkt.",
+    aside: "Veranstaltungstechniker",
+    mood: "Kabel, Timing, Druck. Sichtbar wird es erst, wenn alles trägt.",
+    className: "sm:ml-auto sm:w-[80%]",
   },
 ];
 
@@ -71,13 +104,153 @@ const quickChoices = [
   },
 ];
 
+const defaultHomepageSituations = [
+  situations[1],
+  situations[3],
+  situations[4],
+  situations[7],
+];
+
+const emotionalEntries = [
+  {
+    id: "too-many-people",
+    label: "Zu viele Menschen",
+    observation:
+      "Vielleicht geht es gerade weniger um Karriere. Eher um mehr Abstand im Tag.",
+    slugs: [
+      "fachinformatiker-systemintegration",
+      "bauzeichner",
+      "fachkraft-lagerlogistik",
+      "tierpfleger",
+    ],
+    tone: "ruhe",
+  },
+  {
+    id: "too-much-screen",
+    label: "Zu viel Bildschirm",
+    observation:
+      "Dann wirken Wege mit Händen, Wegen und sichtbaren Dingen oft ehrlicher.",
+    slugs: ["elektroniker", "tischler", "florist", "fachkraft-lagerlogistik"],
+    tone: "bewegung",
+  },
+  {
+    id: "no-direction",
+    label: "Keine Richtung",
+    observation:
+      "Manchmal reicht ein Beruf, der nicht sofort fremd wirkt.",
+    slugs: ["pflegefachkraft", "elektroniker", "bauzeichner", "mediengestalter"],
+    tone: "struktur",
+  },
+  {
+    id: "nothing-real",
+    label: "Nichts Echtes",
+    observation:
+      "Dann ziehen oft Tage an, in denen jemand direkt merkt, dass du da warst.",
+    slugs: [
+      "pflegefachkraft",
+      "notfallsanitaeter",
+      "medizinische-fachangestellte",
+      "erzieher",
+    ],
+    tone: "echtes",
+  },
+  {
+    id: "too-loud",
+    label: "Zu laut",
+    observation:
+      "Viele merken erst später, dass Ruhe wichtiger ist als Spannung.",
+    slugs: [
+      "bauzeichner",
+      "fachinformatiker-systemintegration",
+      "kaufmann-bueromanagement",
+      "florist",
+    ],
+    tone: "ruhe",
+  },
+  {
+    id: "no-idea",
+    label: "Keine Ahnung",
+    observation:
+      "Das ist okay. Nicht jede gute Richtung fühlt sich am Anfang aufregend an.",
+    slugs: ["fachkraft-lagerlogistik", "elektroniker", "friseur", "tierpfleger"],
+    tone: "ueberraschung",
+  },
+];
+
 export default function Home() {
-  const homepageSituations = [
-    situations[1],
-    situations[3],
-    situations[4],
-    situations[7],
-  ];
+  const [adaptiveMoments, setAdaptiveMoments] = useState(moments.slice(0, 3));
+  const [adaptiveChoices, setAdaptiveChoices] = useState(quickChoices);
+  const [homepageSituations, setHomepageSituations] = useState(
+    defaultHomepageSituations,
+  );
+  const [adaptiveAside, setAdaptiveAside] = useState("");
+  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
+
+  const selectedEntry = emotionalEntries.find(
+    (entry) => entry.id === selectedEntryId,
+  );
+  const displayedMoments = useMemo(() => {
+    if (!selectedEntry) return adaptiveMoments;
+
+    const selectedMoments = selectedEntry.slugs
+      .map((slug) => moments.find((moment) => moment.slug === slug))
+      .filter((moment): moment is (typeof moments)[number] => Boolean(moment));
+
+    return [
+      ...selectedMoments,
+      ...adaptiveMoments.filter(
+        (moment) => !selectedEntry.slugs.includes(moment.slug),
+      ),
+    ].slice(0, 3);
+  }, [adaptiveMoments, selectedEntry]);
+
+  useEffect(() => {
+    const syncExplorationDrift = () => {
+      const profile = getExplorationProfile();
+      const suggestedSlugs = getAdaptiveCareerSuggestions(careers).map(
+        (career) => career.slug,
+      );
+      const momentDrift = suggestedSlugs
+        .map((slug) => moments.find((moment) => moment.slug === slug))
+        .filter((moment): moment is (typeof moments)[number] => Boolean(moment));
+
+      if (profile.hasAdaptiveConfidence && momentDrift.length >= 3) {
+        setAdaptiveMoments(momentDrift.slice(0, 3));
+      } else {
+        setAdaptiveMoments(moments.slice(0, 3));
+      }
+
+      if (profile.hasAdaptiveConfidence) {
+        setAdaptiveChoices(getAdaptiveFilterOrder(quickChoices));
+        setHomepageSituations(
+          getAdaptiveSituations(defaultHomepageSituations).slice(0, 4),
+        );
+      } else {
+        setAdaptiveChoices(quickChoices);
+        setHomepageSituations(defaultHomepageSituations);
+      }
+
+      if (profile.isQuietLeaning) {
+        setAdaptiveAside("Du landest gerade oft bei ruhigeren Wegen.");
+      } else if (profile.isPracticalLeaning) {
+        setAdaptiveAside("Vielleicht eher sowas.");
+      } else if (profile.isPeopleLeaning) {
+        setAdaptiveAside("Ein paar Wege gehen in eine ähnliche Richtung.");
+      } else {
+        setAdaptiveAside("");
+      }
+    };
+
+    const frame = window.requestAnimationFrame(syncExplorationDrift);
+    window.addEventListener(EXPLORATION_MEMORY_EVENT, syncExplorationDrift);
+    window.addEventListener("storage", syncExplorationDrift);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener(EXPLORATION_MEMORY_EVENT, syncExplorationDrift);
+      window.removeEventListener("storage", syncExplorationDrift);
+    };
+  }, []);
 
   return (
     <AppShell>
@@ -117,6 +290,60 @@ export default function Home() {
       </section>
 
       <div className="mx-auto w-full max-w-5xl px-5 pb-28 sm:px-8">
+        <section className="-mt-4 mb-16 max-w-3xl sm:-mt-8 sm:mb-24">
+          <p className="text-sm text-primary">
+            Was fühlt sich gerade eher falsch an?
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {emotionalEntries.map((entry) => {
+              const active = entry.id === selectedEntryId;
+
+              return (
+                <button
+                  aria-pressed={active}
+                  className={`choice-surface rounded-full border px-3.5 py-2 text-sm transition duration-500 ease-out hover:-translate-y-0.5 active:translate-y-0 ${
+                    active
+                      ? "border-primary/30 bg-primary/10 text-foreground"
+                      : "border-white/10 text-muted-foreground hover:text-foreground"
+                  }`}
+                  key={entry.id}
+                  onClick={() => {
+                    setSelectedEntryId(active ? null : entry.id);
+                    trackFilterUse(entry.tone);
+                  }}
+                  type="button"
+                >
+                  {entry.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {selectedEntry ? (
+            <div className="mt-7 max-w-2xl border-y border-white/10 py-5">
+              <p className="text-xl font-semibold leading-snug text-foreground/90">
+                {selectedEntry.observation}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {selectedEntry.slugs.slice(0, 4).map((slug) => {
+                  const career = careers.find((item) => item.slug === slug);
+                  if (!career) return null;
+
+                  return (
+                    <Link
+                      className="rounded-full border border-white/10 bg-white/[0.035] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 ease-out hover:-translate-y-0.5 hover:bg-white/[0.08] hover:text-foreground"
+                      href={`/careers/${career.slug}`}
+                      key={career.slug}
+                    >
+                      {career.title}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+        </section>
+
         <div className="mb-14 max-w-lg sm:mb-20">
           <p className="text-sm text-primary">Such nicht direkt nach einem Beruf</p>
           <p className="mt-4 text-2xl font-semibold leading-snug text-foreground/90 sm:text-3xl">
@@ -128,11 +355,12 @@ export default function Home() {
           <div className="max-w-2xl sm:ml-auto sm:w-[78%]">
             <p className="text-sm text-primary">Was trifft dich gerade eher?</p>
             <div className="mt-6 space-y-2.5">
-              {quickChoices.map((choice) => (
+              {adaptiveChoices.map((choice) => (
                 <Link
                   className="choice-surface group flex items-center justify-between gap-4 rounded-[1.35rem] border border-white/10 px-4 py-3.5 text-left transition duration-500 hover:-translate-y-0.5 sm:px-5"
                   href={choice.href}
                   key={choice.label}
+                  onClick={() => trackFilterUse(choice.tone)}
                 >
                   <span className="flex items-center gap-3">
                     <span className="wj-marker scale-90" data-tone={choice.tone} />
@@ -153,7 +381,7 @@ export default function Home() {
         </div>
 
         <div className="space-y-16 sm:space-y-28">
-          {moments.map((moment, index) => {
+          {displayedMoments.map((moment, index) => {
             const career = careers.find((item) => item.slug === moment.slug);
             const situation = homepageSituations[index % homepageSituations.length];
             const situationCareers = situation ? getSituationCareers(situation) : [];
@@ -166,7 +394,7 @@ export default function Home() {
                       index % 2 === 0 ? "sm:ml-[8%]" : "sm:ml-auto"
                     }`}
                   >
-                    {quietInterruptions[index % quietInterruptions.length]}
+                    {adaptiveAside || quietInterruptions[index % quietInterruptions.length]}
                   </p>
                 ) : null}
 
@@ -237,13 +465,14 @@ export default function Home() {
                     </p>
                     <div className="mt-5 flex flex-wrap gap-2">
                       {situationCareers.slice(0, 3).map((situationCareer) => (
-                        <Link
+                        <TrackedSituationLink
                           className="rounded-full border border-white/10 bg-white/[0.045] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.08] hover:text-foreground"
                           href={`/careers/${situationCareer.slug}`}
                           key={`${situation.prompt}-${situationCareer.slug}`}
+                          situation={situation}
                         >
                           {situationCareer.title}
-                        </Link>
+                        </TrackedSituationLink>
                       ))}
                     </div>
                   </div>
@@ -253,27 +482,25 @@ export default function Home() {
           })}
         </div>
 
-        <div className="mt-20 sm:mt-32">
-          <Card className="glass-surface energy-surface p-6 sm:p-8">
-            <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-sm text-primary">Wenn du noch gar nichts weißt</p>
-                <h2 className="mt-4 text-3xl font-semibold leading-tight sm:text-5xl">
-                  Dann fang nicht mit einem Plan an. Fang mit einem Gefühl an.
-                </h2>
-                <p className="mt-5 text-base leading-7 text-muted-foreground">
-                  Der Quiz ist kurz. Nicht wissenschaftlich. Eher wie: ein paar
-                  Fragen, die nicht komplett nerven.
-                </p>
-              </div>
-              <Button asChild size="lg" className="w-full sm:w-auto">
-                <Link href="/quiz">
-                  Quiz starten
-                  <ArrowRight className="size-4" />
-                </Link>
-              </Button>
+        <div className="mt-20 border-t border-white/10 pt-10 sm:mt-32 sm:pt-12">
+          <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-sm text-primary">Wenn du noch gar nichts weißt</p>
+              <h2 className="mt-4 text-3xl font-semibold leading-tight sm:text-5xl">
+                Dann fang nicht mit einem Plan an. Fang mit einem Gefühl an.
+              </h2>
+              <p className="mt-5 text-base leading-7 text-muted-foreground">
+                Der Quiz ist kurz. Nicht wissenschaftlich. Eher wie: ein paar
+                Fragen, die nicht komplett nerven.
+              </p>
             </div>
-          </Card>
+            <Button asChild size="lg" className="w-full sm:w-auto">
+              <Link href="/quiz">
+                Quiz starten
+                <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </AppShell>

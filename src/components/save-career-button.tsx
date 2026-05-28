@@ -10,6 +10,7 @@ import {
   SAVED_CAREERS_EVENT,
   toggleSavedCareerSlug,
 } from "@/lib/saved-careers";
+import { trackCareerSave } from "@/lib/exploration-memory";
 
 type SaveCareerButtonProps = {
   slug: string;
@@ -56,6 +57,9 @@ export function SaveCareerButton({
       onClick={(event) => {
         event.stopPropagation();
         const nextSlugs = toggleSavedCareerSlug(slug);
+        if (nextSlugs.includes(slug)) {
+          trackCareerSave(slug);
+        }
         setSaved(nextSlugs.includes(slug));
       }}
       type="button"
@@ -64,7 +68,7 @@ export function SaveCareerButton({
       {removeAction ? (
         <>
           <X className="size-3.5" />
-          Nicht mehr aufheben
+          Nicht mehr merken
         </>
       ) : (
         <>
@@ -75,7 +79,7 @@ export function SaveCareerButton({
           )}
           {saved
             ? compact
-              ? (savedLabel ?? "Aufgehoben")
+              ? (savedLabel ?? "gemerkt")
               : "Liegt zum Weiterdenken bereit"
             : compact
               ? (unsavedLabel ?? "Später anschauen")
