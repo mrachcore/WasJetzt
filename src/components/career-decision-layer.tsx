@@ -38,7 +38,7 @@ const decisionPrompts: DecisionPrompt[] = [
     a: {
       id: "a",
       label: "Weniger reden, dafür länger konzentrieren.",
-      explanation: "Dann wirken ruhigere, sortierte Wege hier etwas klarer.",
+      explanation: "Dann wirkt ein ruhigerer, sortierter Tag hier etwas klarer.",
       slugs: [
         "fachinformatiker-systemintegration",
         "bauzeichner",
@@ -49,7 +49,7 @@ const decisionPrompts: DecisionPrompt[] = [
     b: {
       id: "b",
       label: "Mehr Bewegung, dafür öfter unterbrochen werden.",
-      explanation: "Dann passen Wege mit mehr Wechsel und körperlichem Alltag eher.",
+      explanation: "Dann liegt ein Tag mit mehr Wechsel näher.",
       slugs: [
         "elektroniker",
         "fachkraft-lagerlogistik",
@@ -80,7 +80,7 @@ const decisionPrompts: DecisionPrompt[] = [
     b: {
       id: "b",
       label: "Lieber an etwas arbeiten, das erst später Sinn ergibt.",
-      explanation: "Dann sind leisere Wege mit mehr Geduld oft besser lesbar.",
+      explanation: "Dann werden leisere Wege oft lesbarer.",
       slugs: [
         "fachinformatiker-systemintegration",
         "bauzeichner",
@@ -96,7 +96,7 @@ const decisionPrompts: DecisionPrompt[] = [
     a: {
       id: "a",
       label: "Klarer Ablauf.",
-      explanation: "Dann helfen Wege, in denen Wiederholung und Ordnung tragen.",
+      explanation: "Dann helfen Tage, in denen Wiederholung und Ordnung tragen.",
       slugs: [
         "fachkraft-lagerlogistik",
         "kaufmann-bueromanagement",
@@ -108,7 +108,7 @@ const decisionPrompts: DecisionPrompt[] = [
     b: {
       id: "b",
       label: "Mehr Abwechslung.",
-      explanation: "Dann wirken Wege mit wechselnden Momenten etwas näher.",
+      explanation: "Dann wirken wechselnde Tage etwas näher.",
       slugs: [
         "notfallsanitaeter",
         "zugbegleiter",
@@ -125,7 +125,7 @@ const decisionPrompts: DecisionPrompt[] = [
     a: {
       id: "a",
       label: "Direkt mit Menschen, auch wenn es voller wird.",
-      explanation: "Dann werden die direkteren, näheren Wege verständlicher.",
+      explanation: "Dann werden die direkteren, näheren Arbeitstage verständlicher.",
       slugs: [
         "pflegefachkraft",
         "notfallsanitaeter",
@@ -139,7 +139,7 @@ const decisionPrompts: DecisionPrompt[] = [
     b: {
       id: "b",
       label: "Lieber freundlich bleiben, aber mit Abstand.",
-      explanation: "Dann passen Wege besser, in denen Kontakt nicht alles bestimmt.",
+      explanation: "Dann passt Kontakt besser, der nicht alles bestimmt.",
       slugs: [
         "fachinformatiker-systemintegration",
         "elektroniker",
@@ -202,9 +202,9 @@ export function CareerDecisionLayer({
       <div className="flex items-start gap-3">
         <CornerDownRight className="mt-0.5 size-4 shrink-0 text-primary/80" />
         <div>
-          <p className="text-sm text-primary">Was passt eher?</p>
+          <p className="text-sm text-primary">Was wäre im Alltag anders?</p>
           <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
-            Kleine Alltagsunterschiede. Kein Test.
+            Kleine Unterschiede. Kein Urteil.
           </p>
         </div>
       </div>
@@ -270,10 +270,10 @@ export function CareerDecisionLayer({
               {saved ? (
                 <>
                   <Check className="size-4 text-primary" />
-                  Richtung gemerkt
+                  Alltag gemerkt
                 </>
               ) : (
-                "Richtung merken"
+                "Alltag merken"
               )}
             </button>
           ) : null}

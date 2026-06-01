@@ -6,11 +6,21 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { TrackedSituationLink } from "@/components/exploration-tracker";
+import {
+  TrackedObservationLink,
+  TrackedSituationLink,
+} from "@/components/exploration-tracker";
 import { SavedReturnMoment } from "@/components/saved-return-moment";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { careers, getSituationCareers, situations } from "@/data/careers";
+import {
+  ambientArbeitsweltFragments,
+  arbeitsweltFragments,
+  getFragmentsForCareers,
+  realSentencePool,
+  type ArbeitsweltFragment,
+} from "@/data/work-life-fragments";
 import {
   EXPLORATION_MEMORY_EVENT,
   getAdaptiveCareerSuggestions,
@@ -19,6 +29,15 @@ import {
   getExplorationProfile,
   trackFilterUse,
 } from "@/lib/exploration-memory";
+import { SAVED_CAREERS_EVENT } from "@/lib/saved-careers";
+import {
+  CONTINUATION_CONTEXT_EVENT,
+  getContinuationContext,
+  rememberHomepageEmotion,
+  type ContinuationSnapshot,
+} from "@/lib/continuation-memory";
+
+type HomepageNotice = ArbeitsweltFragment;
 
 const moments = [
   {
@@ -66,9 +85,9 @@ const moments = [
 ];
 
 const quietInterruptions = [
-  "Berufe, über die fast niemand spricht.",
-  "Manche Wege wirken erst langweilig. Dann merkt man, dass genau das gut ist.",
-  "Vielleicht willst du keinen Traumjob. Vielleicht willst du nur einen Tag, der dich nicht auffrisst.",
+  "Tage, über die fast niemand ehrlich spricht.",
+  "Manche Tage wirken erst langweilig. Dann merkt man, dass genau das gut ist.",
+  "Vielleicht reicht ein Tag, der dich nicht auffrisst.",
 ];
 
 const quickChoices = [
@@ -114,9 +133,9 @@ const defaultHomepageSituations = [
 const emotionalEntries = [
   {
     id: "too-many-people",
-    label: "Zu viele Menschen",
+    label: "zu viele Menschen",
     observation:
-      "Vielleicht geht es gerade weniger um Karriere. Eher um mehr Abstand im Tag.",
+      "Vielleicht geht es gerade weniger um Richtung. Eher um mehr Abstand im Tag.",
     slugs: [
       "fachinformatiker-systemintegration",
       "bauzeichner",
@@ -127,7 +146,7 @@ const emotionalEntries = [
   },
   {
     id: "too-much-screen",
-    label: "Zu viel Bildschirm",
+    label: "zu viel Bildschirm",
     observation:
       "Dann wirken Wege mit Händen, Wegen und sichtbaren Dingen oft ehrlicher.",
     slugs: ["elektroniker", "tischler", "florist", "fachkraft-lagerlogistik"],
@@ -135,15 +154,28 @@ const emotionalEntries = [
   },
   {
     id: "no-direction",
-    label: "Keine Richtung",
+    label: "keine Richtung",
     observation:
-      "Manchmal reicht ein Beruf, der nicht sofort fremd wirkt.",
+      "Manchmal reicht ein Alltag, der nicht sofort fremd wirkt.",
     slugs: ["pflegefachkraft", "elektroniker", "bauzeichner", "mediengestalter"],
     tone: "struktur",
   },
   {
+    id: "all-same",
+    label: "alles klingt gleich",
+    observation:
+      "Dann hilft es, nicht auf Titel zu schauen, sondern auf den Tag dahinter.",
+    slugs: [
+      "bauzeichner",
+      "mediengestalter",
+      "kaufmann-bueromanagement",
+      "fachkraft-lagerlogistik",
+    ],
+    tone: "struktur",
+  },
+  {
     id: "nothing-real",
-    label: "Nichts Echtes",
+    label: "ich will etwas Echtes",
     observation:
       "Dann ziehen oft Tage an, in denen jemand direkt merkt, dass du da warst.",
     slugs: [
@@ -155,27 +187,172 @@ const emotionalEntries = [
     tone: "echtes",
   },
   {
-    id: "too-loud",
-    label: "Zu laut",
-    observation:
-      "Viele merken erst später, dass Ruhe wichtiger ist als Spannung.",
-    slugs: [
-      "bauzeichner",
-      "fachinformatiker-systemintegration",
-      "kaufmann-bueromanagement",
-      "florist",
-    ],
-    tone: "ruhe",
-  },
-  {
     id: "no-idea",
-    label: "Keine Ahnung",
+    label: "keine Ahnung",
     observation:
       "Das ist okay. Nicht jede gute Richtung fühlt sich am Anfang aufregend an.",
     slugs: ["fachkraft-lagerlogistik", "elektroniker", "friseur", "tierpfleger"],
     tone: "ueberraschung",
   },
 ];
+
+const heroDirections: Record<
+  string,
+  {
+    response: string;
+    directions: {
+      href: string;
+      label: string;
+      note: string;
+      tone: string;
+    }[];
+  }
+> = {
+  "too-many-people": {
+    response:
+      "Dann suchen wir nicht nach weniger Leben. Nur nach weniger Dauer-Performen.",
+    directions: [
+      {
+        href: "/wege",
+        label: "weniger Bühne suchen",
+        note: "ruhigere Wege öffnen",
+        tone: "ruhe",
+      },
+      {
+        href: "/karte?career=bauzeichner",
+        label: "mit Abstand herumgehen",
+        note: "Nachbarschaften auf der Karte",
+        tone: "struktur",
+      },
+      {
+        href: "/careers/fachkraft-lagerlogistik",
+        label: "einen klaren Tag ansehen",
+        note: "weniger Reden, mehr Ablauf",
+        tone: "bewegung",
+      },
+    ],
+  },
+  "too-much-screen": {
+    response:
+      "Vielleicht brauchst du nicht weniger Zukunft. Nur mehr echte Dinge vor dir.",
+    directions: [
+      {
+        href: "/wege",
+        label: "raus aus dem Bildschirm",
+        note: "Wege mit Händen und Bewegung",
+        tone: "bewegung",
+      },
+      {
+        href: "/karte?career=elektroniker",
+        label: "echte Dinge suchen",
+        note: "auf der Karte herumgehen",
+        tone: "struktur",
+      },
+      {
+        href: "/careers/tischler",
+        label: "etwas Fertiges ansehen",
+        note: "ein Alltag mit Material",
+        tone: "echtes",
+      },
+    ],
+  },
+  "no-direction": {
+    response:
+      "Keine Richtung ist kein Fehler. Dann schauen wir erst auf Tage, nicht auf Pläne.",
+    directions: [
+      {
+        href: "/quiz",
+        label: "ein paar Fragen aushalten",
+        note: "kurzer Einstieg",
+        tone: "ueberraschung",
+      },
+      {
+        href: "/wege",
+        label: "kleine Wahrheiten ziehen",
+        note: "ein paar echte Sätze ansehen",
+        tone: "struktur",
+      },
+      {
+        href: "/karte",
+        label: "ohne Ziel herumgehen",
+        note: "Tage nebeneinander sehen",
+        tone: "ruhe",
+      },
+    ],
+  },
+  "all-same": {
+    response:
+      "Dann schauen wir auf Unterschiede, die man erst im Alltag merkt.",
+    directions: [
+      {
+        href: "/karte",
+        label: "ähnliche Tage trennen",
+        note: "auf der Karte schauen",
+        tone: "struktur",
+      },
+      {
+        href: "/wege",
+        label: "kleine Unterschiede lesen",
+        note: "Energie, Menschen, Bewegung",
+        tone: "ueberraschung",
+      },
+      {
+        href: "/quiz",
+        label: "ein paar Fragen aushalten",
+        note: "was nervt weniger?",
+        tone: "ruhe",
+      },
+    ],
+  },
+  "nothing-real": {
+    response:
+      "Dann suchen wir nach Tagen, in denen etwas zurückbleibt. Nicht groß. Nur echt.",
+    directions: [
+      {
+        href: "/wege",
+        label: "näher an echte Tage",
+        note: "weniger abstrakt suchen",
+        tone: "echtes",
+      },
+      {
+        href: "/karte?career=pflegefachkraft",
+        label: "wo Menschen wirklich vorkommen",
+        note: "nah dran anfangen",
+        tone: "menschen",
+      },
+      {
+        href: "/careers/notfallsanitaeter",
+        label: "einen direkten Tag ansehen",
+        note: "ruhig bleiben, wenn es zählt",
+        tone: "bewegung",
+      },
+    ],
+  },
+  "no-idea": {
+    response:
+      "Keine Ahnung ist ein Anfang. Dann fang nicht mit einem Plan an. Fang mit einem Arbeitstag an.",
+    directions: [
+      {
+        href: "/quiz",
+        label: "ein paar Fragen aushalten",
+        note: "kurzer Einstieg",
+        tone: "ueberraschung",
+      },
+      {
+        href: "/wege",
+        label: "kleine Wahrheiten ziehen",
+        note: "ein paar echte Sätze ansehen",
+        tone: "struktur",
+      },
+      {
+        href: "/karte",
+        label: "ohne Ziel herumgehen",
+        note: "Tage nebeneinander sehen",
+        tone: "ruhe",
+      },
+    ],
+  },
+};
 
 export default function Home() {
   const [adaptiveMoments, setAdaptiveMoments] = useState(moments.slice(0, 3));
@@ -184,11 +361,43 @@ export default function Home() {
     defaultHomepageSituations,
   );
   const [adaptiveAside, setAdaptiveAside] = useState("");
+  const [continuation, setContinuation] = useState<ContinuationSnapshot | null>(
+    null,
+  );
+  const [laterNotice, setLaterNotice] = useState<HomepageNotice | null>(null);
+  const [realSentence, setRealSentence] = useState<HomepageNotice | null>(null);
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
 
   const selectedEntry = emotionalEntries.find(
     (entry) => entry.id === selectedEntryId,
   );
+  const selectedHero = selectedEntry ? heroDirections[selectedEntry.id] : null;
+  const continuationCareer =
+    continuation?.savedCareers[0] ??
+    continuation?.recentlyViewedCareers[0] ??
+    continuation?.recentlyComparedCareers[0];
+  const continuationHref = continuationCareer
+    ? `/careers/${continuationCareer.slug}`
+    : continuation?.lastWegeFilters.length
+      ? "/wege"
+      : "/karte";
+  const continuationMapHref = continuationCareer
+    ? `/karte?career=${continuationCareer.slug}`
+    : "/karte";
+  const selectedNotice = useMemo(() => {
+    if (!selectedEntry) return laterNotice;
+
+    const notices = getFragmentsForCareers(selectedEntry.slugs);
+
+    if (
+      laterNotice &&
+      selectedEntry.slugs.includes(laterNotice.careerSlug)
+    ) {
+      return laterNotice;
+    }
+
+    return notices[0] ?? laterNotice;
+  }, [laterNotice, selectedEntry]);
   const displayedMoments = useMemo(() => {
     if (!selectedEntry) return adaptiveMoments;
 
@@ -205,8 +414,25 @@ export default function Home() {
   }, [adaptiveMoments, selectedEntry]);
 
   useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setLaterNotice(
+        arbeitsweltFragments[
+          Math.floor(Math.random() * arbeitsweltFragments.length)
+        ] ?? null,
+      );
+      setRealSentence(
+        realSentencePool[Math.floor(Math.random() * realSentencePool.length)] ??
+          null,
+      );
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
     const syncExplorationDrift = () => {
       const profile = getExplorationProfile();
+      setContinuation(getContinuationContext(careers));
       const suggestedSlugs = getAdaptiveCareerSuggestions(careers).map(
         (career) => career.slug,
       );
@@ -243,111 +469,206 @@ export default function Home() {
 
     const frame = window.requestAnimationFrame(syncExplorationDrift);
     window.addEventListener(EXPLORATION_MEMORY_EVENT, syncExplorationDrift);
+    window.addEventListener(SAVED_CAREERS_EVENT, syncExplorationDrift);
+    window.addEventListener(CONTINUATION_CONTEXT_EVENT, syncExplorationDrift);
     window.addEventListener("storage", syncExplorationDrift);
 
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener(EXPLORATION_MEMORY_EVENT, syncExplorationDrift);
+      window.removeEventListener(SAVED_CAREERS_EVENT, syncExplorationDrift);
+      window.removeEventListener(CONTINUATION_CONTEXT_EVENT, syncExplorationDrift);
       window.removeEventListener("storage", syncExplorationDrift);
     };
   }, []);
 
   return (
     <AppShell>
-      <section className="mx-auto flex min-h-[calc(100vh-68px)] w-full max-w-5xl flex-col justify-center px-5 pb-16 pt-8 sm:min-h-[calc(100vh-76px)] sm:px-8 sm:pb-20 sm:pt-10">
-        <div className="relative max-w-3xl">
+      <section className="mx-auto flex min-h-[calc(100vh-68px)] w-full max-w-5xl flex-col justify-center px-5 pb-10 pt-6 sm:min-h-[calc(100vh-76px)] sm:px-8 sm:pb-14 sm:pt-10">
+        <div className="relative overflow-hidden py-3 sm:py-8">
+          <div
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-x-0 top-8 h-72 rounded-[4rem] bg-[radial-gradient(circle_at_24%_26%,rgba(239,231,207,0.08),transparent_34%),radial-gradient(circle_at_82%_72%,rgba(155,176,164,0.07),transparent_30%)] blur-2xl transition duration-700 ${
+              selectedEntry ? "opacity-100" : "opacity-55"
+            }`}
+          />
           <Image
             src="/logo-mark.png"
             alt=""
             width={180}
             height={168}
-            className="mark-breathe pointer-events-none absolute -right-8 -top-12 hidden w-36 sm:block"
+            className="mark-breathe pointer-events-none absolute -right-5 -top-10 hidden w-32 opacity-50 sm:block"
             priority
           />
-          <p className="mb-8 text-sm text-primary">Ohne diesen ganzen Druck</p>
-          <h1 className="text-[3rem] font-semibold leading-[0.98] sm:text-7xl">
-            Du musst noch nicht wissen,
-            <br />
-            wer du werden willst.
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl sm:leading-9">
-            Ein paar Berufe. Ein paar echte Tage. Vielleicht irgendwas, das
-            weniger fremd wirkt als der Rest.
-          </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link href="/quiz">
-                Einfach anfangen
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="quiet" className="w-full sm:w-auto">
-              <Link href="/wege">Erstmal umsehen</Link>
-            </Button>
+          <div className="relative">
+            <p className="mb-5 text-sm text-primary">
+              Ohne diesen ganzen Zukunftsdruck
+            </p>
+            <h1 className="max-w-3xl text-[2.55rem] font-semibold leading-[0.98] sm:text-7xl">
+              Was fühlt sich gerade am falschesten an?
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground sm:text-xl sm:leading-9">
+              Nicht sofort entscheiden. Erstmal merken, welcher Tag dich
+              innerlich wegdrückt.
+            </p>
+            {!selectedEntry ? (
+              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-xs leading-5 text-muted-foreground/45 sm:max-w-3xl">
+                {ambientArbeitsweltFragments.slice(0, 4).map((fragment) => (
+                  <span
+                    className="max-w-[15rem] border-l border-white/10 pl-3"
+                    key={fragment}
+                  >
+                    {fragment}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+
+            <div className="mt-7 flex flex-wrap gap-2.5 sm:mt-10 sm:gap-3">
+              {emotionalEntries.map((entry) => {
+                const active = entry.id === selectedEntryId;
+
+                return (
+                  <button
+                    aria-pressed={active}
+                    className={`group min-h-14 rounded-[999px] border px-4 py-3 text-left text-base font-medium leading-snug shadow-[0_12px_38px_rgba(0,0,0,0.14)] backdrop-blur-xl transition duration-500 ease-out hover:-translate-y-1 active:translate-y-0 sm:min-h-16 sm:px-5 ${
+                      active
+                        ? "scale-[1.03] border-primary/45 bg-primary/[0.16] text-foreground shadow-[0_22px_70px_rgba(0,0,0,0.28)]"
+                        : selectedEntry
+                          ? "border-white/10 bg-white/[0.025] text-muted-foreground/70 hover:border-white/18 hover:text-foreground"
+                          : "border-white/12 bg-white/[0.055] text-foreground/90 hover:border-primary/22 hover:bg-white/[0.09]"
+                    }`}
+                    key={entry.id}
+                    onClick={() => {
+                      setSelectedEntryId(entry.id);
+                      rememberHomepageEmotion(entry.label);
+                      trackFilterUse(entry.tone);
+                    }}
+                    type="button"
+                  >
+                    {entry.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div
+              className={`grid transition-all duration-700 ease-out ${
+                selectedHero
+                  ? "mt-8 grid-rows-[1fr] opacity-100 sm:mt-10"
+                  : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                {selectedHero ? (
+                  <div className="space-y-7 sm:space-y-8">
+                    <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_17rem] sm:items-center">
+                      <div>
+                        <p className="text-sm text-primary/85">
+                          {selectedEntry?.label}
+                        </p>
+                        <p className="mt-3 max-w-2xl text-[2.15rem] font-semibold leading-[1.08] text-foreground/95 sm:text-5xl">
+                          {selectedHero.response}
+                        </p>
+                      </div>
+
+                      {selectedNotice ? (
+                        <TrackedObservationLink
+                          className="group block max-w-sm border-l border-primary/35 pl-4 transition duration-500 hover:translate-x-1"
+                          href={`/careers/${selectedNotice.careerSlug}`}
+                          observation={selectedNotice.text}
+                          slug={selectedNotice.careerSlug}
+                        >
+                          <span className="block text-xs text-primary">
+                            Das merkst du erst später
+                          </span>
+                          <span className="mt-2.5 block text-base font-semibold leading-6 text-foreground/92">
+                            {selectedNotice.text}
+                          </span>
+                          <span className="mt-3 inline-flex items-center gap-2 text-xs text-muted-foreground">
+                            {selectedNotice.careerTitle}
+                            <ArrowRight className="size-3.5 shrink-0 text-primary transition duration-500 group-hover:translate-x-0.5" />
+                          </span>
+                        </TrackedObservationLink>
+                      ) : null}
+                    </div>
+
+                    <div className="grid gap-3 border-t border-white/10 pt-4 sm:grid-cols-3">
+                      {selectedHero.directions.map((direction) => (
+                        <Link
+                          className="group flex items-center justify-between gap-4 py-2 text-left transition duration-500 hover:text-primary sm:block sm:border-l sm:border-white/10 sm:py-0 sm:pl-4"
+                          href={direction.href}
+                          key={direction.label}
+                          onClick={() => trackFilterUse(direction.tone)}
+                        >
+                          <span className="block text-base font-medium leading-snug text-foreground transition duration-500 group-hover:text-primary">
+                            → {direction.label}
+                          </span>
+                          <span className="mt-2 block text-sm leading-5 text-muted-foreground">
+                            {direction.note}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            <SavedReturnMoment />
           </div>
-          <SavedReturnMoment />
         </div>
       </section>
 
       <div className="mx-auto w-full max-w-5xl px-5 pb-28 sm:px-8">
-        <section className="-mt-4 mb-16 max-w-3xl sm:-mt-8 sm:mb-24">
-          <p className="text-sm text-primary">
-            Was fühlt sich gerade eher falsch an?
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {emotionalEntries.map((entry) => {
-              const active = entry.id === selectedEntryId;
-
-              return (
-                <button
-                  aria-pressed={active}
-                  className={`choice-surface rounded-full border px-3.5 py-2 text-sm transition duration-500 ease-out hover:-translate-y-0.5 active:translate-y-0 ${
-                    active
-                      ? "border-primary/30 bg-primary/10 text-foreground"
-                      : "border-white/10 text-muted-foreground hover:text-foreground"
-                  }`}
-                  key={entry.id}
-                  onClick={() => {
-                    setSelectedEntryId(active ? null : entry.id);
-                    trackFilterUse(entry.tone);
-                  }}
-                  type="button"
-                >
-                  {entry.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {selectedEntry ? (
-            <div className="mt-7 max-w-2xl border-y border-white/10 py-5">
-              <p className="text-xl font-semibold leading-snug text-foreground/90">
-                {selectedEntry.observation}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {selectedEntry.slugs.slice(0, 4).map((slug) => {
-                  const career = careers.find((item) => item.slug === slug);
-                  if (!career) return null;
-
-                  return (
-                    <Link
-                      className="rounded-full border border-white/10 bg-white/[0.035] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 ease-out hover:-translate-y-0.5 hover:bg-white/[0.08] hover:text-foreground"
-                      href={`/careers/${career.slug}`}
-                      key={career.slug}
-                    >
-                      {career.title}
-                    </Link>
-                  );
-                })}
-              </div>
+        {continuation?.enoughHistory && continuation.summary ? (
+          <section className="mb-14 max-w-3xl border-y border-white/10 py-5 sm:mb-20 sm:ml-[8%]">
+            <p className="text-sm text-primary">Zum Weiterdenken</p>
+            <p className="mt-3 max-w-2xl text-2xl font-semibold leading-snug text-foreground/90 sm:text-3xl">
+              {continuation.summary}
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3 text-sm">
+              <Link
+                className="rounded-full border border-white/10 px-3.5 py-2 text-foreground/85 transition duration-500 hover:border-primary/25 hover:text-primary"
+                href={continuationHref}
+              >
+                Weiter dort
+              </Link>
+              <Link
+                className="rounded-full border border-white/10 px-3.5 py-2 text-foreground/85 transition duration-500 hover:border-primary/25 hover:text-primary"
+                href="/weiterdenken"
+              >
+                Zum Weiterdenken
+              </Link>
+              <Link
+                className="rounded-full border border-white/10 px-3.5 py-2 text-foreground/85 transition duration-500 hover:border-primary/25 hover:text-primary"
+                href={continuationMapHref}
+              >
+                Auf der Karte ansehen
+              </Link>
             </div>
-          ) : null}
-        </section>
+          </section>
+        ) : null}
+
+        {realSentence ? (
+          <section className="mb-14 max-w-2xl sm:mb-20 sm:ml-[8%]">
+            <p className="text-sm text-primary">Aus echten Arbeitstagen</p>
+            <Link
+              className="group mt-4 block text-3xl font-semibold leading-tight text-foreground/92 transition duration-500 hover:text-primary sm:text-5xl"
+              href={`/careers/${realSentence.careerSlug}`}
+            >
+              {realSentence.text}
+            </Link>
+            <p className="mt-4 text-sm text-muted-foreground">
+              {realSentence.careerTitle}
+            </p>
+          </section>
+        ) : null}
 
         <div className="mb-14 max-w-lg sm:mb-20">
-          <p className="text-sm text-primary">Such nicht direkt nach einem Beruf</p>
+          <p className="text-sm text-primary">Such nicht direkt nach einem Titel</p>
           <p className="mt-4 text-2xl font-semibold leading-snug text-foreground/90 sm:text-3xl">
-            Fang mit dem an, was gerade weniger falsch klingt.
+            Fang mit dem an, was sich im Alltag weniger falsch anfühlt.
           </p>
         </div>
 
@@ -444,7 +765,7 @@ export default function Home() {
                     <div className="cinematic-line mb-5 h-px w-24" />
                     <p className="text-xl font-semibold leading-snug text-foreground/90 sm:text-2xl">
                       Es muss nicht sofort ein Plan sein. Manchmal reicht ein
-                      Beruf, der nicht komplett absurd klingt.
+                      Tag, der nicht komplett absurd klingt.
                     </p>
                   </div>
                 ) : null}
@@ -487,16 +808,16 @@ export default function Home() {
             <div className="max-w-2xl">
               <p className="text-sm text-primary">Wenn du noch gar nichts weißt</p>
               <h2 className="mt-4 text-3xl font-semibold leading-tight sm:text-5xl">
-                Dann fang nicht mit einem Plan an. Fang mit einem Gefühl an.
+                Dann fang nicht mit einem Plan an. Fang mit einem Arbeitstag an.
               </h2>
               <p className="mt-5 text-base leading-7 text-muted-foreground">
-                Der Quiz ist kurz. Nicht wissenschaftlich. Eher wie: ein paar
-                Fragen, die nicht komplett nerven.
+                Ein paar unbequeme Fragen darüber, was dich Energie kostet und
+                was du länger aushältst.
               </p>
             </div>
             <Button asChild size="lg" className="w-full sm:w-auto">
               <Link href="/quiz">
-                Quiz starten
+                Fragen beantworten
                 <ArrowRight className="size-4" />
               </Link>
             </Button>

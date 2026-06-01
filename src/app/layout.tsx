@@ -20,11 +20,11 @@ export const metadata: Metadata = {
     template: "%s | WasJetzt",
   },
   description:
-    "Ein ruhiger Ort für Ausbildung, Jobs und die Frage, was als Nächstes kommen könnte.",
+    "Ein ruhiger Ort, um zu spüren, wie unterschiedliche Arbeitstage sich anfühlen.",
   openGraph: {
     title: "WasJetzt",
     description:
-      "Berufe und Ausbildungen entdecken, ohne Druck und ohne Bewerbungsstress.",
+      "Arbeitstage verstehen, ohne Druck und ohne Bewerbungsstress.",
     siteName: "WasJetzt",
     locale: "de_DE",
     type: "website",

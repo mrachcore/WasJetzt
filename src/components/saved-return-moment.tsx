@@ -32,7 +32,7 @@ export function SavedReturnMoment() {
   return (
     <Card className="mt-7 max-w-xl p-5">
       <p className="text-sm text-primary">
-        Du hattest dir ein paar Wege gemerkt.
+        Da liegt noch etwas von dir.
       </p>
       <Link
         className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground transition duration-500 hover:text-foreground"

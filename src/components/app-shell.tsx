@@ -44,6 +44,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Link>
           <Link
             className="rounded-full px-2.5 py-1.5 transition hover:bg-white/[0.07] hover:text-foreground sm:px-3"
+            href="/karte"
+          >
+            Karte
+          </Link>
+          <Link
+            className="rounded-full px-2.5 py-1.5 transition hover:bg-white/[0.07] hover:text-foreground sm:px-3"
             href="/weiterdenken"
           >
             <span className="sm:hidden">Merken</span>

@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Ergebnisse",
   description:
-    "Berufe und Ausbildungen zum ruhigen Weiterklicken. Nicht als perfekte Matches, eher als mögliche Richtungen.",
+    "Richtungen zum ruhigen Weiterklicken. Keine perfekten Treffer.",
   openGraph: {
     title: "WasJetzt Ergebnisse",
     description:
-      "Diese Wege könnten weniger falsch wirken als andere. Ruhig anschauen, ohne Druck.",
+      "Diese Arbeitstage könnten weniger falsch wirken als andere. Ruhig anschauen, ohne Druck.",
   },
 };
 

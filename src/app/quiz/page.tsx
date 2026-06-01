@@ -7,8 +7,18 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { Card } from "@/components/ui/card";
 import { quizQuestions } from "@/data/careers";
+import { ambientArbeitsweltFragments } from "@/data/work-life-fragments";
+
+const answerReactions = [
+  ["Okay. Eher Ruhe im Kopf.", "Okay. Eher mit Unterbrechungen leben."],
+  ["Das ist eine eigene Art Geduld.", "Dann geht es eher um Taktung mit Menschen."],
+  ["Du suchst vielleicht den Moment, wenn etwas wieder hält.", "Du merkst vielleicht schneller, wenn jemand aufatmet."],
+  ["Eher mit Dingen denken.", "Eher Ordnung im Kopf suchen."],
+  ["Reden ist nicht automatisch leer.", "Beobachten ist auch Arbeit."],
+  ["Sichtbar fertig zählt.", "Nicht allein lassen zählt."],
+  ["Der Körper trägt den Tag.", "Der Kopf nimmt den Tag mit."],
+];
 
 export default function QuizPage() {
   const router = useRouter();
@@ -94,10 +104,15 @@ export default function QuizPage() {
             exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
             transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="mb-4 text-sm text-primary">Nicht zu lange nachdenken</p>
+            <p className="mb-4 text-sm text-primary">
+              Ein paar unbequeme Alltagsfragen
+            </p>
             <h1 className="text-4xl font-semibold leading-[1.08] sm:text-5xl">
               {question.question}
             </h1>
+            <p className="mt-5 max-w-md border-l border-white/10 pl-4 text-sm leading-6 text-muted-foreground/75">
+              {ambientArbeitsweltFragments[step % ambientArbeitsweltFragments.length]}
+            </p>
 
             <div className="mt-10 grid gap-3.5">
               {question.answers.map((answer, index) => (
@@ -113,32 +128,43 @@ export default function QuizPage() {
                   onClick={() => choose(answer.careers, index)}
                   type="button"
                 >
-                  <Card
-                    className={`cursor-pointer p-5 transition duration-500 ease-out group-hover:-translate-y-0.5 group-hover:bg-white/[0.095] ${
+                  <span
+                    className={`block border-l px-4 py-4 transition duration-500 ease-out group-hover:translate-x-1 ${
                       selectedIndex === index
-                        ? "energy-surface border-primary/35 bg-white/[0.115] shadow-[0_18px_48px_rgba(0,0,0,0.22)]"
-                        : ""
+                        ? "border-primary bg-white/[0.045]"
+                        : "border-white/10 bg-transparent"
                     }`}
                   >
                     <div className="flex items-center justify-between gap-4">
-                      <span className="flex items-center gap-3 text-[1.05rem] leading-7">
-                        {selectedIndex === index ? (
-                          <span className="wj-marker" data-tone="struktur" />
-                        ) : null}
+                      <span className="flex items-center gap-3 text-xl font-semibold leading-7 sm:text-2xl">
                         <span>{answer.label}</span>
                       </span>
-                      <span className="glass-soft grid size-10 shrink-0 place-items-center rounded-full text-primary transition duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
-                        <ArrowRight className="size-4" />
-                      </span>
+                      <ArrowRight className="size-4 shrink-0 text-primary transition duration-500 group-hover:translate-x-0.5" />
                     </div>
-                  </Card>
+                  </span>
                 </motion.button>
               ))}
             </div>
 
+            <div
+              className={`grid transition-all duration-500 ease-out ${
+                selectedIndex === null
+                  ? "mt-0 grid-rows-[0fr] opacity-0"
+                  : "mt-6 grid-rows-[1fr] opacity-100"
+              }`}
+            >
+              <div className="overflow-hidden">
+                {selectedIndex !== null ? (
+                  <p className="max-w-md border-l border-primary/25 pl-4 text-sm leading-6 text-primary/85">
+                    {answerReactions[step]?.[selectedIndex]}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
             <p className="mt-8 text-sm leading-6 text-muted-foreground">
-              Es geht nicht um richtig. Nimm einfach die Antwort, bei der du am
-              wenigsten innerlich die Augen verdrehst.
+              Keine Antwort ist richtig. Nimm die, die an einem echten Dienstag
+              weniger falsch wäre.
             </p>
           </motion.div>
         </AnimatePresence>

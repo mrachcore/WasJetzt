@@ -20,6 +20,7 @@ export type Career = {
   tags: string[];
   lifeIndicators: LifeIndicators;
   practicalSignals: string[];
+  realSentences: string[];
   realism: {
     underestimated: string[];
     afterDay: string;
@@ -29,6 +30,7 @@ export type Career = {
   searchKeywords?: string[];
   discoveryNote: string;
   discoveryGroup: string;
+  laterNotices: string[];
   observations: string[];
   emotionalPathways: {
     prompt: string;
@@ -50,7 +52,7 @@ export type Situation = {
 
 const careerEntries: Omit<
   Career,
-  "lifeIndicators" | "practicalSignals" | "realism"
+  "laterNotices" | "lifeIndicators" | "practicalSignals" | "realSentences" | "realism"
 >[] = [
   {
     slug: "fachinformatiker-systemintegration",
@@ -1372,7 +1374,7 @@ const defaultLifeIndicators: LifeIndicators = {
 const defaultPracticalSignals = ["Ausbildung", "echter Alltag", "regional abhängig"];
 const defaultCareerRealism = {
   underestimated: [
-    "dass der Anfang oft weniger klar wirkt, als die Berufsbezeichnung klingt",
+    "dass der Anfang oft weniger klar wirkt, als der Titel klingt",
     "wie stark Betrieb und Team den Alltag verändern",
   ],
   afterDay: "eher müde, aber mit ein paar echten Momenten im Kopf",
@@ -1590,7 +1592,7 @@ const careerRealism: Record<string, typeof defaultCareerRealism> = {
     afterDay: "visuell satt, manchmal noch mit einem Detail im Kopf",
     entry: ["Portfolio hilft", "Praktikum zeigt den Alltag", "Büros unterscheiden sich stark"],
     localTexture:
-      "Agentur, Druckerei und internes Team können sich wie drei verschiedene Berufe anfühlen.",
+      "Agentur, Druckerei und internes Team können sich wie drei verschiedene Arbeitsleben anfühlen.",
   },
   notfallsanitaeter: {
     underestimated: [
@@ -1630,7 +1632,7 @@ const careerRealism: Record<string, typeof defaultCareerRealism> = {
     afterDay: "menschlich voll, manchmal aber auch weich zufrieden",
     entry: ["Ausbildung je nach Bundesland", "Praktikum sehr hilfreich", "Einrichtung macht viel aus"],
     localTexture:
-      "Kita, Hort und Jugendhilfe fühlen sich oft weniger ähnlich an, als der Berufstitel klingt.",
+      "Kita, Hort und Jugendhilfe fühlen sich oft weniger ähnlich an, als der Titel klingt.",
   },
   verkaeufer: {
     underestimated: [
@@ -1730,7 +1732,7 @@ const careerRealism: Record<string, typeof defaultCareerRealism> = {
     afterDay: "kalte Hände, ruhiger Kopf, manchmal feine Zufriedenheit",
     entry: ["Ausbildung klar", "Ladenalltag testen", "Saison macht viel aus"],
     localTexture:
-      "Vor Feiertagen wirkt dieser Beruf anders als an normalen Dienstagen.",
+      "Vor Feiertagen wirkt dieser Alltag anders als an normalen Dienstagen.",
   },
   zugbegleiter: {
     underestimated: [
@@ -1754,10 +1756,318 @@ const careerRealism: Record<string, typeof defaultCareerRealism> = {
   },
 };
 
+const careerLaterNotices: Record<string, string[]> = {
+  "fachinformatiker-systemintegration": [
+    "Du bemerkst schlechte WLANs sofort.",
+    "Du fragst automatisch, ob schon neu gestartet wurde.",
+    "Drucker wirken irgendwann persönlich.",
+    "Du erkennst Chaos schon an Ordnernamen.",
+    "Ein voller Desktop macht dich innerlich unruhig.",
+    "Du hörst an der Beschreibung, dass etwas anderes kaputt ist.",
+  ],
+  elektroniker: [
+    "Du schaust automatisch auf Kabel.",
+    "Kaputte Dinge wirken oft reparierbar.",
+    "Du hörst Geräusche, die andere ignorieren.",
+    "Steckdosen werden plötzlich interessant.",
+    "Du siehst schiefe Schalterplatten aus drei Metern Entfernung.",
+    "Du traust keiner Wand, bevor du weißt, was dahinterliegt.",
+  ],
+  pflegefachkraft: [
+    "Du merkst schneller, wenn jemand nicht okay ist.",
+    "Du siehst Müdigkeit früher als andere.",
+    "Kleine Gesten bleiben länger hängen.",
+    "Du gewöhnst dir an, ständig mitzudenken.",
+    "Du liest Räume, bevor jemand etwas sagt.",
+    "Manche Gerüche bringen sofort einen ganzen Tag zurück.",
+  ],
+  mediengestalter: [
+    "Schlechte Logos springen dich plötzlich an.",
+    "Du verschiebst Dinge manchmal um zwei Pixel.",
+    "Du bemerkst Schriftarten auf Speisekarten.",
+    "Manche Werbeplakate machen dich heimlich wütend.",
+    "Du kannst nicht mehr nicht auf Abstände schauen.",
+    "Dateinamen verraten dir, wie chaotisch ein Projekt war.",
+  ],
+  notfallsanitaeter: [
+    "Du hörst an Stimmen schneller, ob jemand wirklich Angst hat.",
+    "Blaulicht wirkt irgendwann weniger wie Film und mehr wie Arbeit.",
+    "Du merkst, welche Stille gefährlich sein kann.",
+    "Du prüfst Räume automatisch nach Auswegen.",
+    "Manche Hausflure bleiben dir länger im Kopf als Einsätze.",
+    "Du gewöhnst dich an, ruhig zu wirken, bevor du dich ruhig fühlst.",
+  ],
+  "fachkraft-lagerlogistik": [
+    "Du merkst sofort, wenn ein Regal keinen Sinn ergibt.",
+    "Du denkst in Wegen, nicht nur in Dingen.",
+    "Falsch beschriftete Kartons nerven dich unverhältnismäßig.",
+    "Du freust dich leise, wenn eine Palette genau aufgeht.",
+    "Du siehst Platz, wo andere nur Kram sehen.",
+    "Ein guter Ablauf fühlt sich irgendwann fast körperlich angenehm an.",
+  ],
+  mechatroniker: [
+    "Du hörst Maschinen anders als früher.",
+    "Ein kleines Ruckeln wirkt plötzlich wie ein Hinweis.",
+    "Du vertraust keinem Fehler, der nur manchmal auftaucht.",
+    "Ölgeruch kann beruhigend und nervig zugleich werden.",
+    "Du schaust bei Geräten zuerst dahin, wo Bewegung entsteht.",
+    "Du merkst, wie viele Dinge nur funktionieren, weil niemand hinsieht.",
+  ],
+  erzieher: [
+    "Du hörst an Lärm, ob ein Raum kippt.",
+    "Du bemerkst kleine Ungerechtigkeiten schneller.",
+    "Kinderzeichnungen erzählen dir irgendwann mehr als geplant.",
+    "Du gewöhnst dich an, drei Gespräche gleichzeitig mitzudenken.",
+    "Stille wirkt manchmal verdächtiger als Geschrei.",
+    "Du siehst, wie lange kleine Sätze nachwirken können.",
+  ],
+  verkaeufer: [
+    "Du erkennst unentschlossene Menschen schon am Gang.",
+    "Du faltest Dinge nebenbei ordentlicher als privat nötig wäre.",
+    "Du hörst, ob eine Frage wirklich eine Frage ist.",
+    "Regale wirken irgendwann wie Stimmungsmesser.",
+    "Du merkst schneller, wann Freundlichkeit nur Fassade ist.",
+    "Du kennst die Uhrzeit am Geräusch des Ladens.",
+  ],
+  koch: [
+    "Du hörst, wenn eine Pfanne zu heiß wird.",
+    "Du liest Speisekarten plötzlich taktisch.",
+    "Messer, die nicht scharf sind, machen dich müde.",
+    "Du riechst früher, wenn etwas gleich kippt.",
+    "Timing verfolgt dich auch beim privaten Essen.",
+    "Du siehst an Tellern, wo jemand unter Druck war.",
+  ],
+  tischler: [
+    "Du streichst über Kanten, ohne darüber nachzudenken.",
+    "Ein Millimeter fühlt sich irgendwann nicht mehr klein an.",
+    "Billige Möbel verraten sich sofort.",
+    "Du hörst, ob eine Maschine sauber läuft.",
+    "Holz arbeitet in deinem Kopf weiter.",
+    "Du siehst Oberflächenfehler, die andere nie bemerken.",
+  ],
+  bauzeichner: [
+    "Du siehst Gebäude plötzlich in Linien.",
+    "Treppen, Türen und Fenster wirken nicht mehr selbstverständlich.",
+    "Ein falsches Maß bleibt dir unangenehm lange im Kopf.",
+    "Du erkennst, wo jemand sauber geplant hat.",
+    "Baustellen sehen für dich weniger zufällig aus.",
+    "Du merkst, dass kleine Striche später echte Wände werden.",
+  ],
+  industriemechaniker: [
+    "Du hörst, wenn eine Anlage nicht rund läuft.",
+    "Schwere Dinge wirken genauer, als sie aussehen.",
+    "Du entwickelst Respekt vor gut geschmierten Teilen.",
+    "Ein lockerer Rhythmus in einer Maschine fällt dir sofort auf.",
+    "Du siehst Verschleiß, bevor etwas wirklich kaputt ist.",
+    "Du merkst, wie viel Ruhe in einer sauber laufenden Halle liegt.",
+  ],
+  veranstaltungstechniker: [
+    "Du schaust bei Konzerten zuerst nach oben.",
+    "Kabelwege erzählen dir, ob jemand mitgedacht hat.",
+    "Du bemerkst gutes Licht erst, wenn es fehlt.",
+    "Applaus fühlt sich manchmal nach Abbau an.",
+    "Du hörst Rückkopplung schon, bevor sie peinlich wird.",
+    "Leere Hallen wirken nach einer Veranstaltung anders.",
+  ],
+  "medizinische-fachangestellte": [
+    "Du hörst am Telefon schneller, wie dringend etwas ist.",
+    "Wartezimmer fühlen sich irgendwann lesbar an.",
+    "Du merkst, wer Angst hinter Ungeduld versteckt.",
+    "Handschriften werden zu kleinen Rätseln.",
+    "Du kannst freundlich kurz sein, ohne kalt zu werden.",
+    "Ein voller Terminkalender wirkt wie ein Wetterbericht.",
+  ],
+  "kaufmann-bueromanagement": [
+    "Du erkennst Chaos an Betreffzeilen.",
+    "Kalender erzählen dir mehr über Menschen als Gespräche.",
+    "Eine saubere Ablage kann sich überraschend gut anfühlen.",
+    "Du merkst, welche Kleinigkeiten später Ärger sparen.",
+    "Unklare Zuständigkeiten machen dich schneller müde.",
+    "Du siehst, wann ein Prozess nur so tut, als wäre er einer.",
+  ],
+  friseur: [
+    "Du schaust Menschen zuerst auf Übergänge.",
+    "Scherenklang wird irgendwann vertraut.",
+    "Du merkst, wer wirklich Veränderung will.",
+    "Spiegel erzählen mehr, als Kundinnen sagen.",
+    "Du siehst schlechte Haarschnitte auch im Vorbeigehen.",
+    "Ein halber Zentimeter kann plötzlich viel bedeuten.",
+  ],
+  florist: [
+    "Du riechst, welche Blumen schon zu lange stehen.",
+    "Farben wirken irgendwann nach Anlass.",
+    "Du siehst an Sträußen, ob jemand unsicher war.",
+    "Kalte Hände gehören irgendwann zum Denken dazu.",
+    "Feiertage fühlen sich anders an als für andere.",
+    "Du bemerkst, wie viel Arbeit hinter etwas Leichtem steckt.",
+  ],
+  zugbegleiter: [
+    "Du erkennst Stress schon am Einsteigen.",
+    "Durchsagen klingen für dich irgendwann wie kleine Entscheidungen.",
+    "Du merkst, welche Ruhe einen Wagen beruhigt.",
+    "Verspätungen verändern die Stimmung schneller als das Wetter.",
+    "Bahnhöfe fühlen sich nach Uhrzeiten unterschiedlich an.",
+    "Du gewöhnst dich daran, freundlich klar zu bleiben.",
+  ],
+  tierpfleger: [
+    "Du merkst, wenn ein Tier heute anders schaut.",
+    "Putzen wirkt irgendwann weniger nebensächlich.",
+    "Du hörst kleine Veränderungen in gewohnten Geräuschen.",
+    "Futterzeiten strukturieren deinen Kopf.",
+    "Du siehst Fürsorge oft in sehr unromantischen Dingen.",
+    "Geduld fühlt sich irgendwann mehr nach Beobachten als nach Warten an.",
+  ],
+};
+
+const careerRealSentences: Record<string, string[]> = {
+  "fachinformatiker-systemintegration": [
+    "Ich schaue nur kurz.",
+    "Das hat gestern noch funktioniert.",
+    "Kannst du einmal neu starten?",
+    "Welcher Drucker war es?",
+    "Ich sehe es im Log.",
+  ],
+  elektroniker: [
+    "Da sollte Strom drauf sein.",
+    "Nur kurz messen.",
+    "Das Kabel ist nicht beschriftet.",
+    "Halt die Leiter kurz.",
+    "Sicherung ist wieder drin.",
+  ],
+  pflegefachkraft: [
+    "Ich bin gleich da.",
+    "Hast du heute genug getrunken?",
+    "Bleib kurz sitzen.",
+    "Tut das gerade weh?",
+    "Ich komme gleich wieder.",
+  ],
+  mediengestalter: [
+    "Kannst du das etwas größer machen?",
+    "Das Logo liegt nicht richtig.",
+    "Ich schiebe es zwei Pixel nach links.",
+    "Welche Version ist die aktuelle?",
+    "Der Export ist wieder zu groß.",
+  ],
+  notfallsanitaeter: [
+    "Bleib kurz bei mir.",
+    "Atme einmal ruhig.",
+    "Was ist passiert?",
+    "Seit wann ist das so?",
+    "Schau mich kurz an.",
+  ],
+  "fachkraft-lagerlogistik": [
+    "Wo liegt das wirklich?",
+    "Der Scanner sagt nein.",
+    "Das passt nicht auf die Palette.",
+    "Wer hat das falsch beschriftet?",
+    "Gang drei ist voll.",
+  ],
+  mechatroniker: [
+    "Das Geräusch war vorhin noch nicht da.",
+    "Ich muss das einmal aufmachen.",
+    "Der Fehler kommt nur manchmal.",
+    "Gib mir kurz das Messgerät.",
+    "Lass sie nochmal laufen.",
+  ],
+  erzieher: [
+    "Wir machen das nacheinander.",
+    "Ich habe dich gehört.",
+    "Nicht alle gleichzeitig.",
+    "Komm, wir gehen kurz raus.",
+    "Das war gerade zu viel.",
+  ],
+  verkaeufer: [
+    "Ich schau kurz im Lager.",
+    "Das ist gerade leider ausverkauft.",
+    "Haben Sie Ihre Karte dabei?",
+    "Ich mach die zweite Kasse auf.",
+    "Einen Moment, ich komme gleich.",
+  ],
+  koch: [
+    "Wie lange noch?",
+    "Pfanne ist heiß.",
+    "Das muss jetzt raus.",
+    "Wer hat den Bon?",
+    "Tisch zwölf wartet.",
+  ],
+  tischler: [
+    "Das ist noch nicht bündig.",
+    "Ein Millimeter fehlt.",
+    "Halt das mal kurz fest.",
+    "Ich schleife es nochmal.",
+    "Jetzt sitzt es.",
+  ],
+  bauzeichner: [
+    "Das Maß stimmt nicht.",
+    "Welche Version ist aktuell?",
+    "Die Wand liegt zwei Zentimeter anders.",
+    "Ich prüfe den Plan nochmal.",
+    "Der Schnitt fehlt noch.",
+  ],
+  industriemechaniker: [
+    "Die Anlage klingt anders.",
+    "Das Lager hat Spiel.",
+    "Wir stellen das nochmal ein.",
+    "Hol mal den Schlüssel.",
+    "Jetzt läuft sie ruhiger.",
+  ],
+  veranstaltungstechniker: [
+    "Kabel bitte nicht über den Weg.",
+    "Licht steht.",
+    "Noch einmal Soundcheck.",
+    "Wer hat den Adapter?",
+    "Nach der Show bauen wir ab.",
+  ],
+  "medizinische-fachangestellte": [
+    "Haben Sie Ihre Karte dabei?",
+    "Setzen Sie sich bitte kurz ins Wartezimmer.",
+    "Ich frage die Ärztin.",
+    "Das Telefon hört heute nicht auf.",
+    "Wir finden noch einen Termin.",
+  ],
+  "kaufmann-bueromanagement": [
+    "Wer hat die aktuelle Version?",
+    "Ich lege das in den Ordner.",
+    "Der Termin steht im Kalender.",
+    "Kannst du mir das kurz weiterleiten?",
+    "Sonst findet das morgen niemand mehr.",
+  ],
+  friseur: [
+    "Nur die Spitzen?",
+    "Schau mal kurz in den Spiegel.",
+    "Das fällt gleich weicher.",
+    "Ich nehme noch ein bisschen Länge raus.",
+    "So sieht es natürlicher aus.",
+  ],
+  florist: [
+    "Das hält mit genug Wasser.",
+    "Für welchen Anlass ist es?",
+    "Die Stiele müssen noch kürzer.",
+    "Ich binde das etwas lockerer.",
+    "Der Strauß kippt sonst nach links.",
+  ],
+  zugbegleiter: [
+    "Die Fahrkarten bitte.",
+    "Der Anschluss wartet nicht.",
+    "Wir haben ein paar Minuten Verspätung.",
+    "Bitte einmal den Gang freimachen.",
+    "Ich frage vorne nach.",
+  ],
+  tierpfleger: [
+    "Heute frisst er weniger.",
+    "Er wirkt anders als gestern.",
+    "Erst sauber machen, dann füttern.",
+    "Mach die Tür richtig zu.",
+    "Wir beobachten das nochmal.",
+  ],
+};
+
 export const careers: Career[] = careerEntries.map((career) => ({
   ...career,
+  laterNotices: careerLaterNotices[career.slug] ?? [],
   lifeIndicators: careerLifeIndicators[career.slug] ?? defaultLifeIndicators,
   practicalSignals: careerPracticalSignals[career.slug] ?? defaultPracticalSignals,
+  realSentences: careerRealSentences[career.slug] ?? [],
   realism: careerRealism[career.slug] ?? defaultCareerRealism,
 }));
 
@@ -1900,87 +2210,11 @@ export function getSituationsForCareer(slug: string) {
 
 export const quizQuestions = [
   {
-    id: "energy",
-    question: "Was klingt an einem guten Tag am ehesten nach dir?",
+    id: "endure",
+    question: "Was würdest du länger aushalten?",
     answers: [
       {
-        label: "In Ruhe herausfinden, warum etwas nicht klappt",
-        careers: [
-          "fachinformatiker-systemintegration",
-          "bauzeichner",
-          "mechatroniker",
-          "industriemechaniker",
-        ],
-      },
-      {
-        label: "Mit Menschen sein, ohne viel Smalltalk drumherum",
-        careers: [
-          "notfallsanitaeter",
-          "pflegefachkraft",
-          "medizinische-fachangestellte",
-          "erzieher",
-        ],
-      },
-      {
-        label: "Etwas so lange verändern, bis es endlich stimmt",
-        careers: ["mediengestalter", "florist", "friseur", "tischler"],
-      },
-      {
-        label: "Etwas anfassen, reparieren, fertig bekommen",
-        careers: [
-          "elektroniker",
-          "mechatroniker",
-          "tischler",
-          "fachkraft-lagerlogistik",
-          "industriemechaniker",
-        ],
-      },
-    ],
-  },
-  {
-    id: "pressure",
-    question: "Welche Art Stress würdest du eher aushalten?",
-    answers: [
-      {
-        label: "Ein Fehler, der sich nicht sofort zeigen will",
-        careers: [
-          "fachinformatiker-systemintegration",
-          "mechatroniker",
-          "elektroniker",
-          "bauzeichner",
-        ],
-      },
-      {
-        label: "Ein Moment, in dem jemand wirklich Hilfe braucht",
-        careers: [
-          "notfallsanitaeter",
-          "pflegefachkraft",
-          "medizinische-fachangestellte",
-          "erzieher",
-        ],
-      },
-      {
-        label: "Feedback, das erstmal nervt, aber etwas besser macht",
-        careers: ["mediengestalter", "friseur", "florist"],
-      },
-      {
-        label: "Ein voller Tag, der körperlich spürbar ist",
-        careers: [
-          "koch",
-          "veranstaltungstechniker",
-          "fachkraft-lagerlogistik",
-          "tierpfleger",
-          "verkaeufer",
-        ],
-      },
-    ],
-  },
-  {
-    id: "place",
-    question: "Wo müsstest du dich wahrscheinlich am wenigsten verstellen?",
-    answers: [
-      {
-        label: "An einem ruhigen Platz mit Monitor, Kabeln und Musik",
+        label: "lange Konzentration",
         careers: [
           "fachinformatiker-systemintegration",
           "bauzeichner",
@@ -1989,71 +2223,161 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Unterwegs, zwischen Menschen, Türen und kurzen Entscheidungen",
-        careers: ["notfallsanitaeter", "zugbegleiter", "veranstaltungstechniker"],
-      },
-      {
-        label: "In einem Raum mit Werkzeug, Material und echten Kanten",
-        careers: [
-          "tischler",
-          "elektroniker",
-          "industriemechaniker",
-          "mechatroniker",
-        ],
-      },
-      {
-        label: "Nah an Menschen, mitten in einem normalen, vollen Tag",
+        label: "ständige Unterbrechungen",
         careers: [
           "pflegefachkraft",
           "medizinische-fachangestellte",
           "erzieher",
-          "friseur",
           "verkaeufer",
         ],
-      },
-      {
-        label: "Irgendwo, wo Dinge sortiert, bewegt oder vorbereitet werden",
-        careers: ["fachkraft-lagerlogistik", "koch", "florist", "tierpfleger"],
       },
     ],
   },
   {
-    id: "compliment",
-    question: "Welcher Satz würde dich heimlich freuen?",
+    id: "annoyance",
+    question: "Was nervt dich weniger?",
     answers: [
       {
-        label: "Du hast gefunden, woran es wirklich lag.",
+        label: "ein Problem, das einfach nicht weggeht",
         careers: [
           "fachinformatiker-systemintegration",
-          "mechatroniker",
           "elektroniker",
+          "mechatroniker",
           "industriemechaniker",
         ],
       },
       {
-        label: "Du bist ruhig geblieben, als es kurz viel war.",
+        label: "viele Menschen, die gleichzeitig etwas wollen",
         careers: [
-          "notfallsanitaeter",
-          "zugbegleiter",
-          "medizinische-fachangestellte",
           "pflegefachkraft",
+          "notfallsanitaeter",
+          "medizinische-fachangestellte",
+          "zugbegleiter",
+        ],
+      },
+    ],
+  },
+  {
+    id: "quiet",
+    question: "Was gibt dir eher Ruhe?",
+    answers: [
+      {
+        label: "wenn etwas endlich funktioniert",
+        careers: [
+          "elektroniker",
+          "mechatroniker",
+          "fachinformatiker-systemintegration",
+          "industriemechaniker",
         ],
       },
       {
-        label: "Jetzt sieht es nicht mehr so komisch aus.",
-        careers: ["mediengestalter", "friseur", "florist", "tischler"],
-      },
-      {
-        label: "Gut, dass du da warst.",
-        careers: ["pflegefachkraft", "erzieher", "tierpfleger", "verkaeufer"],
-      },
-      {
-        label: "Das hast du sauber gemacht.",
+        label: "wenn jemand sichtbar erleichtert ist",
         careers: [
-          "elektroniker",
+          "pflegefachkraft",
+          "notfallsanitaeter",
+          "medizinische-fachangestellte",
+          "friseur",
+        ],
+      },
+    ],
+  },
+  {
+    id: "body-or-head",
+    question: "Was fühlt sich weniger falsch an?",
+    answers: [
+      {
+        label: "mit Händen etwas machen",
+        careers: [
           "tischler",
+          "elektroniker",
+          "florist",
           "koch",
           "fachkraft-lagerlogistik",
+        ],
+      },
+      {
+        label: "im Kopf etwas sortieren",
+        careers: [
+          "bauzeichner",
+          "kaufmann-bueromanagement",
+          "fachinformatiker-systemintegration",
+          "mediengestalter",
+        ],
+      },
+    ],
+  },
+  {
+    id: "energy-cost",
+    question: "Was kostet dich weniger Energie?",
+    answers: [
+      {
+        label: "reden",
+        careers: [
+          "erzieher",
+          "verkaeufer",
+          "friseur",
+          "zugbegleiter",
+          "medizinische-fachangestellte",
+        ],
+      },
+      {
+        label: "beobachten",
+        careers: [
+          "tierpfleger",
+          "bauzeichner",
+          "fachinformatiker-systemintegration",
+          "fachkraft-lagerlogistik",
+          "florist",
+        ],
+      },
+    ],
+  },
+  {
+    id: "after-day",
+    question: "Was wäre am Ende vom Tag besser?",
+    answers: [
+      {
+        label: "etwas ist fertig",
+        careers: [
+          "tischler",
+          "elektroniker",
+          "koch",
+          "florist",
+          "mediengestalter",
+        ],
+      },
+      {
+        label: "jemand ist nicht mehr allein",
+        careers: [
+          "pflegefachkraft",
+          "notfallsanitaeter",
+          "erzieher",
+          "medizinische-fachangestellte",
+        ],
+      },
+    ],
+  },
+  {
+    id: "bad-day",
+    question: "Was wäre an einem schlechten Tag eher auszuhalten?",
+    answers: [
+      {
+        label: "körperlich müde sein",
+        careers: [
+          "fachkraft-lagerlogistik",
+          "elektroniker",
+          "koch",
+          "tierpfleger",
+          "industriemechaniker",
+        ],
+      },
+      {
+        label: "im Kopf noch weiterdenken",
+        careers: [
+          "fachinformatiker-systemintegration",
+          "mediengestalter",
+          "bauzeichner",
+          "kaufmann-bueromanagement",
           "veranstaltungstechniker",
         ],
       },

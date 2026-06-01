@@ -26,6 +26,7 @@ type ExplorationMemory = {
   viewedCareers: string[];
   savedCareers: string[];
   comparedCareers: string[];
+  openedObservations: string[];
   selectedFilters: string[];
   clickedPathways: string[];
   clickedSituations: string[];
@@ -55,6 +56,7 @@ const emptyMemory: ExplorationMemory = {
   viewedCareers: [],
   savedCareers: [],
   comparedCareers: [],
+  openedObservations: [],
   selectedFilters: [],
   clickedPathways: [],
   clickedSituations: [],
@@ -67,6 +69,7 @@ export const explorationSignalWeights = {
   careerSave: 1.05,
   compare: 0.68,
   filterUse: 0.72,
+  observationOpen: 0.34,
   pathwayClick: 0.52,
   situationClick: 0.46,
 } as const;
@@ -176,6 +179,7 @@ function readMemory(): ExplorationMemory {
       viewedCareers: sanitizeStringArray(parsed.viewedCareers),
       savedCareers: sanitizeStringArray(parsed.savedCareers),
       comparedCareers: sanitizeStringArray(parsed.comparedCareers),
+      openedObservations: sanitizeStringArray(parsed.openedObservations),
       selectedFilters: sanitizeStringArray(parsed.selectedFilters),
       clickedPathways: sanitizeStringArray(parsed.clickedPathways),
       clickedSituations: sanitizeStringArray(parsed.clickedSituations),
@@ -208,6 +212,7 @@ function updateMemory(
     | "clickedPathways"
     | "clickedSituations"
     | "comparedCareers"
+    | "openedObservations"
     | "savedCareers"
     | "selectedFilters"
     | "viewedCareers",
@@ -303,8 +308,13 @@ function scaleTendencies(tendencies: TendencyScores, weight: number) {
 
 function scoreCareer(career: Career, profile: ExplorationProfile) {
   const tendencies = careerTendencies[career.slug] ?? {};
+  const openedObservationBoost = profile.memory.openedObservations.some((item) =>
+    item.startsWith(`${career.slug}:`),
+  )
+    ? 0.42
+    : 0;
 
-  return explorationTendencies.reduce((total, tendency) => {
+  return openedObservationBoost + explorationTendencies.reduce((total, tendency) => {
     return total + (profile.memory.tendencies[tendency] ?? 0) * (tendencies[tendency] ?? 0);
   }, 0);
 }
@@ -364,6 +374,14 @@ export function trackFilterUse(toneOrLabel: string) {
     "selectedFilters",
     toneOrLabel,
     getFilterTendencies(toneOrLabel, explorationSignalWeights.filterUse),
+  );
+}
+
+export function trackObservationOpen(slug: string, observation: string) {
+  return updateMemory(
+    "openedObservations",
+    `${slug}:${observation}`,
+    getCareerTendencies(slug, explorationSignalWeights.observationOpen),
   );
 }
 
@@ -519,6 +537,7 @@ function getSignalStrength(memory: ExplorationMemory) {
     memory.viewedCareers.length * 0.35 +
     memory.savedCareers.length * 1.45 +
     memory.comparedCareers.length * 1 +
+    memory.openedObservations.length * 0.55 +
     memory.selectedFilters.length * 0.95 +
     memory.clickedPathways.length * 0.9 +
     memory.clickedSituations.length * 0.85

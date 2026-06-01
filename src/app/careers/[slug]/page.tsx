@@ -2,9 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Map } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { ContinuationLine } from "@/components/continuation-line";
 import { TrackCareerView, TrackedPathwayLink } from "@/components/exploration-tracker";
 import { LifeIndicatorSnapshot } from "@/components/life-indicators";
 import { PracticalSignals } from "@/components/practical-signals";
@@ -34,15 +35,14 @@ type CareerPageProfile = {
 };
 
 const defaultProfile: CareerPageProfile = {
-  label: "Wie der Alltag ungefähr aussieht",
+  label: "Wie sich dieser Alltag ungefähr anfühlt",
   fitStyle: "card",
   detailOrder: ["atmosphere", "secretlyLike", "annoys", "comfortableFor"],
   detailMode: "grid",
   observationStyle: "stepped",
   dayStyle: "lines",
   dayTitle: "Ein ganz normaler Dienstag",
-  pathwayTitle:
-    "Nicht ähnliche Wege. Eher andere Arten, sich im Alltag zu fühlen.",
+  pathwayTitle: "Andere Tage mit ähnlichem Gefühl.",
 };
 
 const careerPageProfiles: Record<string, CareerPageProfile> = {
@@ -349,9 +349,9 @@ export async function generateMetadata({
 
   if (!career) {
     return {
-      title: "Beruf nicht gefunden | WasJetzt",
+      title: "Arbeitsleben nicht gefunden | WasJetzt",
       description:
-        "Ein ruhiger Ort, um Berufe und Ausbildungen ohne Druck zu entdecken.",
+        "Ein ruhiger Ort, um zu verstehen, wie unterschiedliche Arbeitstage sich anfühlen.",
     };
   }
 
@@ -429,9 +429,16 @@ export default async function CareerDetailPage({
             className="mt-5"
             label="typisch"
           />
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-3">
             <SaveCareerButton slug={career.slug} />
+            <Button asChild variant="quiet">
+              <Link href={`/karte?career=${career.slug}`}>
+                <Map className="size-4" />
+                Auf der Karte ansehen
+              </Link>
+            </Button>
           </div>
+          <ContinuationLine careerSlug={career.slug} className="mt-5" />
         </div>
 
         <LifeIndicatorSnapshot
@@ -440,13 +447,15 @@ export default async function CareerDetailPage({
         />
         <FitSection career={career} profile={profile} />
         <ObservationStream career={career} profile={profile} />
+        <RealSentencesWall career={career} />
+        <LaterNoticeCards career={career} />
         <DayFragments career={career} profile={profile} tone={tone} />
         <RealismLayer career={career} />
 
         {emotionalPathways.length > 0 ? (
           <section className="mt-16 sm:mt-20">
             <div className="mb-10 max-w-2xl">
-              <p className="text-sm text-primary">Von hier aus weiterdenken</p>
+              <p className="text-sm text-primary">Wenn du von hier weiterdenkst</p>
               <h2 className="mt-3 text-3xl font-semibold leading-tight">
                 {profile.pathwayTitle}
               </h2>
@@ -558,7 +567,7 @@ function FitSection({
     return (
       <div className="mt-14 max-w-2xl sm:ml-[8%]">
         <p className="text-sm text-primary">
-          Warum es vielleicht nicht falsch ist
+          Warum manche bleiben
         </p>
         <p className="mt-4 text-2xl font-semibold leading-snug text-foreground/90 sm:text-3xl">
           {career.whyItMightFit}
@@ -574,7 +583,7 @@ function FitSection({
     return (
       <div className="mt-14 grid gap-5 sm:grid-cols-[1fr_0.8fr] sm:items-start">
         <Card className="energy-surface p-6 sm:p-8">
-          <p className="text-sm text-primary">Warum das passen könnte</p>
+          <p className="text-sm text-primary">Warum manche bleiben</p>
           <p className="mt-4 text-xl font-semibold leading-snug sm:text-2xl">
             {career.whyItMightFit}
           </p>
@@ -592,7 +601,7 @@ function FitSection({
     <Card className="energy-surface mt-12">
       <CardHeader className="pb-4">
         <div className="flex items-center gap-3">
-          <CardTitle>Warum das für dich passen könnte</CardTitle>
+          <CardTitle>Warum manche bleiben</CardTitle>
         </div>
       </CardHeader>
       <CardContent>
@@ -645,6 +654,56 @@ function ObservationStream({
         </p>
       ))}
     </div>
+  );
+}
+
+function RealSentencesWall({ career }: { career: Career }) {
+  return (
+    <section className="my-16 border-y border-white/10 py-9 sm:my-24 sm:py-12">
+      <p className="text-sm text-primary">Sätze, die dort fallen</p>
+      <div className="mt-8 flex flex-wrap gap-x-8 gap-y-5">
+        {career.realSentences.map((sentence, index) => (
+          <p
+            className={cn(
+              "max-w-xl text-3xl font-semibold leading-tight text-foreground/92 sm:text-5xl",
+              index % 3 === 1 && "sm:pt-10",
+              index % 3 === 2 && "sm:pt-4",
+            )}
+            key={sentence}
+          >
+            {sentence}
+          </p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function LaterNoticeCards({ career }: { career: Career }) {
+  return (
+    <section className="my-16 sm:my-24">
+      <div className="mb-8 max-w-2xl">
+        <p className="text-sm text-primary">Was später hängen bleibt</p>
+        <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
+          Was du vielleicht irgendwann bemerkst.
+        </h2>
+      </div>
+
+      <div className="flex flex-wrap gap-3 sm:gap-4">
+        {career.laterNotices.map((notice, index) => (
+          <div
+            className={cn(
+              "rounded-[1.2rem] border border-white/10 bg-white/[0.035] px-4 py-3.5 text-sm leading-6 text-foreground/90 shadow-[0_12px_34px_rgba(0,0,0,0.13)] transition duration-700 ease-out hover:-translate-y-1 hover:border-primary/20 hover:bg-white/[0.065] sm:max-w-[17rem] sm:px-5 sm:py-4 sm:text-base",
+              index % 3 === 1 && "sm:mt-8",
+              index % 3 === 2 && "sm:mt-3",
+            )}
+            key={notice}
+          >
+            {notice}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -720,13 +779,13 @@ function RealismLayer({ career }: { career: Career }) {
 
       <div className="space-y-6 sm:pt-7">
         <div>
-          <p className="text-sm text-primary/80">Nach der Arbeit eher</p>
+          <p className="text-sm text-primary/80">Nach einem schlechten Tag eher</p>
           <p className="mt-2 text-base leading-7 text-muted-foreground">
             {career.realism.afterDay}
           </p>
         </div>
         <div>
-          <p className="text-sm text-primary/80">Einstieg wirkt oft</p>
+          <p className="text-sm text-primary/80">Das merkst du oft erst später</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {career.realism.entry.map((item) => (
               <span
@@ -754,15 +813,15 @@ function NextSteps({ career }: { career: Career }) {
       <div className="grid gap-8 sm:grid-cols-[0.95fr_1.05fr] sm:items-start">
         <div className="max-w-2xl">
           <p className="text-sm text-primary">
-            Wenn du das gerade nicht komplett absurd findest
+            Wenn du wissen willst, ob sich das echt so anfühlt
           </p>
           <h2 className="mt-3 text-3xl font-semibold leading-tight">
-            Du musst noch nichts entscheiden. Nur vielleicht einen nächsten
-            echten Blick nehmen.
+            Du musst noch nichts entscheiden. Nur vielleicht einen echten Tag
+            näher anschauen.
           </h2>
           <p className="mt-5 text-base leading-7 text-muted-foreground">
-            Manchmal wird eine Richtung nicht durch Nachdenken klarer, sondern
-            durch einen kleinen Kontakt mit der Wirklichkeit.
+            Manchmal versteht man einen Weg erst, wenn man sieht, wie Menschen
+            darin müde werden, bleiben oder gehen.
           </p>
         </div>
 
@@ -803,18 +862,18 @@ function getCareerNextStepLinks(career: Career) {
 
   return [
     {
-      title: "Ausbildungsplätze ansehen",
-      text: "Erstmal nur schauen, was es gerade gibt.",
+      title: "Schauen, wo dieser Alltag wirklich auftaucht",
+      text: "Nicht bewerben müssen. Erstmal nur sehen, wie nah das an deiner Gegend ist.",
       href: `https://www.arbeitsagentur.de/jobsuche/suche?angebotsart=4&was=${query}`,
     },
     {
-      title: "Weg offiziell nachlesen",
-      text: "Für Fakten, Voraussetzungen und offizielle Infos.",
+      title: "Fakten danebenlegen",
+      text: "Für Voraussetzungen und offizielle Infos, wenn du die Realität sortieren willst.",
       href: `https://web.arbeitsagentur.de/berufenet/suche?suchwoerter=${query}`,
     },
     {
-      title: "Praktikum suchen",
-      text: "Manchmal merkt man erst nach ein paar Tagen, ob es sich richtig anfühlt.",
+      title: "Einen echten Tag suchen",
+      text: "Manchmal merkt man erst nach ein paar Stunden, was daran zieht oder stört.",
       href: `https://www.google.com/search?q=${internshipQuery}`,
     },
   ];

@@ -12,27 +12,38 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { careers } from "@/data/careers";
 import {
+  CONTINUATION_CONTEXT_EVENT,
+  getContinuationContext,
+  type ContinuationSnapshot,
+} from "@/lib/continuation-memory";
+import {
   readSavedCareerSlugs,
   SAVED_CAREERS_EVENT,
 } from "@/lib/saved-careers";
 
 export default function SavedCareersPage() {
   const [hydrated, setHydrated] = useState(false);
+  const [continuation, setContinuation] = useState<ContinuationSnapshot | null>(
+    null,
+  );
   const [savedSlugs, setSavedSlugs] = useState<string[]>([]);
 
   useEffect(() => {
     const syncSavedCareers = () => {
       setSavedSlugs(readSavedCareerSlugs());
+      setContinuation(getContinuationContext(careers));
       setHydrated(true);
     };
 
     syncSavedCareers();
     window.addEventListener("storage", syncSavedCareers);
     window.addEventListener(SAVED_CAREERS_EVENT, syncSavedCareers);
+    window.addEventListener(CONTINUATION_CONTEXT_EVENT, syncSavedCareers);
 
     return () => {
       window.removeEventListener("storage", syncSavedCareers);
       window.removeEventListener(SAVED_CAREERS_EVENT, syncSavedCareers);
+      window.removeEventListener(CONTINUATION_CONTEXT_EVENT, syncSavedCareers);
     };
   }, []);
 
@@ -57,17 +68,16 @@ export default function SavedCareersPage() {
           />
           <Badge className="mb-7 text-primary">Zum Weiterdenken</Badge>
           <h1 className="text-4xl font-semibold leading-[1.08] sm:text-6xl">
-            Ein paar Wege, die du nicht sofort vergessen wolltest.
+            Ein ruhiges Regal für später.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Keine Liste, die abgearbeitet werden muss. Nur ein ruhiger Ort für
-            Sachen, die vielleicht später nochmal Sinn ergeben.
+            Nichts zum Abarbeiten. Nur Alltage, die nicht sofort weg waren.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Button asChild variant="quiet">
               <Link href="/quiz">
                 <RefreshCcw className="size-4" />
-                Heute nochmal anders fühlen
+                Heute nochmal anders antworten
               </Link>
             </Button>
             <Button asChild variant="ghost">
@@ -93,16 +103,16 @@ export default function SavedCareersPage() {
             </p>
           </Card>
         ) : savedCareers.length > 0 ? (
-          <div className="mt-14 space-y-5">
+          <div className="mt-14 space-y-8">
             {savedCareers.map((career) => (
-              <Card
-                className="group p-5 transition duration-700 ease-out hover:-translate-y-0.5 hover:bg-white/[0.075] sm:p-6"
+              <section
+                className="border-t border-white/10 pt-7 first:border-t-0 first:pt-0"
                 key={career.slug}
               >
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
                   <div className="max-w-2xl">
                     <p className="text-xs text-primary/80">
-                      {career.discoveryGroup}
+                      {getSavedContext(career.slug, continuation)}
                     </p>
                     <h2 className="mt-3 text-2xl font-semibold leading-tight">
                       {career.title}
@@ -111,24 +121,47 @@ export default function SavedCareersPage() {
                   <SaveCareerButton removeAction slug={career.slug} />
                 </div>
 
-                <div className="mt-7 border-t border-white/10 pt-6">
-                  <p className="max-w-2xl text-base leading-7 text-muted-foreground">
-                    {career.short}
-                  </p>
-                  <p className="mt-5 max-w-xl text-sm leading-6 text-foreground/75">
-                    {career.discoveryNote}
-                  </p>
-                  <div className="mt-7">
-                    <Link
-                      className="inline-flex items-center gap-2 text-sm text-foreground/85 transition duration-500 hover:text-primary"
-                      href={`/careers/${career.slug}`}
-                    >
-                      Nochmal reinfühlen
-                      <ArrowRight className="size-4 text-primary" />
-                    </Link>
+                <div className="mt-7 grid gap-6 sm:grid-cols-[1fr_0.95fr]">
+                  <div>
+                    <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+                      {career.short}
+                    </p>
+                    <p className="mt-5 max-w-xl border-l border-white/10 pl-4 text-sm leading-6 text-foreground/78">
+                      {career.laterNotices[0]}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-primary/80">
+                      Ein Satz von dort
+                    </p>
+                    <p className="mt-3 text-2xl font-semibold leading-tight text-foreground/92">
+                      {career.realSentences[0]}
+                    </p>
                   </div>
                 </div>
-              </Card>
+
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <Link
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3.5 py-2 text-sm text-foreground/85 transition duration-500 hover:border-primary/25 hover:text-primary"
+                    href={`/careers/${career.slug}`}
+                  >
+                    Nochmal reinfühlen
+                    <ArrowRight className="size-4 text-primary" />
+                  </Link>
+                  <Link
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3.5 py-2 text-sm text-foreground/85 transition duration-500 hover:border-primary/25 hover:text-primary"
+                    href={`/karte?career=${career.slug}`}
+                  >
+                    Auf Karte ansehen
+                  </Link>
+                  <Link
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3.5 py-2 text-sm text-foreground/85 transition duration-500 hover:border-primary/25 hover:text-primary"
+                    href="/wege"
+                  >
+                    Vergleichen
+                  </Link>
+                </div>
+              </section>
             ))}
           </div>
         ) : (
@@ -154,4 +187,23 @@ export default function SavedCareersPage() {
       </section>
     </AppShell>
   );
+}
+
+function getSavedContext(
+  slug: string,
+  continuation: ContinuationSnapshot | null,
+) {
+  if (continuation?.lastResultDirection) {
+    return "Das lag in deiner letzten Richtung.";
+  }
+
+  if (continuation?.recentlyComparedCareers.some((career) => career.slug === slug)) {
+    return "Von hier aus könntest du später weiterdenken.";
+  }
+
+  if (continuation?.recentlyViewedCareers.some((career) => career.slug === slug)) {
+    return "Ein Alltag, der nicht sofort weg war.";
+  }
+
+  return "Für später gemerkt.";
 }

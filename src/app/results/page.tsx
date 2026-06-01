@@ -4,17 +4,95 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, RefreshCcw } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { SaveCareerButton } from "@/components/save-career-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { careers, getExplorationCareers } from "@/data/careers";
+import { careers, getExplorationCareers, type Career } from "@/data/careers";
+import {
+  getFragmentsForCareers,
+  getRealSentencesForCareers,
+} from "@/data/work-life-fragments";
+import { rememberResultDirection } from "@/lib/continuation-memory";
+import { trackCareerSave } from "@/lib/exploration-memory";
+import {
+  readSavedCareerSlugs,
+  writeSavedCareerSlugs,
+} from "@/lib/saved-careers";
+
+type WorkingWorld = {
+  id: string;
+  title: string;
+  sentence: string;
+  slugs: string[];
+};
+
+const workingWorlds: WorkingWorld[] = [
+  {
+    id: "problems",
+    title: "Probleme lösen",
+    sentence: "Wenn etwas nicht aufgeht, bleibst du eher noch einen Moment dran.",
+    slugs: [
+      "fachinformatiker-systemintegration",
+      "elektroniker",
+      "mechatroniker",
+      "industriemechaniker",
+    ],
+  },
+  {
+    id: "people",
+    title: "Menschen entlasten",
+    sentence: "Es zählt für dich, wenn jemand danach ein bisschen weniger allein ist.",
+    slugs: [
+      "pflegefachkraft",
+      "notfallsanitaeter",
+      "medizinische-fachangestellte",
+      "erzieher",
+      "friseur",
+    ],
+  },
+  {
+    id: "order",
+    title: "Ordnung schaffen",
+    sentence: "Du merkst wahrscheinlich schneller, wenn Dinge keinen Platz haben.",
+    slugs: [
+      "bauzeichner",
+      "kaufmann-bueromanagement",
+      "fachkraft-lagerlogistik",
+      "fachinformatiker-systemintegration",
+    ],
+  },
+  {
+    id: "moving",
+    title: "Unterwegs sein",
+    sentence: "Stillstand wirkt vielleicht anstrengender als Bewegung.",
+    slugs: [
+      "zugbegleiter",
+      "veranstaltungstechniker",
+      "notfallsanitaeter",
+      "elektroniker",
+      "fachkraft-lagerlogistik",
+    ],
+  },
+  {
+    id: "making",
+    title: "Dinge fertig machen",
+    sentence: "Ein abgeschlossener Moment bleibt dir länger im Kopf als ein gutes Gespräch darüber.",
+    slugs: ["tischler", "elektroniker", "koch", "florist", "mediengestalter"],
+  },
+];
+
+const realityChecks = [
+  "Probleme verschwinden selten von allein.",
+  "Menschen sind komplizierter als Technik.",
+  "Ruhe heißt nicht automatisch wenig Verantwortung.",
+  "Sichtbare Ergebnisse haben oft unsichtbare Arbeit davor.",
+];
 
 export default function ResultsPage() {
   const [hydrated, setHydrated] = useState(false);
+  const [directionSaved, setDirectionSaved] = useState(false);
   const [storedAnswers, setStoredAnswers] = useState<string[]>([]);
 
   useEffect(() => {
@@ -33,10 +111,37 @@ export default function ResultsPage() {
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
-  const explorationCareers = useMemo(() => {
-    if (!storedAnswers.length) return careers;
-    return getExplorationCareers(storedAnswers);
+  const patternCareers = useMemo(() => {
+    if (!storedAnswers.length) return careers.slice(0, 8);
+    return getExplorationCareers(storedAnswers).slice(0, 8);
   }, [storedAnswers]);
+
+  const patternSlugs = useMemo(
+    () => patternCareers.map((career) => career.slug),
+    [patternCareers],
+  );
+  const observations = useMemo(
+    () => getPatternObservations(storedAnswers, patternCareers),
+    [patternCareers, storedAnswers],
+  );
+  const visibleWorlds = useMemo(
+    () => getVisibleWorlds(storedAnswers, patternSlugs),
+    [patternSlugs, storedAnswers],
+  );
+  const visibleRealityChecks = useMemo(
+    () => getRealityChecks(patternSlugs),
+    [patternSlugs],
+  );
+  const dominantPatternLabel = visibleWorlds[0]?.title ?? "diese Richtung";
+
+  function saveCurrentDirection() {
+    const slugs = patternCareers.slice(0, 3).map((career) => career.slug);
+
+    writeSavedCareerSlugs([...slugs, ...readSavedCareerSlugs()]);
+    slugs.forEach((slug) => trackCareerSave(slug));
+    rememberResultDirection(dominantPatternLabel);
+    setDirectionSaved(true);
+  }
 
   return (
     <AppShell>
@@ -51,82 +156,341 @@ export default function ResultsPage() {
           />
           <Badge className="mb-7 text-primary">
             {hydrated && storedAnswers.length
-              ? "Aus deinen Antworten"
-              : "Zum Rumklicken"}
+              ? "Nach ein paar Antworten"
+              : "Zum Reinfühlen"}
           </Badge>
-          <h1 className="text-4xl font-semibold leading-[1.08] sm:text-6xl">
-            Diese Wege könnten weniger falsch wirken als andere.
+          <h1 className="text-4xl font-semibold leading-[1.05] sm:text-6xl">
+            Nicht dein Ergebnis.
+            <br />
+            Vielleicht eher etwas,
+            <br />
+            das du öfter merken wirst.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Kein Beruf muss direkt dein ganzes Leben erklären.
-            Klick ruhig weiter. Manchmal merkt man erst beim dritten Beruf, was
-            eigentlich interessant war.
+            Keine Antwort entscheidet alles. Aber manchmal wird ein Muster
+            sichtbar.
           </p>
           <div className="mt-9">
             <Button asChild variant="quiet">
               <Link href="/quiz">
                 <RefreshCcw className="size-4" />
-                Heute nochmal anders fühlen
+                nochmal anders antworten
               </Link>
             </Button>
           </div>
         </div>
 
-        <div className="mt-12 grid gap-4">
-          {explorationCareers.map((career, index) => (
-            <motion.div
-              key={career.slug}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: index * 0.045,
-                duration: 0.52,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              <Card
-                className={`transition duration-500 ease-out hover:-translate-y-0.5 hover:bg-white/[0.095] ${
-                  index === 0 ? "energy-surface" : ""
-                }`}
+        <section className="mt-16 sm:mt-24">
+          <div className="mb-7 max-w-2xl">
+            <p className="text-sm text-primary">Du wirst das später merken.</p>
+          </div>
+          <div className="space-y-7 sm:space-y-9">
+            {observations.map((observation, index) => (
+              <motion.div
+                key={observation}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: index * 0.05,
+                  duration: 0.48,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
               >
-                <CardHeader className="pb-4">
-                  <div className="mb-3 flex flex-wrap gap-2">
-                    {career.tags.map((tag) => (
-                      <Badge key={tag}>{tag}</Badge>
-                    ))}
+                <MicroRevealObservation index={index} text={observation} />
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16 sm:mt-24">
+          <div className="mb-8 max-w-2xl">
+            <p className="text-sm text-primary">Muster, die öfter auftauchen</p>
+            <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-5xl">
+              Das sind nur mögliche Richtungen.
+            </h2>
+          </div>
+
+          <div className="space-y-8">
+            {visibleWorlds.map((world) => {
+              const worldCareers = world.slugs
+                .map((slug) => careers.find((career) => career.slug === slug))
+                .filter((career): career is Career => Boolean(career))
+                .slice(0, 5);
+              const worldSentence = getRealSentencesForCareers(world.slugs)[0];
+
+              return (
+                <div
+                  className="border-t border-white/10 pt-6"
+                  key={world.id}
+                >
+                  <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_1.15fr]">
+                    <div>
+                      <h3 className="text-3xl font-semibold leading-tight sm:text-4xl">
+                        {world.title}
+                      </h3>
+                      <p className="mt-4 max-w-xl text-base leading-7 text-muted-foreground">
+                        {world.sentence}
+                      </p>
+                      {worldSentence ? (
+                        <p className="mt-5 border-l border-primary/25 pl-4 text-lg font-semibold leading-7 text-foreground/90">
+                          {worldSentence.text}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div className="flex flex-wrap gap-2 sm:items-start sm:pt-2">
+                      {worldCareers.map((career) => (
+                        <Link
+                          className="rounded-full border border-white/10 bg-white/[0.035] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:-translate-y-0.5 hover:bg-white/[0.08] hover:text-foreground"
+                          href={`/careers/${career.slug}`}
+                          key={`${world.id}-${career.slug}`}
+                        >
+                          {career.title}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {index === 0 ? (
-                      <span className="wj-marker" data-tone="struktur" />
-                    ) : null}
-                    <CardTitle className="text-2xl leading-tight">
-                      {career.title}
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="max-w-3xl leading-7 text-muted-foreground">
-                    {career.short}
-                  </p>
-                  <p className="mt-5 max-w-2xl text-sm leading-6 text-primary/80">
-                    {career.discoveryNote}
-                  </p>
-                  <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <Link
-                      className="inline-flex items-center gap-2 text-sm text-foreground transition duration-500 hover:text-primary"
-                      href={`/careers/${career.slug}`}
-                    >
-                      Mehr dazu
-                      <ArrowRight className="size-4 text-primary" />
-                    </Link>
-                    <SaveCareerButton compact slug={career.slug} />
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-16 border-y border-white/10 py-8 sm:mt-24 sm:py-10">
+          <div className="grid gap-8 sm:grid-cols-[0.9fr_1.1fr]">
+            <div>
+              <p className="text-sm text-primary">Das wird nicht nur angenehm sein.</p>
+              <h2 className="mt-3 text-3xl font-semibold leading-tight">
+                Nicht negativ. Nur wahr.
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {visibleRealityChecks.map((check) => (
+                <p
+                  className="border-l border-white/10 pl-4 text-lg font-semibold leading-7 text-foreground/90"
+                  key={check}
+                >
+                  {check}
+                </p>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-14 max-w-2xl sm:mt-20">
+          <p className="text-sm text-primary">Diese Richtung darf bleiben.</p>
+          <p className="mt-3 text-2xl font-semibold leading-snug text-foreground/90 sm:text-3xl">
+            Wenn das gerade nicht ganz falsch klang, kannst du es ruhig
+            aufheben.
+          </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Button
+              onClick={saveCurrentDirection}
+              type="button"
+              variant={directionSaved ? "ghost" : "quiet"}
+            >
+              {directionSaved ? "Richtung gemerkt" : "Diese Richtung merken"}
+            </Button>
+            {directionSaved ? (
+              <div className="max-w-sm">
+                <p className="text-lg font-semibold leading-snug text-foreground/92">
+                  Aufgehoben.
+                </p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Du musst daraus jetzt nichts machen. Liegt einfach später noch
+                  da.
+                </p>
+                <Button asChild className="mt-4" variant="ghost">
+                  <Link href="/weiterdenken">Zum Weiterdenken</Link>
+                </Button>
+              </div>
+            ) : null}
+          </div>
+        </section>
+
+        <section className="mt-16 sm:mt-24">
+          <p className="text-sm text-primary">
+            Womit du als Nächstes kurz Kontakt haben könntest
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <Link
+              className="group border-l border-white/10 py-2 pl-4 transition duration-500 hover:border-primary/30 hover:text-primary"
+              href="/karte"
+            >
+              <span className="block text-lg font-semibold">
+                → Karte ansehen
+              </span>
+              <span className="mt-2 block text-sm leading-5 text-muted-foreground">
+                eine ruhige Karte öffnen
+              </span>
+            </Link>
+            <Link
+              className="group border-l border-white/10 py-2 pl-4 transition duration-500 hover:border-primary/30 hover:text-primary"
+              href={`/careers/${patternCareers[0]?.slug ?? "fachinformatiker-systemintegration"}`}
+            >
+              <span className="block text-lg font-semibold">
+                → Ein paar echte Arbeitstage lesen
+              </span>
+              <span className="mt-2 block text-sm leading-5 text-muted-foreground">
+                nicht alles auf einmal
+              </span>
+            </Link>
+            <Link
+              className="group border-l border-white/10 py-2 pl-4 transition duration-500 hover:border-primary/30 hover:text-primary"
+              href="/wege"
+            >
+              <span className="block text-lg font-semibold">
+                → Wege vergleichen
+              </span>
+              <span className="mt-2 block text-sm leading-5 text-muted-foreground">
+                kleine Unterschiede spüren
+              </span>
+            </Link>
+          </div>
+        </section>
       </section>
     </AppShell>
   );
+}
+
+function MicroRevealObservation({ index, text }: { index: number; text: string }) {
+  const [step, setStep] = useState(0);
+  const parts = useMemo(() => splitObservation(text), [text]);
+  const visibleText = parts.slice(0, step + 1).join("");
+
+  return (
+    <button
+      className={`block w-full max-w-3xl text-left transition duration-500 hover:translate-x-1 ${
+        index % 2 === 1 ? "sm:ml-auto" : ""
+      }`}
+      onClick={() => setStep((current) => Math.min(current + 1, parts.length - 1))}
+      type="button"
+    >
+      <span className="block border-l border-white/10 pl-5 text-2xl font-semibold leading-snug text-foreground/92 sm:text-4xl">
+        {visibleText}
+      </span>
+      {step < parts.length - 1 ? (
+        <span className="mt-3 block pl-5 text-xs text-primary/75">
+          noch ein Stück
+        </span>
+      ) : null}
+    </button>
+  );
+}
+
+function splitObservation(text: string) {
+  const firstComma = text.indexOf(",");
+  const firstPeriod = text.indexOf(". ");
+  const splitAt = firstComma > 18 ? firstComma + 1 : firstPeriod > 18 ? firstPeriod + 1 : -1;
+
+  if (splitAt === -1 || splitAt >= text.length - 8) return [text];
+
+  const first = text.slice(0, splitAt);
+  const rest = text.slice(splitAt);
+  const restPeriod = rest.indexOf(". ");
+
+  if (restPeriod > 18 && restPeriod < rest.length - 8) {
+    return [first, rest.slice(0, restPeriod + 1), rest.slice(restPeriod + 1)];
+  }
+
+  return [first, rest];
+}
+
+function getPatternObservations(answerSlugs: string[], patternCareers: Career[]) {
+  if (!answerSlugs.length) {
+    return [
+      "Vielleicht merkst du erst beim Lesen, welche Sätze länger hängen bleiben.",
+      "Manche Tage fühlen sich näher an, obwohl du sie noch nie erlebt hast.",
+      "Du musst nicht sofort wissen, was passt.",
+      "Manchmal reicht ein Satz, der unangenehm vertraut klingt.",
+    ];
+  }
+
+  const answerSet = new Set(answerSlugs);
+  const observations = [
+    answerSet.has("fachinformatiker-systemintegration") ||
+    answerSet.has("bauzeichner")
+      ? "Du bemerkst Chaos oft, bevor es sichtbar wird."
+      : "",
+    answerSet.has("pflegefachkraft") ||
+    answerSet.has("medizinische-fachangestellte")
+      ? "Manche Menschen machen dich müder als Probleme."
+      : "",
+    answerSet.has("elektroniker") || answerSet.has("mechatroniker")
+      ? "Wenn etwas endlich funktioniert, fühlt sich das größer an, als es von außen aussieht."
+      : "",
+    answerSet.has("fachkraft-lagerlogistik") ||
+    answerSet.has("kaufmann-bueromanagement")
+      ? "Du wirst irgendwann automatisch vergleichen, was besser organisiert sein könnte."
+      : "",
+    answerSet.has("tierpfleger") || answerSet.has("florist")
+      ? "Ruhe bedeutet für dich nicht automatisch Langeweile."
+      : "",
+    answerSet.has("tischler") ||
+    answerSet.has("koch") ||
+    answerSet.has("mediengestalter")
+      ? "Manche Tage fühlen sich besser an, wenn etwas wirklich abgeschlossen wurde."
+      : "",
+    answerSet.has("erzieher") || answerSet.has("notfallsanitaeter")
+      ? "Du merkst schneller, wenn jemand nicht nur eine Antwort braucht."
+      : "",
+    answerSet.has("veranstaltungstechniker") || answerSet.has("zugbegleiter")
+      ? "Stillstand macht dich wahrscheinlich schneller müde als Bewegung."
+      : "",
+  ].filter(Boolean);
+
+  const fragments = getFragmentsForCareers(
+    patternCareers.slice(0, 4).map((career) => career.slug),
+  )
+    .slice(0, 2)
+    .map((fragment) => fragment.text);
+
+  return uniqueStrings([...observations, ...fragments]).slice(0, 8);
+}
+
+function getVisibleWorlds(answerSlugs: string[], patternSlugs: string[]) {
+  const answerSet = new Set(answerSlugs);
+  const patternSet = new Set(patternSlugs);
+
+  const worlds = workingWorlds
+    .map((world, index) => ({
+      index,
+      matchCount: world.slugs.filter(
+        (slug) => answerSet.has(slug) || patternSet.has(slug),
+      ).length,
+      world,
+    }))
+    .sort((a, b) => b.matchCount - a.matchCount || a.index - b.index)
+    .map(({ world }) => world);
+
+  return worlds.slice(0, 4);
+}
+
+function getRealityChecks(patternSlugs: string[]) {
+  const patternSet = new Set(patternSlugs);
+  const checks = [
+    patternSet.has("fachinformatiker-systemintegration") ||
+    patternSet.has("mechatroniker")
+      ? "Probleme verschwinden selten von allein."
+      : "",
+    patternSet.has("pflegefachkraft") ||
+    patternSet.has("erzieher") ||
+    patternSet.has("verkaeufer")
+      ? "Menschen sind oft komplizierter als Technik."
+      : "",
+    patternSet.has("bauzeichner") ||
+    patternSet.has("kaufmann-bueromanagement")
+      ? "Ruhe heißt nicht automatisch wenig Verantwortung."
+      : "",
+    patternSet.has("tischler") ||
+    patternSet.has("elektroniker") ||
+    patternSet.has("mediengestalter")
+      ? "Sichtbare Ergebnisse bringen oft unsichtbare Arbeit mit."
+      : "",
+  ].filter(Boolean);
+
+  return uniqueStrings([...checks, ...realityChecks]).slice(0, 4);
+}
+
+function uniqueStrings(values: string[]) {
+  return values.filter((value, index) => value && values.indexOf(value) === index);
 }

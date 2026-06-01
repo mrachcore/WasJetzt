@@ -290,6 +290,30 @@ button:focus-visible {
   display: none;
 }
 
+.career-map-scroll {
+  cursor: grab;
+  scrollbar-color: rgba(200, 222, 192, 0.18) transparent;
+  scrollbar-width: thin;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+.career-map-scroll:active {
+  cursor: grabbing;
+}
+
+.career-map-scroll::-webkit-scrollbar {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.career-map-scroll::-webkit-scrollbar-thumb {
+  border: 0.22rem solid transparent;
+  border-radius: 999px;
+  background: rgba(200, 222, 192, 0.18);
+  background-clip: content-box;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

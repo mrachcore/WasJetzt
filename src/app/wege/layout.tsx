@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Wege",
   description:
-    "Berufe nach Gefühl, Alltag und Stimmung durchsuchen. Ein ruhiger Finder für Ausbildungen und mögliche Richtungen.",
+    "Wege nach Gefühl, Rhythmus und Alltag durchsuchen.",
   openGraph: {
     title: "WasJetzt Wege",
     description:
-      "Such nach einem Beruf, einer Stimmung oder einfach nach dem, was du im Alltag nicht mehr willst.",
+      "Such nach Ruhe, Menschen, Bewegung oder dem, was ein Tag mit dir macht.",
   },
 };
 

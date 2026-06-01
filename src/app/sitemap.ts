@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/quiz",
     "/wege",
+    "/karte",
     "/results",
     "/weiterdenken",
     ...careers.map((career) => `/careers/${career.slug}`),

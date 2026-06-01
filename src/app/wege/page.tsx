@@ -23,11 +23,13 @@ import {
   careers,
   getSituationsForCareer,
 } from "@/data/careers";
+import { ambientArbeitsweltFragments } from "@/data/work-life-fragments";
 import { cn } from "@/lib/utils";
 import {
   readSavedCareerSlugs,
   writeSavedCareerSlugs,
 } from "@/lib/saved-careers";
+import { rememberWegeFilters } from "@/lib/continuation-memory";
 import {
   EXPLORATION_MEMORY_EVENT,
   getAdaptiveCareerSuggestions,
@@ -269,7 +271,7 @@ const explorationRows: ExplorationRow[] = [
   },
   {
     id: "everyday",
-    headline: "Mehr Alltag als Karrieregefühl",
+    headline: "Mehr Alltag als großes Zukunftsgefühl",
     note: "Nicht glänzend. Eher ein Tag, der irgendwann vertrauter wird.",
     slugs: [
       "verkaeufer",
@@ -487,11 +489,15 @@ export default function WegePage() {
 
     setActiveFilters((current) => {
       if (current.includes(label)) {
-        return current.filter((item) => item !== label);
+        const nextFilters = current.filter((item) => item !== label);
+        rememberWegeFilters(nextFilters);
+        return nextFilters;
       }
 
       trackFilterUse(filter?.tone ?? label);
-      return [...current, label];
+      const nextFilters = [...current, label];
+      rememberWegeFilters(nextFilters);
+      return nextFilters;
     });
   }
 
@@ -541,13 +547,16 @@ export default function WegePage() {
             className="mark-breathe pointer-events-none absolute -right-8 -top-10 hidden w-28 sm:block"
             priority
           />
-          <Badge className="mb-7 text-primary">Ohne richtige Suchbegriffe</Badge>
+          <Badge className="mb-7 text-primary">Alltag statt Jobtitel</Badge>
           <h1 className="text-5xl font-semibold leading-[0.98] sm:text-7xl">
             Wege
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Nicht nach Branche. Eher nach Gefühl. Such nach einem Beruf, einer
-            Stimmung oder einfach nach dem, was du im Alltag nicht mehr willst.
+            Nicht nach Branche. Eher nach dem Gefühl eines Tages: Ruhe,
+            Menschen, Bewegung, Druck, Abstand.
+          </p>
+          <p className="mt-7 max-w-md border-l border-white/10 pl-4 text-sm leading-6 text-muted-foreground/70">
+            {ambientArbeitsweltFragments[4]}
           </p>
         </div>
 
@@ -558,7 +567,7 @@ export default function WegePage() {
               aria-label="Wege durchsuchen"
               className="min-w-0 flex-1 bg-transparent text-base text-foreground outline-none placeholder:text-muted-foreground"
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Such nach Beruf, Gefühl oder Alltag..."
+              placeholder="Such nach Gefühl, Rhythmus oder Alltag..."
               type="search"
               value={query}
             />
@@ -603,6 +612,7 @@ export default function WegePage() {
               onClick={() => {
                 setQuery("");
                 setActiveFilters([]);
+                rememberWegeFilters([]);
               }}
               type="button"
             >
@@ -617,7 +627,7 @@ export default function WegePage() {
               Das ist eine seltene Mischung.
             </p>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              Wir zeigen dir Wege, die zumindest nah dran sind.
+              Ein paar Wege berühren trotzdem etwas davon.
             </p>
           </Card>
         ) : null}
@@ -885,7 +895,7 @@ function CareerExplorerCard({
             onClick={onCompare}
             type="button"
           >
-            {compareSelected ? "Ausgewählt" : "Vergleichen"}
+            {compareSelected ? "Ausgewählt" : "Unterschied fühlen"}
           </button>
           <SaveCareerButton
             compact
@@ -929,8 +939,8 @@ function CompareBar({
           <div>
             <p className="text-sm font-medium text-foreground">
               {count === 1
-                ? "Noch einen Weg auswählen"
-                : `${count} Wege ausgewählt`}
+                ? "Noch einen Alltag dazulegen"
+                : `${count} Alltage nebeneinander`}
             </p>
             {notice ? (
               <p className="mt-1 text-xs text-muted-foreground">{notice}</p>
@@ -944,7 +954,7 @@ function CompareBar({
               onClick={onOpen}
               type="button"
             >
-              Vergleichen
+              Unterschiede ansehen
             </button>
             <button
               className="rounded-full border border-white/10 bg-white/[0.045] px-3 py-2 text-sm text-muted-foreground transition duration-500 ease-out hover:-translate-y-0.5 hover:bg-white/[0.07] hover:text-foreground active:translate-y-0"
@@ -996,17 +1006,17 @@ function CompareDialog({
       >
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 pr-2">
-            <p className="text-sm text-primary">Vergleich</p>
+            <p className="text-sm text-primary">Was fühlt sich anders an?</p>
             <h2 className="mt-2 max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
               Nicht besser oder schlechter. Nur anders.
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">
-              Kein Ranking. Eher ein ruhiger Blick darauf, wie sich die Wege im
-              Alltag unterscheiden könnten.
+              Ein ruhiger Blick darauf, was Energie kostet: Menschen, Bewegung,
+              Struktur, Druck, Wiederholung.
             </p>
           </div>
           <button
-            aria-label="Vergleich schließen"
+            aria-label="Unterschiede schließen"
             className="sticky top-0 z-10 shrink-0 rounded-full border border-white/10 bg-[#1b2118]/80 p-2.5 text-muted-foreground shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl transition hover:bg-white/[0.08] hover:text-foreground"
             onClick={onClose}
             type="button"
@@ -1037,13 +1047,32 @@ function CompareDialog({
             </div>
           </section>
 
+          <section className="border-t border-white/10 pt-6">
+            <p className="text-sm text-primary">Später fällt oft auf</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {careers.map((career, index) => (
+                <div
+                  className="rounded-[1.05rem] border border-white/10 bg-white/[0.025] p-4"
+                  key={`compare-later-${career.slug}`}
+                >
+                  <p className="text-sm font-medium text-foreground/90">
+                    {career.title}
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                    {career.laterNotices[index % career.laterNotices.length]}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
           <CareerDecisionLayer careers={careers} compact />
         </div>
 
         {nextCareers.length > 0 ? (
           <div className="mt-9 border-t border-white/10 pt-6">
             <p className="text-sm text-primary">
-              Von hier gehen viele eher weiter Richtung...
+              Ähnliche Alltage, anderer Ton
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {nextCareers.map((career) => (
@@ -1073,7 +1102,7 @@ function CompareIndicatorRows({ careers }: { careers: Career[] }) {
       <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <p className="text-sm text-primary">Alltag auf einen Blick</p>
         <p className="text-xs text-muted-foreground">
-          Leise Hinweise, keine Bewertung.
+          Leise Hinweise. Keine Bewertung.
         </p>
       </div>
 
@@ -1157,6 +1186,8 @@ function buildCareerDocument(career: Career): CareerSearchDocument {
     career.realism.localTexture,
     career.realism.underestimated.join(" "),
     career.discoveryNote,
+    career.laterNotices.join(" "),
+    career.realSentences.join(" "),
     career.whyItMightFit,
     career.observations.join(" "),
     career.typicalTuesday.map((item) => `${item.time} ${item.text}`).join(" "),

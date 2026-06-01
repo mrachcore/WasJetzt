@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Quiz",
+  title: "Fragen",
   description:
-    "Ein kurzer, ruhiger Einstieg in Berufe und Ausbildungen, die sich vielleicht weniger falsch anfühlen.",
+    "Ein paar konkrete Fragen darüber, welche Art Arbeitstag sich weniger falsch anfühlt.",
   openGraph: {
-    title: "WasJetzt Quiz",
+    title: "WasJetzt Fragen",
     description:
-      "Kein Test mit Prozenten. Nur ein paar Fragen, die beim Sortieren helfen können.",
+      "Kein Test mit Prozenten. Nur kleine Wahrheiten über Energie, Menschen, Ruhe und Alltag.",
   },
 };
 
