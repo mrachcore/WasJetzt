@@ -8,6 +8,7 @@ import { ArrowRight, Search, X } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { CareerDecisionLayer } from "@/components/career-decision-layer";
+import { DayMomentPlayer } from "@/components/day-moment-player";
 import {
   LifeIndicatorLine,
   MiniLifeIndicators,
@@ -552,13 +553,32 @@ export default function WegePage() {
             Wege
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Nicht nach Branche. Eher nach dem Gefühl eines Tages: Ruhe,
-            Menschen, Bewegung, Druck, Abstand.
+            Fang mit einem Arbeitstag an. Tipp dich kurz durch ein paar
+            Momente, dann schau weiter.
           </p>
           <p className="mt-7 max-w-md border-l border-white/10 pl-4 text-sm leading-6 text-muted-foreground/70">
             {ambientArbeitsweltFragments[4]}
           </p>
         </div>
+
+        <section className="mt-12">
+          <div className="mb-6 max-w-2xl">
+            <p className="text-sm text-primary">Erstmal Arbeitstage ansehen</p>
+            <p className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
+              Tipp dich durch einen kurzen Arbeitstag.
+            </p>
+          </div>
+          <div className="grid gap-4">
+            {filteredCareers.slice(0, 3).map((career) => (
+              <DayMomentPlayer
+                career={career}
+                className="sm:max-w-3xl"
+                compact
+                key={`wege-preview-${career.slug}`}
+              />
+            ))}
+          </div>
+        </section>
 
         <div className="sticky top-3 z-20 mt-10 sm:top-5">
           <div className="glass-surface flex items-center gap-3 rounded-[1.45rem] px-4 py-3 sm:px-5">

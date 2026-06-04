@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { RefreshCcw } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { DayMomentPlayer } from "@/components/day-moment-player";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { careers, getExplorationCareers, type Career } from "@/data/careers";
@@ -83,13 +84,6 @@ const workingWorlds: WorkingWorld[] = [
   },
 ];
 
-const realityChecks = [
-  "Probleme verschwinden selten von allein.",
-  "Menschen sind komplizierter als Technik.",
-  "Ruhe heißt nicht automatisch wenig Verantwortung.",
-  "Sichtbare Ergebnisse haben oft unsichtbare Arbeit davor.",
-];
-
 export default function ResultsPage() {
   const [hydrated, setHydrated] = useState(false);
   const [directionSaved, setDirectionSaved] = useState(false);
@@ -128,10 +122,6 @@ export default function ResultsPage() {
     () => getVisibleWorlds(storedAnswers, patternSlugs),
     [patternSlugs, storedAnswers],
   );
-  const visibleRealityChecks = useMemo(
-    () => getRealityChecks(patternSlugs),
-    [patternSlugs],
-  );
   const dominantPatternLabel = visibleWorlds[0]?.title ?? "diese Richtung";
 
   function saveCurrentDirection() {
@@ -160,15 +150,13 @@ export default function ResultsPage() {
               : "Zum Reinfühlen"}
           </Badge>
           <h1 className="text-4xl font-semibold leading-[1.05] sm:text-6xl">
-            Nicht dein Ergebnis.
+            Ein paar Arbeitstage,
             <br />
-            Vielleicht eher etwas,
-            <br />
-            das du öfter merken wirst.
+            die weniger falsch klingen könnten.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Keine Antwort entscheidet alles. Aber manchmal wird ein Muster
-            sichtbar.
+            Tipp dich kurz durch ein paar Momente. Danach kannst du einen
+            Arbeitstag öffnen, merken oder vergleichen.
           </p>
           <div className="mt-9">
             <Button asChild variant="quiet">
@@ -180,12 +168,38 @@ export default function ResultsPage() {
           </div>
         </div>
 
-        <section className="mt-16 sm:mt-24">
+        <section className="mt-14 sm:mt-20">
+          <div className="mb-8 max-w-2xl">
+            <p className="text-sm text-primary">30 Sekunden Alltag</p>
+            <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-5xl">
+              Such dir einen Tag aus.
+            </h2>
+          </div>
+
+          <div className="grid gap-5">
+            {patternCareers.slice(0, 4).map((career, index) => (
+              <motion.div
+                key={`day-preview-${career.slug}`}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: index * 0.055,
+                  duration: 0.46,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <DayPreviewCard career={career} />
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-14 sm:mt-18">
           <div className="mb-7 max-w-2xl">
-            <p className="text-sm text-primary">Du wirst das später merken.</p>
+            <p className="text-sm text-primary">Was du daran vielleicht merkst</p>
           </div>
           <div className="space-y-7 sm:space-y-9">
-            {observations.map((observation, index) => (
+            {observations.slice(0, 3).map((observation, index) => (
               <motion.div
                 key={observation}
                 initial={{ opacity: 0, y: 14 }}
@@ -202,16 +216,16 @@ export default function ResultsPage() {
           </div>
         </section>
 
-        <section className="mt-16 sm:mt-24">
+        <section className="mt-14 sm:mt-18">
           <div className="mb-8 max-w-2xl">
-            <p className="text-sm text-primary">Muster, die öfter auftauchen</p>
-            <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-5xl">
-              Das sind nur mögliche Richtungen.
+            <p className="text-sm text-primary">Was öfter dazu passt</p>
+            <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
+              Ein paar Berufe mit ähnlichem Arbeitstag.
             </h2>
           </div>
 
           <div className="space-y-8">
-            {visibleWorlds.map((world) => {
+            {visibleWorlds.slice(0, 3).map((world) => {
               const worldCareers = world.slugs
                 .map((slug) => careers.find((career) => career.slug === slug))
                 .filter((career): career is Career => Boolean(career))
@@ -228,7 +242,7 @@ export default function ResultsPage() {
                       <h3 className="text-3xl font-semibold leading-tight sm:text-4xl">
                         {world.title}
                       </h3>
-                      <p className="mt-4 max-w-xl text-base leading-7 text-muted-foreground">
+                      <p className="mt-4 max-w-xl text-sm leading-6 text-muted-foreground">
                         {world.sentence}
                       </p>
                       {worldSentence ? (
@@ -252,27 +266,6 @@ export default function ResultsPage() {
                 </div>
               );
             })}
-          </div>
-        </section>
-
-        <section className="mt-16 border-y border-white/10 py-8 sm:mt-24 sm:py-10">
-          <div className="grid gap-8 sm:grid-cols-[0.9fr_1.1fr]">
-            <div>
-              <p className="text-sm text-primary">Das wird nicht nur angenehm sein.</p>
-              <h2 className="mt-3 text-3xl font-semibold leading-tight">
-                Nicht negativ. Nur wahr.
-              </h2>
-            </div>
-            <div className="space-y-4">
-              {visibleRealityChecks.map((check) => (
-                <p
-                  className="border-l border-white/10 pl-4 text-lg font-semibold leading-7 text-foreground/90"
-                  key={check}
-                >
-                  {check}
-                </p>
-              ))}
-            </div>
           </div>
         </section>
 
@@ -307,48 +300,14 @@ export default function ResultsPage() {
           </div>
         </section>
 
-        <section className="mt-16 sm:mt-24">
-          <p className="text-sm text-primary">
-            Womit du als Nächstes kurz Kontakt haben könntest
-          </p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <Link
-              className="group border-l border-white/10 py-2 pl-4 transition duration-500 hover:border-primary/30 hover:text-primary"
-              href="/karte"
-            >
-              <span className="block text-lg font-semibold">
-                → Karte ansehen
-              </span>
-              <span className="mt-2 block text-sm leading-5 text-muted-foreground">
-                eine ruhige Karte öffnen
-              </span>
-            </Link>
-            <Link
-              className="group border-l border-white/10 py-2 pl-4 transition duration-500 hover:border-primary/30 hover:text-primary"
-              href={`/careers/${patternCareers[0]?.slug ?? "fachinformatiker-systemintegration"}`}
-            >
-              <span className="block text-lg font-semibold">
-                → Ein paar echte Arbeitstage lesen
-              </span>
-              <span className="mt-2 block text-sm leading-5 text-muted-foreground">
-                nicht alles auf einmal
-              </span>
-            </Link>
-            <Link
-              className="group border-l border-white/10 py-2 pl-4 transition duration-500 hover:border-primary/30 hover:text-primary"
-              href="/wege"
-            >
-              <span className="block text-lg font-semibold">
-                → Wege vergleichen
-              </span>
-              <span className="mt-2 block text-sm leading-5 text-muted-foreground">
-                kleine Unterschiede spüren
-              </span>
-            </Link>
-          </div>
-        </section>
       </section>
     </AppShell>
+  );
+}
+
+function DayPreviewCard({ career }: { career: Career }) {
+  return (
+    <DayMomentPlayer career={career} compact />
   );
 }
 
@@ -463,32 +422,6 @@ function getVisibleWorlds(answerSlugs: string[], patternSlugs: string[]) {
     .map(({ world }) => world);
 
   return worlds.slice(0, 4);
-}
-
-function getRealityChecks(patternSlugs: string[]) {
-  const patternSet = new Set(patternSlugs);
-  const checks = [
-    patternSet.has("fachinformatiker-systemintegration") ||
-    patternSet.has("mechatroniker")
-      ? "Probleme verschwinden selten von allein."
-      : "",
-    patternSet.has("pflegefachkraft") ||
-    patternSet.has("erzieher") ||
-    patternSet.has("verkaeufer")
-      ? "Menschen sind oft komplizierter als Technik."
-      : "",
-    patternSet.has("bauzeichner") ||
-    patternSet.has("kaufmann-bueromanagement")
-      ? "Ruhe heißt nicht automatisch wenig Verantwortung."
-      : "",
-    patternSet.has("tischler") ||
-    patternSet.has("elektroniker") ||
-    patternSet.has("mediengestalter")
-      ? "Sichtbare Ergebnisse bringen oft unsichtbare Arbeit mit."
-      : "",
-  ].filter(Boolean);
-
-  return uniqueStrings([...checks, ...realityChecks]).slice(0, 4);
 }
 
 function uniqueStrings(values: string[]) {

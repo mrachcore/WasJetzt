@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "WasJetzt Fragen",
     description:
-      "Kein Test mit Prozenten. Nur kleine Wahrheiten über Energie, Menschen, Ruhe und Alltag.",
+      "Kurze Fragen über Energie, Menschen, Ruhe und Alltag.",
   },
 };
 

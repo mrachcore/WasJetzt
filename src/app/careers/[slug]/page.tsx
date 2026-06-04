@@ -2,10 +2,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Map } from "lucide-react";
+import { ArrowDown, ArrowLeft, ExternalLink, Map } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { ContinuationLine } from "@/components/continuation-line";
+import { DayMomentPlayer } from "@/components/day-moment-player";
 import { TrackCareerView, TrackedPathwayLink } from "@/components/exploration-tracker";
 import { LifeIndicatorSnapshot } from "@/components/life-indicators";
 import { PracticalSignals } from "@/components/practical-signals";
@@ -349,7 +350,7 @@ export async function generateMetadata({
 
   if (!career) {
     return {
-      title: "Arbeitsleben nicht gefunden | WasJetzt",
+      title: "Arbeitstag nicht gefunden | WasJetzt",
       description:
         "Ein ruhiger Ort, um zu verstehen, wie unterschiedliche Arbeitstage sich anfühlen.",
     };
@@ -430,6 +431,12 @@ export default async function CareerDetailPage({
             label="typisch"
           />
           <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild>
+              <Link href="#30-sekunden">
+                30 Sekunden fühlen
+                <ArrowDown className="size-4" />
+              </Link>
+            </Button>
             <SaveCareerButton slug={career.slug} />
             <Button asChild variant="quiet">
               <Link href={`/karte?career=${career.slug}`}>
@@ -438,12 +445,28 @@ export default async function CareerDetailPage({
               </Link>
             </Button>
           </div>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {[
+              { href: "#saetze", label: "Sätze aus dem Alltag" },
+              { href: "#was-nervt", label: "Was nervt" },
+              { href: "#aehnliche-tage", label: "Ähnliche Tage" },
+            ].map((action) => (
+              <Link
+                className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:-translate-y-0.5 hover:border-primary/25 hover:bg-white/[0.075] hover:text-foreground"
+                href={action.href}
+                key={action.href}
+              >
+                {action.label}
+              </Link>
+            ))}
+          </div>
           <ContinuationLine careerSlug={career.slug} className="mt-5" />
         </div>
 
+        <DayMomentSection career={career} />
         <LifeIndicatorSnapshot
           career={career}
-          className="mt-10 max-w-3xl sm:ml-[8%]"
+          className="mt-14 max-w-3xl opacity-80 sm:ml-[8%]"
         />
         <FitSection career={career} profile={profile} />
         <ObservationStream career={career} profile={profile} />
@@ -453,7 +476,7 @@ export default async function CareerDetailPage({
         <RealismLayer career={career} />
 
         {emotionalPathways.length > 0 ? (
-          <section className="mt-16 sm:mt-20">
+          <section className="mt-16 scroll-mt-24 sm:mt-20" id="aehnliche-tage">
             <div className="mb-10 max-w-2xl">
               <p className="text-sm text-primary">Wenn du von hier weiterdenkst</p>
               <h2 className="mt-3 text-3xl font-semibold leading-tight">
@@ -556,6 +579,17 @@ function getCareerTone(slug: string) {
   return "ruhe";
 }
 
+function DayMomentSection({ career }: { career: Career }) {
+  return (
+    <section
+      className="mt-12 scroll-mt-6 sm:mt-14"
+      id="30-sekunden"
+    >
+      <DayMomentPlayer career={career} />
+    </section>
+  );
+}
+
 function FitSection({
   career,
   profile,
@@ -565,11 +599,11 @@ function FitSection({
 }) {
   if (profile.fitStyle === "note") {
     return (
-      <div className="mt-14 max-w-2xl sm:ml-[8%]">
+      <div className="mt-16 max-w-2xl sm:ml-[8%]">
         <p className="text-sm text-primary">
           Warum manche bleiben
         </p>
-        <p className="mt-4 text-2xl font-semibold leading-snug text-foreground/90 sm:text-3xl">
+        <p className="mt-4 text-xl font-semibold leading-snug text-foreground/88 sm:text-2xl">
           {career.whyItMightFit}
         </p>
         <p className="mt-5 max-w-xl text-sm leading-6 text-muted-foreground">
@@ -581,10 +615,10 @@ function FitSection({
 
   if (profile.fitStyle === "split") {
     return (
-      <div className="mt-14 grid gap-5 sm:grid-cols-[1fr_0.8fr] sm:items-start">
+      <div className="mt-16 grid gap-5 sm:grid-cols-[1fr_0.8fr] sm:items-start">
         <Card className="energy-surface p-6 sm:p-8">
           <p className="text-sm text-primary">Warum manche bleiben</p>
-          <p className="mt-4 text-xl font-semibold leading-snug sm:text-2xl">
+          <p className="mt-4 text-lg font-semibold leading-snug sm:text-xl">
             {career.whyItMightFit}
           </p>
         </Card>
@@ -598,7 +632,7 @@ function FitSection({
   }
 
   return (
-    <Card className="energy-surface mt-12">
+    <Card className="energy-surface mt-16">
       <CardHeader className="pb-4">
         <div className="flex items-center gap-3">
           <CardTitle>Warum manche bleiben</CardTitle>
@@ -659,7 +693,10 @@ function ObservationStream({
 
 function RealSentencesWall({ career }: { career: Career }) {
   return (
-    <section className="my-16 border-y border-white/10 py-9 sm:my-24 sm:py-12">
+    <section
+      className="my-16 scroll-mt-24 border-y border-white/10 py-9 sm:my-24 sm:py-12"
+      id="saetze"
+    >
       <p className="text-sm text-primary">Sätze, die dort fallen</p>
       <div className="mt-8 flex flex-wrap gap-x-8 gap-y-5">
         {career.realSentences.map((sentence, index) => (
@@ -762,10 +799,16 @@ function DayFragments({
 
 function RealismLayer({ career }: { career: Career }) {
   return (
-    <section className="mt-16 grid gap-8 border-y border-white/10 py-8 sm:mt-20 sm:grid-cols-[0.9fr_1.1fr] sm:py-10">
+    <section
+      className="mt-16 grid scroll-mt-24 gap-8 border-y border-white/10 py-8 sm:mt-20 sm:grid-cols-[0.9fr_1.1fr] sm:py-10"
+      id="was-nervt"
+    >
       <div>
-        <p className="text-sm text-primary">Was viele unterschätzen</p>
+        <p className="text-sm text-primary">Was nervt</p>
         <div className="mt-5 space-y-4">
+          <p className="text-xl font-semibold leading-snug text-foreground/90 sm:text-2xl">
+            {career.annoys}
+          </p>
           {career.realism.underestimated.map((item) => (
             <p
               className="text-xl font-semibold leading-snug text-foreground/90 sm:text-2xl"

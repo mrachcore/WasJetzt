@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ergebnisse",
+  title: "Nach deinen Antworten",
   description:
-    "Richtungen zum ruhigen Weiterklicken. Keine perfekten Treffer.",
+    "Ein paar kurze Arbeitstage zum Reinfühlen.",
   openGraph: {
-    title: "WasJetzt Ergebnisse",
+    title: "WasJetzt nach deinen Antworten",
     description:
       "Diese Arbeitstage könnten weniger falsch wirken als andere. Ruhig anschauen, ohne Druck.",
   },

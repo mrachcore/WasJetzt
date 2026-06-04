@@ -41,6 +41,11 @@ export type Career = {
     time: string;
     text: string;
   }[];
+  dayMoments: {
+    timeLabel: string;
+    text: string;
+    realSentence?: string;
+  }[];
   whyItMightFit: string;
 };
 
@@ -52,7 +57,12 @@ export type Situation = {
 
 const careerEntries: Omit<
   Career,
-  "laterNotices" | "lifeIndicators" | "practicalSignals" | "realSentences" | "realism"
+  | "dayMoments"
+  | "laterNotices"
+  | "lifeIndicators"
+  | "practicalSignals"
+  | "realSentences"
+  | "realism"
 >[] = [
   {
     slug: "fachinformatiker-systemintegration",
@@ -1592,7 +1602,7 @@ const careerRealism: Record<string, typeof defaultCareerRealism> = {
     afterDay: "visuell satt, manchmal noch mit einem Detail im Kopf",
     entry: ["Portfolio hilft", "Praktikum zeigt den Alltag", "Büros unterscheiden sich stark"],
     localTexture:
-      "Agentur, Druckerei und internes Team können sich wie drei verschiedene Arbeitsleben anfühlen.",
+      "Agentur, Druckerei und internes Team können sich wie drei verschiedene Tage anfühlen.",
   },
   notfallsanitaeter: {
     underestimated: [
@@ -1919,6 +1929,312 @@ const careerLaterNotices: Record<string, string[]> = {
   ],
 };
 
+const careerDayMoments: Record<
+  string,
+  { timeLabel: string; text: string; realSentence?: string }[]
+> = {
+  "fachinformatiker-systemintegration": [
+    {
+      timeLabel: "09:12",
+      text: "Jemand sagt: „Das Internet geht nicht.“ Es ist nicht das Internet.",
+      realSentence: "Das hat gestern noch funktioniert.",
+    },
+    {
+      timeLabel: "10:30",
+      text: "Du suchst weiter, obwohl schon wieder jemand fragt.",
+    },
+    {
+      timeLabel: "15:40",
+      text: "Es läuft wieder. Niemand sieht, wie viel Suchen drin war.",
+    },
+  ],
+  elektroniker: [
+    {
+      timeLabel: "08:40",
+      text: "Erstmal messen. Nicht raten.",
+      realSentence: "Nur kurz messen.",
+    },
+    {
+      timeLabel: "12:10",
+      text: "Ein Kabel sieht harmlos aus und ist trotzdem der Grund.",
+    },
+    {
+      timeLabel: "15:50",
+      text: "Etwas funktioniert wieder. Das reicht manchmal.",
+    },
+  ],
+  pflegefachkraft: [
+    {
+      timeLabel: "07:20",
+      text: "Jemand braucht Hilfe, bevor du richtig angekommen bist.",
+      realSentence: "Ich bin gleich da.",
+    },
+    {
+      timeLabel: "11:10",
+      text: "Du merkst an der Stimme, dass heute etwas anders ist.",
+    },
+    {
+      timeLabel: "16:30",
+      text: "Du bist müde, aber jemand war kurz nicht allein.",
+    },
+  ],
+  mediengestalter: [
+    {
+      timeLabel: "09:25",
+      text: "Drei Dateien heißen fast gleich. Eine davon ist richtig.",
+      realSentence: "Welche Version ist die aktuelle?",
+    },
+    {
+      timeLabel: "13:05",
+      text: "Du verschiebst etwas minimal und es wirkt plötzlich weniger falsch.",
+    },
+    {
+      timeLabel: "16:45",
+      text: "Der Export dauert länger als der Satz „nur kurz“ klang.",
+    },
+  ],
+  notfallsanitaeter: [
+    {
+      timeLabel: "06:58",
+      text: "Fahrzeug checken. Noch ist alles ruhig.",
+      realSentence: "Bleib kurz bei mir.",
+    },
+    {
+      timeLabel: "10:16",
+      text: "Jemand hat Angst. Du wirst nicht lauter als die Situation.",
+    },
+    {
+      timeLabel: "18:20",
+      text: "Der Körper ist zuhause. Der Kopf braucht noch länger.",
+    },
+  ],
+  "fachkraft-lagerlogistik": [
+    {
+      timeLabel: "08:05",
+      text: "Der Scanner sagt nein. Du weißt schon, dass es länger dauert.",
+      realSentence: "Der Scanner sagt nein.",
+    },
+    {
+      timeLabel: "11:35",
+      text: "Eine Palette passt nicht. Also nochmal umdenken.",
+    },
+    {
+      timeLabel: "15:25",
+      text: "Der Gang ist frei. Morgen stolpert niemand über dein Chaos.",
+    },
+  ],
+  mechatroniker: [
+    {
+      timeLabel: "08:50",
+      text: "Die Maschine klingt anders. Noch nicht kaputt, aber anders.",
+      realSentence: "Das Geräusch war vorhin noch nicht da.",
+    },
+    {
+      timeLabel: "12:20",
+      text: "Der Fehler kommt nur manchmal. Natürlich gerade nicht.",
+    },
+    {
+      timeLabel: "16:10",
+      text: "Sie läuft wieder ruhiger. Alle reden sofort normaler.",
+    },
+  ],
+  erzieher: [
+    {
+      timeLabel: "08:15",
+      text: "Der Raum ist laut, aber du hörst, wo es gerade kippt.",
+      realSentence: "Nicht alle gleichzeitig.",
+    },
+    {
+      timeLabel: "11:40",
+      text: "Ein Streit ist klein. Für zwei Kinder aber gerade riesig.",
+    },
+    {
+      timeLabel: "15:10",
+      text: "Du sagst einen ruhigen Satz. Er wirkt später als gedacht.",
+    },
+  ],
+  verkaeufer: [
+    {
+      timeLabel: "09:40",
+      text: "Jemand sucht etwas und weiß selbst nicht genau was.",
+      realSentence: "Ich schau kurz im Lager.",
+    },
+    {
+      timeLabel: "13:15",
+      text: "Die zweite Kasse geht auf, bevor die Schlange schlecht gelaunt wird.",
+    },
+    {
+      timeLabel: "18:05",
+      text: "Die Beine sind müde. Ein Regal sieht wieder ordentlich aus.",
+    },
+  ],
+  koch: [
+    {
+      timeLabel: "10:20",
+      text: "Noch ist es ruhig. Das bleibt nicht so.",
+      realSentence: "Wie lange noch?",
+    },
+    {
+      timeLabel: "12:35",
+      text: "Tisch zwölf wartet. Die Pfanne ist zu heiß für lange Gedanken.",
+    },
+    {
+      timeLabel: "15:00",
+      text: "Kurz probieren. Noch Salz. Dann raus damit.",
+    },
+  ],
+  tischler: [
+    {
+      timeLabel: "08:30",
+      text: "Ein Millimeter fehlt. Das ist nicht klein.",
+      realSentence: "Ein Millimeter fehlt.",
+    },
+    {
+      timeLabel: "11:50",
+      text: "Du hältst kurz die Luft an, bevor das Teil sitzt.",
+    },
+    {
+      timeLabel: "16:00",
+      text: "Staub überall. Aber die Kante stimmt.",
+    },
+  ],
+  bauzeichner: [
+    {
+      timeLabel: "09:10",
+      text: "Ein Maß stimmt nicht. Später wäre daraus eine echte Wand geworden.",
+      realSentence: "Das Maß stimmt nicht.",
+    },
+    {
+      timeLabel: "12:45",
+      text: "Du prüfst den Plan nochmal, obwohl niemand dramatisch wirkt.",
+    },
+    {
+      timeLabel: "15:35",
+      text: "Ein Schnitt fehlt. Ohne ihn versteht morgen keiner den Rest.",
+    },
+  ],
+  industriemechaniker: [
+    {
+      timeLabel: "07:55",
+      text: "Die Anlage klingt anders. Du bleibst stehen.",
+      realSentence: "Die Anlage klingt anders.",
+    },
+    {
+      timeLabel: "11:15",
+      text: "Schwere Teile, kleine Abstände, wenig Platz für Ungenauigkeit.",
+    },
+    {
+      timeLabel: "15:30",
+      text: "Sie läuft ruhiger. In der Halle wird es sofort entspannter.",
+    },
+  ],
+  veranstaltungstechniker: [
+    {
+      timeLabel: "10:00",
+      text: "Die Halle ist leer. Trotzdem ist schon Druck da.",
+      realSentence: "Wer hat den Adapter?",
+    },
+    {
+      timeLabel: "16:20",
+      text: "Ein Kabelweg entscheidet, ob später jemand stolpert.",
+    },
+    {
+      timeLabel: "23:40",
+      text: "Vorne war Applaus. Hinten fängt der Abbau an.",
+    },
+  ],
+  "medizinische-fachangestellte": [
+    {
+      timeLabel: "08:05",
+      text: "Das Telefon hört nicht auf, bevor der Tag richtig angefangen hat.",
+      realSentence: "Haben Sie Ihre Karte dabei?",
+    },
+    {
+      timeLabel: "10:50",
+      text: "Jemand wirkt genervt. Eigentlich ist es Angst.",
+    },
+    {
+      timeLabel: "16:15",
+      text: "Noch ein Termin passt irgendwo dazwischen. Knapp, aber passt.",
+    },
+  ],
+  "kaufmann-bueromanagement": [
+    {
+      timeLabel: "09:00",
+      text: "Drei Mails meinen dasselbe. Keine sagt es klar.",
+      realSentence: "Wer hat die aktuelle Version?",
+    },
+    {
+      timeLabel: "11:30",
+      text: "Du legst etwas richtig ab, damit morgen niemand suchen muss.",
+    },
+    {
+      timeLabel: "15:55",
+      text: "Ein Kalender ist voll. Trotzdem findet sich eine Lücke.",
+    },
+  ],
+  friseur: [
+    {
+      timeLabel: "09:35",
+      text: "Jemand sagt „nur die Spitzen“ und meint etwas sehr Genaues.",
+      realSentence: "Nur die Spitzen?",
+    },
+    {
+      timeLabel: "12:25",
+      text: "Der Spiegel zeigt, ob jemand wirklich zufrieden ist.",
+    },
+    {
+      timeLabel: "17:10",
+      text: "Du stehst seit Stunden. Der Übergang sieht gut aus.",
+    },
+  ],
+  florist: [
+    {
+      timeLabel: "08:25",
+      text: "Kalte Hände, nasse Stiele, ein Strauß, der noch kippt.",
+      realSentence: "Für welchen Anlass ist es?",
+    },
+    {
+      timeLabel: "12:05",
+      text: "Jemand ist unsicher. Du hörst es an der Pause.",
+    },
+    {
+      timeLabel: "16:40",
+      text: "Etwas Leichtes sieht leicht aus. Deine Finger wissen es besser.",
+    },
+  ],
+  zugbegleiter: [
+    {
+      timeLabel: "07:42",
+      text: "Beim Einsteigen merkst du, wer schon gestresst ist.",
+      realSentence: "Die Fahrkarten bitte.",
+    },
+    {
+      timeLabel: "13:18",
+      text: "Verspätung verändert die Stimmung schneller als jede Durchsage.",
+    },
+    {
+      timeLabel: "19:05",
+      text: "Der Zug leert sich. Du bleibst freundlich klar.",
+    },
+  ],
+  tierpfleger: [
+    {
+      timeLabel: "07:10",
+      text: "Er frisst weniger. Du merkst es, bevor es jemand aufschreibt.",
+      realSentence: "Heute frisst er weniger.",
+    },
+    {
+      timeLabel: "11:25",
+      text: "Putzen ist nicht Nebenarbeit. Es zeigt, ob etwas stimmt.",
+    },
+    {
+      timeLabel: "15:20",
+      text: "Geduld fühlt sich heute eher nach genauem Hinsehen an.",
+    },
+  ],
+};
+
 const careerRealSentences: Record<string, string[]> = {
   "fachinformatiker-systemintegration": [
     "Ich schaue nur kurz.",
@@ -2064,6 +2380,7 @@ const careerRealSentences: Record<string, string[]> = {
 
 export const careers: Career[] = careerEntries.map((career) => ({
   ...career,
+  dayMoments: careerDayMoments[career.slug] ?? [],
   laterNotices: careerLaterNotices[career.slug] ?? [],
   lifeIndicators: careerLifeIndicators[career.slug] ?? defaultLifeIndicators,
   practicalSignals: careerPracticalSignals[career.slug] ?? defaultPracticalSignals,

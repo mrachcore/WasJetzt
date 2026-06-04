@@ -105,7 +105,7 @@ export default function QuizPage() {
             transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="mb-4 text-sm text-primary">
-              Ein paar unbequeme Alltagsfragen
+              Ein paar Fragen. Danach ein paar echte Arbeitstage.
             </p>
             <h1 className="text-4xl font-semibold leading-[1.08] sm:text-5xl">
               {question.question}
@@ -166,6 +166,12 @@ export default function QuizPage() {
               Keine Antwort ist richtig. Nimm die, die an einem echten Dienstag
               weniger falsch wäre.
             </p>
+            {answers.length >= 3 ? (
+              <p className="mt-3 max-w-xl text-sm leading-6 text-primary/75">
+                Wir suchen gerade keine Berufsbezeichnung. Eher einen Alltag,
+                der weniger falsch klingt.
+              </p>
+            ) : null}
           </motion.div>
         </AnimatePresence>
       </section>

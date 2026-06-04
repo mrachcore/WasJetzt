@@ -16,12 +16,12 @@ const DEBUG_FLAG_KEY = "wasjetzt_debug";
 const isDevelopment = process.env.NODE_ENV === "development";
 
 export function AdaptiveDebugPanel() {
-  const [enabled, setEnabled] = useState(isDevelopment);
+  const [enabled, setEnabled] = useState(false);
   const [open, setOpen] = useState(false);
   const [snapshot, setSnapshot] = useState<ExplorationDebugSnapshot | null>(null);
 
   useEffect(() => {
-    if (isDevelopment) return;
+    if (!isDevelopment) return;
 
     const frame = window.requestAnimationFrame(() => {
       const hasDebugFlag = window.localStorage.getItem(DEBUG_FLAG_KEY) === "true";
@@ -59,6 +59,12 @@ export function AdaptiveDebugPanel() {
 
   if (!enabled || !snapshot) return null;
 
+  function hidePanel() {
+    window.localStorage.removeItem(DEBUG_FLAG_KEY);
+    setEnabled(false);
+    setOpen(false);
+  }
+
   function resetMemory() {
     resetExplorationMemory();
   }
@@ -77,16 +83,25 @@ export function AdaptiveDebugPanel() {
 
   return (
     <aside className="fixed bottom-3 right-3 z-[80] w-[min(24rem,calc(100vw-1.5rem))] rounded-2xl border border-amber-300/25 bg-black/80 text-xs text-white shadow-2xl backdrop-blur-xl">
-      <button
-        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left font-semibold text-amber-100"
-        onClick={() => setOpen((current) => !current)}
-        type="button"
-      >
-        Adaptive QA
-        <span className="text-[0.7rem] font-normal text-white/60">
-          {open ? "close" : "open"}
-        </span>
-      </button>
+      <div className="flex items-center justify-between gap-3 px-4 py-3">
+        <button
+          className="flex-1 text-left font-semibold text-amber-100"
+          onClick={() => setOpen((current) => !current)}
+          type="button"
+        >
+          Adaptive QA
+          <span className="ml-3 text-[0.7rem] font-normal text-white/60">
+            {open ? "close" : "open"}
+          </span>
+        </button>
+        <button
+          className="rounded-full border border-white/10 px-2 py-0.5 text-[0.7rem] text-white/70 transition hover:bg-white/10 hover:text-white"
+          onClick={hidePanel}
+          type="button"
+        >
+          hide
+        </button>
+      </div>
 
       {open ? (
         <div className="max-h-[72vh] overflow-y-auto border-t border-white/10 px-4 pb-4 pt-3">

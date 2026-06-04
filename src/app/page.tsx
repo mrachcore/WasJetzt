@@ -6,13 +6,13 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { DayMomentPlayer } from "@/components/day-moment-player";
 import {
   TrackedObservationLink,
   TrackedSituationLink,
 } from "@/components/exploration-tracker";
 import { SavedReturnMoment } from "@/components/saved-return-moment";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { careers, getSituationCareers, situations } from "@/data/careers";
 import {
   ambientArbeitsweltFragments,
@@ -502,17 +502,38 @@ export default function Home() {
           />
           <div className="relative">
             <p className="mb-5 text-sm text-primary">
-              Ohne diesen ganzen Zukunftsdruck
+              Fragen beantworten + 30 Sekunden Alltag fühlen
             </p>
             <h1 className="max-w-3xl text-[2.55rem] font-semibold leading-[0.98] sm:text-7xl">
-              Was fühlt sich gerade am falschesten an?
+              Fang nicht mit einem Beruf an.
+              <br />
+              Fang mit einem Arbeitstag an.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground sm:text-xl sm:leading-9">
-              Nicht sofort entscheiden. Erstmal merken, welcher Tag dich
-              innerlich wegdrückt.
+              Beantworte kurz ein paar Fragen. Dann probierst du Arbeitstage in
+              kleinen Momenten.
             </p>
+
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Button asChild size="lg" className="w-full sm:w-auto">
+                <Link href="/quiz">
+                  Fragen starten
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="quiet" className="w-full sm:w-auto">
+                <Link href="/wege">Erstmal Arbeitstage ansehen</Link>
+              </Button>
+              <Link
+                className="inline-flex justify-center rounded-full px-3 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.055] hover:text-foreground sm:justify-start"
+                href="/karte"
+              >
+                Karte öffnen
+              </Link>
+            </div>
+
             {!selectedEntry ? (
-              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-xs leading-5 text-muted-foreground/45 sm:max-w-3xl">
+              <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs leading-5 text-muted-foreground/35 sm:max-w-3xl">
                 {ambientArbeitsweltFragments.slice(0, 4).map((fragment) => (
                   <span
                     className="max-w-[15rem] border-l border-white/10 pl-3"
@@ -524,14 +545,17 @@ export default function Home() {
               </div>
             ) : null}
 
-            <div className="mt-7 flex flex-wrap gap-2.5 sm:mt-10 sm:gap-3">
+            <p className="mt-14 text-xs text-primary/70 sm:mt-16">
+              Oder sag kurz, was gerade nervt.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
               {emotionalEntries.map((entry) => {
                 const active = entry.id === selectedEntryId;
 
                 return (
                   <button
                     aria-pressed={active}
-                    className={`group min-h-14 rounded-[999px] border px-4 py-3 text-left text-base font-medium leading-snug shadow-[0_12px_38px_rgba(0,0,0,0.14)] backdrop-blur-xl transition duration-500 ease-out hover:-translate-y-1 active:translate-y-0 sm:min-h-16 sm:px-5 ${
+                    className={`group rounded-[999px] border px-3.5 py-2 text-left text-sm font-medium leading-snug shadow-[0_8px_24px_rgba(0,0,0,0.12)] backdrop-blur-xl transition duration-500 ease-out hover:-translate-y-0.5 active:translate-y-0 ${
                       active
                         ? "scale-[1.03] border-primary/45 bg-primary/[0.16] text-foreground shadow-[0_22px_70px_rgba(0,0,0,0.28)]"
                         : selectedEntry
@@ -719,36 +743,22 @@ export default function Home() {
                   </p>
                 ) : null}
 
-                <Link href={`/careers/${moment.slug}`} className="block">
-                  <Card
-                    className={`energy-surface group p-5 transition duration-700 ease-out hover:-translate-y-1 hover:bg-white/[0.095] sm:p-8 ${moment.className}`}
-                  >
-                    <div className="flex items-start justify-between gap-6">
+                {career ? (
+                  <DayMomentPlayer
+                    career={career}
+                    className={moment.className}
+                    compareHref="/wege"
+                  />
+                ) : (
+                  <Link href={`/careers/${moment.slug}`} className="block">
+                    <div className={`energy-surface rounded-[1.25rem] border border-white/10 p-5 sm:p-8 ${moment.className}`}>
                       <p className="max-w-2xl text-2xl font-semibold leading-[1.12] sm:text-5xl">
                         {moment.line}
                       </p>
-                      <Image
-                        src="/logo-mark.png"
-                        alt=""
-                        width={46}
-                        height={43}
-                        className="mt-1 hidden h-10 w-auto opacity-30 transition duration-700 group-hover:opacity-50 sm:block"
-                      />
+                      <p className="mt-6 text-sm text-primary">{moment.aside}</p>
                     </div>
-                    <div className="mt-8 flex flex-col gap-5 sm:mt-10 sm:flex-row sm:items-end sm:justify-between">
-                      <div>
-                        <p className="text-sm text-primary">{moment.aside}</p>
-                        <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground">
-                          {career?.discoveryNote ?? moment.mood}
-                        </p>
-                      </div>
-                      <p className="inline-flex items-center gap-2 text-sm text-foreground/90">
-                        kurz reinschauen
-                        <ArrowRight className="size-4 text-primary" />
-                      </p>
-                    </div>
-                  </Card>
-                </Link>
+                  </Link>
+                )}
 
                 {index !== 2 ? (
                   <p

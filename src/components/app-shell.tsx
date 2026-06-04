@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             className="rounded-full px-2.5 py-1.5 transition hover:bg-white/[0.07] hover:text-foreground sm:px-3"
             href="/quiz"
           >
-            Start
+            Fragen
           </Link>
           <Link
             className="rounded-full px-2.5 py-1.5 transition hover:bg-white/[0.07] hover:text-foreground sm:px-3"
