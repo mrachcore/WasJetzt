@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Fragen",
+  title: "7 kurze Entscheidungen",
   description:
-    "Ein paar konkrete Fragen darüber, welche Art Arbeitstag sich weniger falsch anfühlt.",
+    "Sieben schnelle Entscheidungen, aus denen später Arbeitstage werden.",
   openGraph: {
-    title: "WasJetzt Fragen",
-    description:
-      "Kurze Fragen über Energie, Menschen, Ruhe und Alltag.",
+    title: "WasJetzt Entscheidungen",
+    description: "Sieben schnelle Reaktionen.",
   },
 };
 

@@ -18,8 +18,11 @@ import {
   type Career,
   careers,
   getCareer,
+  getCareerDifferenceMoments,
   getEmotionalPathways,
+  getOftenConfusedCareers,
 } from "@/data/careers";
+import { getNextWorkday } from "@/data/workday-flow";
 import { cn } from "@/lib/utils";
 
 type DetailKey = "atmosphere" | "secretlyLike" | "annoys" | "comfortableFor";
@@ -391,6 +394,7 @@ export default async function CareerDetailPage({
   if (!career) notFound();
 
   const emotionalPathways = getEmotionalPathways(slug);
+  const oftenConfusedCareers = getOftenConfusedCareers(slug);
   const profile = careerPageProfiles[career.slug] ?? defaultProfile;
   const tone = getCareerTone(career.slug);
 
@@ -447,6 +451,7 @@ export default async function CareerDetailPage({
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
             {[
+              { href: "#anders", label: "Was anders ist" },
               { href: "#saetze", label: "Sätze aus dem Alltag" },
               { href: "#was-nervt", label: "Was nervt" },
               { href: "#aehnliche-tage", label: "Ähnliche Tage" },
@@ -468,12 +473,14 @@ export default async function CareerDetailPage({
           career={career}
           className="mt-14 max-w-3xl opacity-80 sm:ml-[8%]"
         />
+        <RealDifferencesSection career={career} />
         <FitSection career={career} profile={profile} />
         <ObservationStream career={career} profile={profile} />
         <RealSentencesWall career={career} />
         <LaterNoticeCards career={career} />
         <DayFragments career={career} profile={profile} tone={tone} />
         <RealismLayer career={career} />
+        <OftenConfusedSection career={career} careers={oftenConfusedCareers} />
 
         {emotionalPathways.length > 0 ? (
           <section className="mt-16 scroll-mt-24 sm:mt-20" id="aehnliche-tage">
@@ -580,12 +587,37 @@ function getCareerTone(slug: string) {
 }
 
 function DayMomentSection({ career }: { career: Career }) {
+  const nextWorkday = getNextWorkday(career.slug, careers);
+
   return (
     <section
       className="mt-12 scroll-mt-6 sm:mt-14"
       id="30-sekunden"
     >
-      <DayMomentPlayer career={career} />
+      <DayMomentPlayer career={career} nextWorkday={nextWorkday} />
+    </section>
+  );
+}
+
+function RealDifferencesSection({ career }: { career: Career }) {
+  if (!career.realDifferences.length) return null;
+
+  return (
+    <section
+      className="mt-14 scroll-mt-24 border-y border-white/10 py-8 sm:mt-16 sm:py-10"
+      id="anders"
+    >
+      <p className="text-sm text-primary">Was hier anders ist</p>
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        {career.realDifferences.slice(0, 3).map((difference) => (
+          <p
+            className="text-xl font-semibold leading-snug text-foreground/90 sm:text-2xl"
+            key={difference}
+          >
+            {difference}
+          </p>
+        ))}
+      </div>
     </section>
   );
 }
@@ -848,6 +880,116 @@ function RealismLayer({ career }: { career: Career }) {
   );
 }
 
+function OftenConfusedSection({
+  career,
+  careers: confusedCareers,
+}: {
+  career: Career;
+  careers: Career[];
+}) {
+  if (!confusedCareers.length) return null;
+
+  return (
+    <section className="mt-16 scroll-mt-24 sm:mt-20" id="oft-verwechselt">
+      <div className="mb-8 max-w-2xl">
+        <p className="text-sm text-primary">Oft verwechselt mit</p>
+        <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
+          Viele landen zuerst hier.
+        </h2>
+        <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground">
+          Manche merken später, dass sie eigentlich eher bei etwas anderem
+          gelandet wären.
+        </p>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        {confusedCareers.map((confusedCareer) => (
+          <Card
+            className="flex h-full flex-col justify-between p-5"
+            key={confusedCareer.slug}
+          >
+            <div>
+              <p className="text-sm text-primary/80">Wirkt manchmal nah dran</p>
+              <h3 className="mt-3 text-xl font-semibold leading-tight">
+                {confusedCareer.title}
+              </h3>
+              <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                {confusedCareer.discoveryNote}
+              </p>
+            </div>
+            <Button asChild className="mt-5 w-fit" variant="quiet">
+              <Link href={`#${getDifferenceAnchor(confusedCareer.slug)}`}>
+                Unterschied fühlen
+                <ArrowDown className="size-4" />
+              </Link>
+            </Button>
+          </Card>
+        ))}
+      </div>
+
+      <div className="mt-10 space-y-12">
+        {confusedCareers.map((confusedCareer, comparisonIndex) => {
+          const moments = getCareerDifferenceMoments(
+            career.slug,
+            confusedCareer.slug,
+          );
+
+          return (
+            <div
+              className={cn(
+                "scroll-mt-24 border-t border-white/10 pt-8",
+                comparisonIndex % 2 === 1 && "sm:ml-[8%]",
+              )}
+              id={getDifferenceAnchor(confusedCareer.slug)}
+              key={`${career.slug}-${confusedCareer.slug}`}
+            >
+              <div className="mb-7 max-w-2xl">
+                <p className="text-sm text-primary">
+                  {career.title} / {confusedCareer.title}
+                </p>
+                <h3 className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
+                  Gleicher Moment. Andere Reaktion.
+                </h3>
+              </div>
+
+              <div className="space-y-6">
+                {moments.map((moment) => (
+                  <div
+                    className="grid gap-4 border-l border-white/10 pl-5 sm:grid-cols-[96px_1fr]"
+                    key={`${moment.time}-${moment.setup}`}
+                  >
+                    <p className="text-sm text-primary">{moment.time}</p>
+                    <div>
+                      <p className="text-xl font-semibold leading-snug text-foreground/92">
+                        {moment.setup}
+                      </p>
+                      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                        {[career, confusedCareer].map((momentCareer) => (
+                          <div
+                            className="rounded-[1.1rem] border border-white/10 bg-white/[0.035] p-4"
+                            key={`${moment.time}-${momentCareer.slug}`}
+                          >
+                            <p className="text-sm text-primary/80">
+                              {momentCareer.title}
+                            </p>
+                            <p className="mt-3 text-base font-semibold leading-7 text-foreground/90">
+                              {moment.lines[momentCareer.slug]}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function NextSteps({ career }: { career: Career }) {
   const links = getCareerNextStepLinks(career);
 
@@ -895,6 +1037,10 @@ function NextSteps({ career }: { career: Career }) {
 
     </section>
   );
+}
+
+function getDifferenceAnchor(slug: string) {
+  return `unterschied-${slug}`;
 }
 
 function getCareerNextStepLinks(career: Career) {

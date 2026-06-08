@@ -1,3 +1,16 @@
+import {
+  careerExpansionDayMoments,
+  careerExpansionDifferenceMoments,
+  careerExpansionEntries,
+  careerExpansionLaterNotices,
+  careerExpansionLifeIndicators,
+  careerExpansionOftenConfusedWith,
+  careerExpansionPracticalSignals,
+  careerExpansionRealDifferences,
+  careerExpansionRealSentences,
+  careerExpansionSignalWeights,
+} from "@/data/career-expansion";
+
 export type LifeIndicatorValue = "low" | "medium" | "high";
 
 export type LifeIndicators = {
@@ -6,6 +19,34 @@ export type LifeIndicators = {
   bewegung: LifeIndicatorValue;
   struktur: LifeIndicatorValue;
   sichtbaresErgebnis: LifeIndicatorValue;
+};
+
+export type QuizSignal =
+  | "people"
+  | "solitude"
+  | "structure"
+  | "chaos_tolerance"
+  | "movement"
+  | "focus"
+  | "hands_on"
+  | "technical"
+  | "creative"
+  | "service"
+  | "problem_solving"
+  | "visible_results"
+  | "long_projects"
+  | "short_tasks"
+  | "routine"
+  | "variety"
+  | "responsibility_for_people"
+  | "responsibility_for_systems";
+
+export type SignalWeights = Partial<Record<QuizSignal, number>>;
+
+export type CareerDifferenceMoment = {
+  time: string;
+  setup: string;
+  lines: Record<string, string>;
 };
 
 export type Career = {
@@ -19,6 +60,9 @@ export type Career = {
   color: string;
   tags: string[];
   lifeIndicators: LifeIndicators;
+  signalWeights: SignalWeights;
+  realDifferences: string[];
+  oftenConfusedWith?: string[];
   practicalSignals: string[];
   realSentences: string[];
   realism: {
@@ -60,6 +104,9 @@ const careerEntries: Omit<
   | "dayMoments"
   | "laterNotices"
   | "lifeIndicators"
+  | "signalWeights"
+  | "realDifferences"
+  | "oftenConfusedWith"
   | "practicalSignals"
   | "realSentences"
   | "realism"
@@ -1371,6 +1418,7 @@ const careerEntries: Omit<
       },
     ],
   },
+  ...careerExpansionEntries,
 ];
 
 const defaultLifeIndicators: LifeIndicators = {
@@ -1534,6 +1582,824 @@ const careerLifeIndicators: Record<string, LifeIndicators> = {
     struktur: "medium",
     sichtbaresErgebnis: "medium",
   },
+  ...careerExpansionLifeIndicators,
+};
+
+export const quizSignals: QuizSignal[] = [
+  "people",
+  "solitude",
+  "structure",
+  "chaos_tolerance",
+  "movement",
+  "focus",
+  "hands_on",
+  "technical",
+  "creative",
+  "service",
+  "problem_solving",
+  "visible_results",
+  "long_projects",
+  "short_tasks",
+  "routine",
+  "variety",
+  "responsibility_for_people",
+  "responsibility_for_systems",
+];
+
+const careerSignalWeights: Record<string, SignalWeights> = {
+  "fachinformatiker-systemintegration": {
+    solitude: 3,
+    focus: 3,
+    technical: 3,
+    problem_solving: 3,
+    responsibility_for_systems: 3,
+    structure: 2,
+    long_projects: 2,
+    routine: 1,
+    people: 1,
+    service: 1,
+    chaos_tolerance: 1,
+  },
+  elektroniker: {
+    hands_on: 3,
+    technical: 3,
+    problem_solving: 3,
+    visible_results: 3,
+    movement: 3,
+    short_tasks: 2,
+    variety: 2,
+    responsibility_for_systems: 1,
+    structure: 2,
+    focus: 1,
+    people: 1,
+  },
+  pflegefachkraft: {
+    people: 3,
+    service: 3,
+    responsibility_for_people: 3,
+    movement: 2,
+    routine: 2,
+    short_tasks: 2,
+    chaos_tolerance: 2,
+    hands_on: 2,
+    structure: 1,
+    solitude: 0,
+  },
+  mediengestalter: {
+    creative: 3,
+    focus: 3,
+    visible_results: 3,
+    solitude: 2,
+    long_projects: 2,
+    problem_solving: 2,
+    technical: 1,
+    people: 1,
+    structure: 1,
+    short_tasks: 1,
+  },
+  notfallsanitaeter: {
+    people: 3,
+    service: 3,
+    responsibility_for_people: 3,
+    chaos_tolerance: 3,
+    movement: 3,
+    short_tasks: 3,
+    variety: 3,
+    problem_solving: 2,
+    hands_on: 2,
+    structure: 1,
+  },
+  "fachkraft-lagerlogistik": {
+    structure: 3,
+    movement: 3,
+    hands_on: 3,
+    routine: 3,
+    visible_results: 2,
+    responsibility_for_systems: 2,
+    focus: 2,
+    short_tasks: 2,
+    solitude: 2,
+    people: 1,
+  },
+  mechatroniker: {
+    technical: 3,
+    hands_on: 3,
+    problem_solving: 3,
+    responsibility_for_systems: 3,
+    focus: 3,
+    movement: 1,
+    visible_results: 2,
+    structure: 3,
+    long_projects: 2,
+    routine: 1,
+    people: 1,
+  },
+  erzieher: {
+    people: 3,
+    service: 3,
+    responsibility_for_people: 3,
+    chaos_tolerance: 3,
+    movement: 2,
+    short_tasks: 2,
+    creative: 2,
+    routine: 2,
+    variety: 2,
+    focus: 1,
+  },
+  verkaeufer: {
+    people: 3,
+    service: 3,
+    short_tasks: 3,
+    movement: 2,
+    routine: 2,
+    visible_results: 2,
+    chaos_tolerance: 2,
+    variety: 2,
+    responsibility_for_people: 1,
+    structure: 1,
+  },
+  koch: {
+    hands_on: 3,
+    movement: 3,
+    chaos_tolerance: 3,
+    short_tasks: 3,
+    visible_results: 3,
+    structure: 2,
+    routine: 2,
+    creative: 2,
+    focus: 2,
+    people: 1,
+  },
+  tischler: {
+    hands_on: 3,
+    visible_results: 3,
+    focus: 3,
+    structure: 3,
+    technical: 2,
+    creative: 2,
+    problem_solving: 2,
+    solitude: 2,
+    long_projects: 2,
+    movement: 2,
+  },
+  bauzeichner: {
+    structure: 3,
+    focus: 3,
+    technical: 2,
+    problem_solving: 2,
+    long_projects: 3,
+    solitude: 3,
+    responsibility_for_systems: 2,
+    creative: 1,
+    visible_results: 1,
+    people: 1,
+  },
+  industriemechaniker: {
+    hands_on: 3,
+    technical: 3,
+    problem_solving: 2,
+    responsibility_for_systems: 3,
+    movement: 3,
+    structure: 3,
+    focus: 2,
+    visible_results: 1,
+    routine: 3,
+    long_projects: 1,
+    people: 1,
+  },
+  veranstaltungstechniker: {
+    movement: 3,
+    chaos_tolerance: 3,
+    technical: 3,
+    hands_on: 3,
+    visible_results: 3,
+    variety: 3,
+    short_tasks: 2,
+    problem_solving: 2,
+    people: 2,
+    responsibility_for_systems: 2,
+  },
+  "medizinische-fachangestellte": {
+    people: 3,
+    service: 3,
+    responsibility_for_people: 3,
+    structure: 3,
+    short_tasks: 3,
+    routine: 2,
+    chaos_tolerance: 2,
+    movement: 2,
+    focus: 1,
+    technical: 1,
+  },
+  "kaufmann-bueromanagement": {
+    structure: 3,
+    routine: 3,
+    focus: 2,
+    service: 2,
+    responsibility_for_systems: 2,
+    long_projects: 2,
+    people: 2,
+    solitude: 2,
+    problem_solving: 1,
+    movement: 0,
+  },
+  friseur: {
+    people: 3,
+    service: 3,
+    creative: 3,
+    hands_on: 3,
+    visible_results: 3,
+    movement: 2,
+    responsibility_for_people: 2,
+    short_tasks: 2,
+    variety: 2,
+    focus: 1,
+  },
+  florist: {
+    creative: 3,
+    hands_on: 3,
+    visible_results: 3,
+    service: 2,
+    people: 2,
+    routine: 2,
+    focus: 2,
+    short_tasks: 2,
+    movement: 1,
+    structure: 1,
+  },
+  zugbegleiter: {
+    people: 3,
+    movement: 3,
+    service: 3,
+    chaos_tolerance: 3,
+    variety: 3,
+    responsibility_for_people: 2,
+    short_tasks: 2,
+    structure: 2,
+    routine: 1,
+    focus: 1,
+  },
+  tierpfleger: {
+    solitude: 3,
+    routine: 3,
+    hands_on: 3,
+    movement: 3,
+    service: 2,
+    responsibility_for_people: 2,
+    focus: 2,
+    structure: 2,
+    people: 1,
+    chaos_tolerance: 1,
+  },
+  ...careerExpansionSignalWeights,
+};
+
+const careerOftenConfusedWith: Record<string, string[]> = {
+  "fachinformatiker-systemintegration": ["bauzeichner", "mechatroniker"],
+  bauzeichner: ["fachinformatiker-systemintegration", "mediengestalter"],
+  pflegefachkraft: ["medizinische-fachangestellte", "notfallsanitaeter"],
+  "medizinische-fachangestellte": ["pflegefachkraft"],
+  mechatroniker: ["industriemechaniker", "elektroniker"],
+  industriemechaniker: ["mechatroniker", "tischler"],
+  elektroniker: ["mechatroniker"],
+  friseur: ["florist"],
+  florist: ["friseur", "mediengestalter"],
+  erzieher: ["pflegefachkraft"],
+  verkaeufer: ["zugbegleiter"],
+  zugbegleiter: ["verkaeufer", "notfallsanitaeter"],
+  koch: ["veranstaltungstechniker"],
+  veranstaltungstechniker: ["koch", "elektroniker"],
+  "fachkraft-lagerlogistik": ["kaufmann-bueromanagement"],
+  "kaufmann-bueromanagement": ["fachkraft-lagerlogistik"],
+  mediengestalter: ["bauzeichner", "florist"],
+  tierpfleger: ["pflegefachkraft"],
+  tischler: ["industriemechaniker"],
+  notfallsanitaeter: ["pflegefachkraft", "zugbegleiter"],
+  ...careerExpansionOftenConfusedWith,
+};
+
+const careerRealDifferences: Record<string, string[]> = {
+  "fachinformatiker-systemintegration": [
+    "Vieles passiert im Kopf, bevor etwas sichtbar wird.",
+    "Menschen merken oft nur, wenn etwas nicht funktioniert.",
+    "Geduld hilft mehr als Geschwindigkeit.",
+  ],
+  elektroniker: [
+    "Fehler werden oft erst vor Ort wirklich klar.",
+    "Der Tag hängt an Material, Wegen und sicheren Anschlüssen.",
+    "Am Ende merkt man den Unterschied daran, dass etwas läuft.",
+  ],
+  pflegefachkraft: [
+    "Man erinnert sich oft an Menschen, nicht an Aufgaben.",
+    "Manche Tage fühlen sich schwerer an, als sie aussehen.",
+    "Hilfe ist nicht immer sofort sichtbar.",
+  ],
+  mediengestalter: [
+    "Kleine Änderungen können sich größer anfühlen als sie aussehen.",
+    "Feedback gehört zum Tag, auch wenn es ungenau kommt.",
+    "Das Ergebnis wirkt leicht, obwohl der Weg oft aus Korrigieren besteht.",
+  ],
+  notfallsanitaeter: [
+    "Der Tag kippt schnell von Warten zu sehr direkt.",
+    "Ruhe wirkt hier oft stärker als Tempo.",
+    "Manche Momente gehen mit, obwohl der Einsatz vorbei ist.",
+  ],
+  "fachkraft-lagerlogistik": [
+    "Ordnung zeigt sich daran, dass später niemand suchen muss.",
+    "Der Körper arbeitet mit, der Kopf sortiert ständig mit.",
+    "Vieles wirkt unsichtbar, bis etwas falsch liegt.",
+  ],
+  mechatroniker: [
+    "Ein Fehler kann gleichzeitig mechanisch, elektrisch und logisch sein.",
+    "Geräusche und Messwerte erzählen oft zusammen etwas.",
+    "Es reicht nicht, dass etwas angeht; es muss sauber zusammenspielen.",
+  ],
+  erzieher: [
+    "Ein kleiner Streit kann für den Tag groß sein.",
+    "Man arbeitet oft an Stimmung, bevor man an Aufgaben arbeitet.",
+    "Geduld zeigt sich in Sätzen, die erst später wirken.",
+  ],
+  verkaeufer: [
+    "Der Tag besteht aus vielen kurzen Stimmungen.",
+    "Ordnung und Freundlichkeit passieren oft gleichzeitig.",
+    "Man merkt schnell, wie Menschen in einen Laden kommen.",
+  ],
+  koch: [
+    "Timing ist hier körperlich, nicht nur organisatorisch.",
+    "Der Druck steigt oft genau dann, wenn Reden kürzer wird.",
+    "Stolz kommt manchmal erst, wenn der Teller schon weg ist.",
+  ],
+  tischler: [
+    "Ein Millimeter kann den ganzen Moment verändern.",
+    "Man denkt mit Händen, Material und Geduld.",
+    "Das Ergebnis bleibt im Raum, nicht nur in einer Datei.",
+  ],
+  bauzeichner: [
+    "Ruhige Linien können später echte Räume verändern.",
+    "Fehler wirken zuerst klein und werden erst später groß.",
+    "Genauigkeit ist hier oft Verantwortung ohne viel Lärm.",
+  ],
+  industriemechaniker: [
+    "Man hört und spürt oft, ob etwas sauber läuft.",
+    "Schwere Teile brauchen trotzdem kleine Genauigkeit.",
+    "Der Unterschied zeigt sich häufig im Lauf einer Anlage.",
+  ],
+  veranstaltungstechniker: [
+    "Vorne wirkt es glatt, hinten bleibt es praktisch und eng getaktet.",
+    "Der Tag endet oft nicht, wenn das Publikum geht.",
+    "Unsichtbare Arbeit entscheidet, ob etwas leicht wirken kann.",
+  ],
+  "medizinische-fachangestellte": [
+    "Menschen kommen oft mit Angst, auch wenn sie nur einen Termin sagen.",
+    "Der Tag hängt an kurzen Wegen, Telefon und Taktung.",
+    "Hilfe passiert oft zwischen Empfang, Wartezimmer und Behandlungsraum.",
+  ],
+  "kaufmann-bueromanagement": [
+    "Ordnung wirkt hier leise, bis sie fehlt.",
+    "Der Tag besteht oft aus Fäden, die andere nicht sehen.",
+    "Ein gutes Ablagesystem kann später einen ganzen Vormittag retten.",
+  ],
+  friseur: [
+    "Nähe passiert über Spiegel, Hände und kurze Sätze.",
+    "Man sieht sofort, ob jemand sich anders fühlt.",
+    "Gestaltung ist hier direkt am Menschen.",
+  ],
+  florist: [
+    "Anlässe stehen oft im Raum, bevor jemand sie ausspricht.",
+    "Schönheit hat hier Wasser, Kälte und brüchige Stiele.",
+    "Ein Strauß muss nicht nur aussehen, sondern einen Ton treffen.",
+  ],
+  zugbegleiter: [
+    "Der Ort bewegt sich weiter, auch wenn Menschen unruhig werden.",
+    "Freundlichkeit braucht hier oft klare Grenzen.",
+    "Verspätung verändert den Tag schneller als jede Durchsage.",
+  ],
+  tierpfleger: [
+    "Man erkennt viel daran, dass etwas anders ist als gestern.",
+    "Fürsorge ist hier oft ruhig, körperlich und wiederholend.",
+    "Nähe entsteht nicht immer durch Reden.",
+  ],
+  ...careerExpansionRealDifferences,
+};
+
+const careerDifferenceMoments: Record<string, CareerDifferenceMoment[]> = {
+  "bauzeichner__fachinformatiker-systemintegration": [
+    {
+      time: "09:18",
+      setup: "Etwas stimmt nicht.",
+      lines: {
+        "fachinformatiker-systemintegration": "Niemand weiß, warum das System nicht antwortet.",
+        bauzeichner: "Niemand sieht den Fehler im Plan.",
+      },
+    },
+    {
+      time: "11:04",
+      setup: "Jemand sagt: kurz prüfen.",
+      lines: {
+        "fachinformatiker-systemintegration": "Du schaust in Logs, Zugriffe, Geräte.",
+        bauzeichner: "Du gehst Maße, Schnitte, Versionen durch.",
+      },
+    },
+    {
+      time: "15:36",
+      setup: "Der Fehler wäre später teuer.",
+      lines: {
+        "fachinformatiker-systemintegration": "Dann steht vielleicht ein Arbeitsablauf.",
+        bauzeichner: "Dann steht vielleicht eine Wand anders.",
+      },
+    },
+  ],
+  "fachinformatiker-systemintegration__mechatroniker": [
+    {
+      time: "08:47",
+      setup: "Eine Störung taucht auf.",
+      lines: {
+        "fachinformatiker-systemintegration": "Du suchst erst im System, bevor jemand etwas anfasst.",
+        mechatroniker: "Du gehst näher ran, hörst, misst, öffnest.",
+      },
+    },
+    {
+      time: "12:12",
+      setup: "Der Fehler kommt nur manchmal.",
+      lines: {
+        "fachinformatiker-systemintegration": "Du wartest auf ein Muster in Daten.",
+        mechatroniker: "Du wartest auf ein Geräusch im Lauf.",
+      },
+    },
+    {
+      time: "16:20",
+      setup: "Es läuft wieder.",
+      lines: {
+        "fachinformatiker-systemintegration": "Der Raum bleibt leise, weil niemand mehr ruft.",
+        mechatroniker: "Die Maschine klingt anders ruhig.",
+      },
+    },
+  ],
+  "elektroniker__mechatroniker": [
+    {
+      time: "08:31",
+      setup: "Ein Gerät macht nicht mit.",
+      lines: {
+        elektroniker: "Du denkst an Leitung, Spannung, Anschluss.",
+        mechatroniker: "Du denkst an Zusammenspiel aus Mechanik, Strom und Steuerung.",
+      },
+    },
+    {
+      time: "10:58",
+      setup: "Der Plan passt nicht ganz.",
+      lines: {
+        elektroniker: "Die Wand entscheidet mit.",
+        mechatroniker: "Die Maschine entscheidet mit.",
+      },
+    },
+    {
+      time: "14:44",
+      setup: "Alle warten auf Funktion.",
+      lines: {
+        elektroniker: "Am Ende soll Strom sicher dort sein, wo er hingehört.",
+        mechatroniker: "Am Ende soll Bewegung sauber das tun, was sie soll.",
+      },
+    },
+  ],
+  "industriemechaniker__mechatroniker": [
+    {
+      time: "07:56",
+      setup: "Die Anlage klingt anders.",
+      lines: {
+        mechatroniker: "Du suchst die Verbindung zwischen Sensor, Steuerung und Bewegung.",
+        industriemechaniker: "Du suchst Spiel, Verschleiß, Druck, Passung.",
+      },
+    },
+    {
+      time: "11:22",
+      setup: "Ein Teil passt fast.",
+      lines: {
+        mechatroniker: "Fast kann bedeuten: Signal stimmt noch nicht.",
+        industriemechaniker: "Fast kann bedeuten: ein Zehntel fehlt.",
+      },
+    },
+    {
+      time: "15:18",
+      setup: "Sie läuft wieder.",
+      lines: {
+        mechatroniker: "Du traust erst, wenn Steuerung und Mechanik zusammen ruhig bleiben.",
+        industriemechaniker: "Du traust erst, wenn Metall und Bewegung sauber sitzen.",
+      },
+    },
+  ],
+  "friseur__florist": [
+    {
+      time: "09:40",
+      setup: "Jemand kommt mit einem Anlass.",
+      lines: {
+        friseur: "Der Anlass sitzt später im Spiegel.",
+        florist: "Der Anlass liegt später in Händen.",
+      },
+    },
+    {
+      time: "12:05",
+      setup: "Etwas soll leicht wirken.",
+      lines: {
+        friseur: "Du nimmst Gewicht aus Haaren.",
+        florist: "Du nimmst Schwere aus einem Strauß.",
+      },
+    },
+    {
+      time: "16:33",
+      setup: "Die Person schaut nochmal hin.",
+      lines: {
+        friseur: "Du merkst sofort, ob sie sich wiedererkennt.",
+        florist: "Du merkst sofort, ob es den Ton trifft.",
+      },
+    },
+  ],
+  "medizinische-fachangestellte__pflegefachkraft": [
+    {
+      time: "08:10",
+      setup: "Jemand wirkt unsicher.",
+      lines: {
+        pflegefachkraft: "Du bleibst körperlich nah am Alltag der Person.",
+        "medizinische-fachangestellte": "Du hältst Praxis, Telefon und Wartezimmer zusammen.",
+      },
+    },
+    {
+      time: "10:46",
+      setup: "Es muss schnell weitergehen.",
+      lines: {
+        pflegefachkraft: "Du merkst, ob Trinken, Aufstehen, Schmerz gerade kippen.",
+        "medizinische-fachangestellte": "Du merkst, ob Termin, Karte, Angst gerade kippen.",
+      },
+    },
+    {
+      time: "15:55",
+      setup: "Der Tag war voll mit Menschen.",
+      lines: {
+        pflegefachkraft: "Es bleibt eher im Körper.",
+        "medizinische-fachangestellte": "Es bleibt eher als Taktung im Kopf.",
+      },
+    },
+  ],
+  "notfallsanitaeter__pflegefachkraft": [
+    {
+      time: "06:58",
+      setup: "Jemand braucht Hilfe.",
+      lines: {
+        notfallsanitaeter: "Du kommst in einen Moment, der gerade passiert.",
+        pflegefachkraft: "Du bleibst in einem Alltag, der nicht aufhört.",
+      },
+    },
+    {
+      time: "13:20",
+      setup: "Eine Stimme wird unruhig.",
+      lines: {
+        notfallsanitaeter: "Du sortierst schnell, was jetzt zählt.",
+        pflegefachkraft: "Du merkst, was heute anders ist als gestern.",
+      },
+    },
+    {
+      time: "18:30",
+      setup: "Du gehst raus.",
+      lines: {
+        notfallsanitaeter: "Der einzelne Einsatz kann noch nachhallen.",
+        pflegefachkraft: "Die vielen kleinen Dinge können noch nachhallen.",
+      },
+    },
+  ],
+  "erzieher__pflegefachkraft": [
+    {
+      time: "08:21",
+      setup: "Der Raum ist laut.",
+      lines: {
+        erzieher: "Du hörst, wo ein Streit gleich größer wird.",
+        pflegefachkraft: "Du hörst, wo jemand gleich Hilfe braucht.",
+      },
+    },
+    {
+      time: "11:37",
+      setup: "Jemand will nicht.",
+      lines: {
+        erzieher: "Du übersetzt Gefühl in einen nächsten kleinen Schritt.",
+        pflegefachkraft: "Du übersetzt Unwohlsein in etwas Praktisches.",
+      },
+    },
+    {
+      time: "15:08",
+      setup: "Ein Satz wirkt später.",
+      lines: {
+        erzieher: "Vielleicht beim Kind, das wieder mitmacht.",
+        pflegefachkraft: "Vielleicht bei jemandem, der ruhiger wird.",
+      },
+    },
+  ],
+  "verkaeufer__zugbegleiter": [
+    {
+      time: "09:12",
+      setup: "Viele Menschen wollen gleichzeitig etwas.",
+      lines: {
+        verkaeufer: "Du hältst Kasse, Regal und Stimmung im Laden.",
+        zugbegleiter: "Du hältst Gang, Türen und Stimmung im Zug.",
+      },
+    },
+    {
+      time: "13:18",
+      setup: "Jemand ist genervt.",
+      lines: {
+        verkaeufer: "Vielleicht fehlt ein Produkt.",
+        zugbegleiter: "Vielleicht fehlt ein Anschluss.",
+      },
+    },
+    {
+      time: "18:05",
+      setup: "Die Beine sind müde.",
+      lines: {
+        verkaeufer: "Der Laden bleibt zurück.",
+        zugbegleiter: "Der nächste Halt kommt trotzdem.",
+      },
+    },
+  ],
+  "koch__veranstaltungstechniker": [
+    {
+      time: "12:35",
+      setup: "Es muss jetzt raus.",
+      lines: {
+        koch: "Der Teller wartet nicht.",
+        veranstaltungstechniker: "Der Auftritt wartet nicht.",
+      },
+    },
+    {
+      time: "16:20",
+      setup: "Vorne soll es leicht aussehen.",
+      lines: {
+        koch: "Hinten ist Hitze, Timing, Zuruf.",
+        veranstaltungstechniker: "Hinten ist Kabel, Licht, Umbau.",
+      },
+    },
+    {
+      time: "23:40",
+      setup: "Der Druck ist vorbei.",
+      lines: {
+        koch: "Die Küche muss trotzdem wieder bereit werden.",
+        veranstaltungstechniker: "Die Halle muss trotzdem wieder leer werden.",
+      },
+    },
+  ],
+  "fachkraft-lagerlogistik__kaufmann-bueromanagement": [
+    {
+      time: "09:00",
+      setup: "Etwas ist falsch abgelegt.",
+      lines: {
+        "fachkraft-lagerlogistik": "Du suchst es zwischen Paletten, Gängen, Scannern.",
+        "kaufmann-bueromanagement": "Du suchst es zwischen Mails, Ordnern, Kalendern.",
+      },
+    },
+    {
+      time: "11:30",
+      setup: "Ordnung verhindert später Ärger.",
+      lines: {
+        "fachkraft-lagerlogistik": "Jemand findet Ware schneller.",
+        "kaufmann-bueromanagement": "Jemand findet Informationen schneller.",
+      },
+    },
+    {
+      time: "15:50",
+      setup: "Der Tag ist sortierter als vorher.",
+      lines: {
+        "fachkraft-lagerlogistik": "Du siehst es im Gang.",
+        "kaufmann-bueromanagement": "Du siehst es im Ablauf.",
+      },
+    },
+  ],
+  "bauzeichner__mediengestalter": [
+    {
+      time: "09:25",
+      setup: "Eine Linie sitzt nicht.",
+      lines: {
+        bauzeichner: "Später könnte daraus ein echtes Problem im Raum werden.",
+        mediengestalter: "Später könnte es einfach falsch wirken.",
+      },
+    },
+    {
+      time: "13:05",
+      setup: "Du verschiebst etwas minimal.",
+      lines: {
+        bauzeichner: "Damit ein Maß wieder stimmt.",
+        mediengestalter: "Damit ein Gefühl wieder stimmt.",
+      },
+    },
+    {
+      time: "16:45",
+      setup: "Feedback kommt rein.",
+      lines: {
+        bauzeichner: "Es geht eher um Genauigkeit, die halten muss.",
+        mediengestalter: "Es geht eher um Wirkung, die getroffen werden soll.",
+      },
+    },
+  ],
+  "florist__mediengestalter": [
+    {
+      time: "08:50",
+      setup: "Etwas soll schön werden.",
+      lines: {
+        florist: "Deine Finger entscheiden mit.",
+        mediengestalter: "Dein Bildschirm entscheidet mit.",
+      },
+    },
+    {
+      time: "12:08",
+      setup: "Die Farbe stimmt fast.",
+      lines: {
+        florist: "Fast heißt: der Strauß kippt im Gefühl.",
+        mediengestalter: "Fast heißt: das Layout zieht falsch.",
+      },
+    },
+    {
+      time: "16:40",
+      setup: "Es geht raus.",
+      lines: {
+        florist: "Jemand nimmt es mit in einen echten Anlass.",
+        mediengestalter: "Jemand nimmt es mit in einen sichtbaren Auftritt.",
+      },
+    },
+  ],
+  "industriemechaniker__tischler": [
+    {
+      time: "08:30",
+      setup: "Ein Millimeter fehlt.",
+      lines: {
+        tischler: "Du spürst es an Holz, Kante, Fläche.",
+        industriemechaniker: "Du spürst es an Metall, Lauf, Passung.",
+      },
+    },
+    {
+      time: "11:50",
+      setup: "Das Teil sitzt fast.",
+      lines: {
+        tischler: "Fast sieht man später vielleicht.",
+        industriemechaniker: "Fast hört man später vielleicht.",
+      },
+    },
+    {
+      time: "16:00",
+      setup: "Es ist fertig genug für den nächsten Schritt.",
+      lines: {
+        tischler: "Der Raum wirkt dadurch anders.",
+        industriemechaniker: "Die Anlage läuft dadurch anders.",
+      },
+    },
+  ],
+  "pflegefachkraft__tierpfleger": [
+    {
+      time: "07:20",
+      setup: "Jemand frisst oder trinkt weniger.",
+      lines: {
+        pflegefachkraft: "Du fragst, beobachtest, hilfst direkt.",
+        tierpfleger: "Du beobachtest stiller und merkst Abweichungen.",
+      },
+    },
+    {
+      time: "11:25",
+      setup: "Putzen ist nicht nur Putzen.",
+      lines: {
+        pflegefachkraft: "Es zeigt, wie jemand durch den Tag kommt.",
+        tierpfleger: "Es zeigt, ob im Gehege etwas anders ist.",
+      },
+    },
+    {
+      time: "15:20",
+      setup: "Geduld fühlt sich anders an.",
+      lines: {
+        pflegefachkraft: "Mehr Gespräch, mehr Nähe.",
+        tierpfleger: "Mehr Abstand, mehr genaues Hinsehen.",
+      },
+    },
+  ],
+  "notfallsanitaeter__zugbegleiter": [
+    {
+      time: "07:42",
+      setup: "Menschen steigen mit Stress ein.",
+      lines: {
+        notfallsanitaeter: "Du suchst, ob es medizinisch kippt.",
+        zugbegleiter: "Du suchst, ob die Stimmung im Zug kippt.",
+      },
+    },
+    {
+      time: "13:18",
+      setup: "Es wird unruhig.",
+      lines: {
+        notfallsanitaeter: "Du musst schnell klar werden.",
+        zugbegleiter: "Du musst freundlich klar bleiben.",
+      },
+    },
+    {
+      time: "19:05",
+      setup: "Der Ort leert sich.",
+      lines: {
+        notfallsanitaeter: "Der Einsatz kann trotzdem bleiben.",
+        zugbegleiter: "Die Strecke geht trotzdem weiter.",
+      },
+    },
+  ],
+  ...careerExpansionDifferenceMoments,
 };
 
 const careerPracticalSignals: Record<string, string[]> = {
@@ -1561,6 +2427,7 @@ const careerPracticalSignals: Record<string, string[]> = {
   florist: ["Ausbildung", "Laden/Werkstatt", "feine Handarbeit"],
   zugbegleiter: ["Ausbildung", "unterwegs", "Schicht möglich"],
   tierpfleger: ["Ausbildung", "frühe Tage", "körperlicher"],
+  ...careerExpansionPracticalSignals,
 };
 
 const careerRealism: Record<string, typeof defaultCareerRealism> = {
@@ -1927,6 +2794,7 @@ const careerLaterNotices: Record<string, string[]> = {
     "Du siehst Fürsorge oft in sehr unromantischen Dingen.",
     "Geduld fühlt sich irgendwann mehr nach Beobachten als nach Warten an.",
   ],
+  ...careerExpansionLaterNotices,
 };
 
 const careerDayMoments: Record<
@@ -1934,305 +2802,166 @@ const careerDayMoments: Record<
   { timeLabel: string; text: string; realSentence?: string }[]
 > = {
   "fachinformatiker-systemintegration": [
-    {
-      timeLabel: "09:12",
-      text: "Jemand sagt: „Das Internet geht nicht.“ Es ist nicht das Internet.",
-      realSentence: "Das hat gestern noch funktioniert.",
-    },
-    {
-      timeLabel: "10:30",
-      text: "Du suchst weiter, obwohl schon wieder jemand fragt.",
-    },
-    {
-      timeLabel: "15:40",
-      text: "Es läuft wieder. Niemand sieht, wie viel Suchen drin war.",
-    },
+    { timeLabel: "08:12", text: "Der erste Satz ist: „Geht nicht.“", realSentence: "Das hat gestern noch funktioniert." },
+    { timeLabel: "09:04", text: "Passwort? Drucker? WLAN? Erstmal nichts glauben." },
+    { timeLabel: "10:37", text: "Im Log steht mehr als im Ticket.", realSentence: "Ich sehe es im Log." },
+    { timeLabel: "12:18", text: "Nur kurz. Natürlich nicht kurz." },
+    { timeLabel: "14:42", text: "Ein Neustart hilft. Aber nicht der erste." },
+    { timeLabel: "16:11", text: "Es läuft. Der Raum vergisst sofort, dass es kaputt war." },
   ],
   elektroniker: [
-    {
-      timeLabel: "08:40",
-      text: "Erstmal messen. Nicht raten.",
-      realSentence: "Nur kurz messen.",
-    },
-    {
-      timeLabel: "12:10",
-      text: "Ein Kabel sieht harmlos aus und ist trotzdem der Grund.",
-    },
-    {
-      timeLabel: "15:50",
-      text: "Etwas funktioniert wieder. Das reicht manchmal.",
-    },
+    { timeLabel: "07:58", text: "Material fehlt. Irgendwas fehlt immer." },
+    { timeLabel: "08:40", text: "Erst messen. Nicht raten.", realSentence: "Nur kurz messen." },
+    { timeLabel: "10:22", text: "Der Plan sagt ja. Die Wand sagt nein." },
+    { timeLabel: "12:10", text: "Wo ist diese Leitung jetzt?" },
+    { timeLabel: "14:36", text: "Nochmal sichern. Nochmal prüfen." },
+    { timeLabel: "15:50", text: "Licht an. Kurz still." },
   ],
   pflegefachkraft: [
-    {
-      timeLabel: "07:20",
-      text: "Jemand braucht Hilfe, bevor du richtig angekommen bist.",
-      realSentence: "Ich bin gleich da.",
-    },
-    {
-      timeLabel: "11:10",
-      text: "Du merkst an der Stimme, dass heute etwas anders ist.",
-    },
-    {
-      timeLabel: "16:30",
-      text: "Du bist müde, aber jemand war kurz nicht allein.",
-    },
+    { timeLabel: "06:48", text: "Übergabe. Drei Dinge gleichzeitig merken." },
+    { timeLabel: "07:20", text: "Jemand klingelt schon.", realSentence: "Ich bin gleich da." },
+    { timeLabel: "09:35", text: "Bleib kurz sitzen." },
+    { timeLabel: "11:10", text: "Die Stimme ist anders als gestern." },
+    { timeLabel: "14:05", text: "Hast du heute genug getrunken?" },
+    { timeLabel: "16:30", text: "Müde. Aber jemand war kurz nicht allein." },
   ],
   mediengestalter: [
-    {
-      timeLabel: "09:25",
-      text: "Drei Dateien heißen fast gleich. Eine davon ist richtig.",
-      realSentence: "Welche Version ist die aktuelle?",
-    },
-    {
-      timeLabel: "13:05",
-      text: "Du verschiebst etwas minimal und es wirkt plötzlich weniger falsch.",
-    },
-    {
-      timeLabel: "16:45",
-      text: "Der Export dauert länger als der Satz „nur kurz“ klang.",
-    },
+    { timeLabel: "09:25", text: "Welche Version ist die aktuelle?", realSentence: "Welche Version ist die aktuelle?" },
+    { timeLabel: "10:14", text: "Das Logo liegt nicht richtig." },
+    { timeLabel: "11:48", text: "Zwei Pixel. Trotzdem anders." },
+    { timeLabel: "13:05", text: "Mach mal moderner. Ohne mehr zu sagen." },
+    { timeLabel: "15:20", text: "Export zu groß." },
+    { timeLabel: "16:45", text: "Final_final_neu. Natürlich." },
   ],
   notfallsanitaeter: [
-    {
-      timeLabel: "06:58",
-      text: "Fahrzeug checken. Noch ist alles ruhig.",
-      realSentence: "Bleib kurz bei mir.",
-    },
-    {
-      timeLabel: "10:16",
-      text: "Jemand hat Angst. Du wirst nicht lauter als die Situation.",
-    },
-    {
-      timeLabel: "18:20",
-      text: "Der Körper ist zuhause. Der Kopf braucht noch länger.",
-    },
+    { timeLabel: "06:58", text: "Fahrzeug checken. Noch ruhig.", realSentence: "Bleib kurz bei mir." },
+    { timeLabel: "08:43", text: "Funk. Adresse. Jacke zu." },
+    { timeLabel: "10:16", text: "Atme einmal ruhig." },
+    { timeLabel: "12:02", text: "Was ist passiert?" },
+    { timeLabel: "15:27", text: "Bericht schreiben. Kaffee wird kalt." },
+    { timeLabel: "18:20", text: "Körper zuhause. Kopf noch nicht ganz." },
   ],
   "fachkraft-lagerlogistik": [
-    {
-      timeLabel: "08:05",
-      text: "Der Scanner sagt nein. Du weißt schon, dass es länger dauert.",
-      realSentence: "Der Scanner sagt nein.",
-    },
-    {
-      timeLabel: "11:35",
-      text: "Eine Palette passt nicht. Also nochmal umdenken.",
-    },
-    {
-      timeLabel: "15:25",
-      text: "Der Gang ist frei. Morgen stolpert niemand über dein Chaos.",
-    },
+    { timeLabel: "08:05", text: "Der Scanner sagt nein.", realSentence: "Der Scanner sagt nein." },
+    { timeLabel: "09:30", text: "Wo liegt das wirklich?" },
+    { timeLabel: "11:35", text: "Die Palette passt nicht." },
+    { timeLabel: "13:12", text: "Gang drei ist voll." },
+    { timeLabel: "15:25", text: "Falsch beschriftet. Natürlich." },
+    { timeLabel: "16:05", text: "Der Gang ist frei. Morgen stolpert niemand." },
   ],
   mechatroniker: [
-    {
-      timeLabel: "08:50",
-      text: "Die Maschine klingt anders. Noch nicht kaputt, aber anders.",
-      realSentence: "Das Geräusch war vorhin noch nicht da.",
-    },
-    {
-      timeLabel: "12:20",
-      text: "Der Fehler kommt nur manchmal. Natürlich gerade nicht.",
-    },
-    {
-      timeLabel: "16:10",
-      text: "Sie läuft wieder ruhiger. Alle reden sofort normaler.",
-    },
+    { timeLabel: "08:50", text: "Das Geräusch war vorhin noch nicht da.", realSentence: "Das Geräusch war vorhin noch nicht da." },
+    { timeLabel: "09:44", text: "Ich muss das einmal aufmachen." },
+    { timeLabel: "11:18", text: "Der Fehler kommt nur manchmal." },
+    { timeLabel: "12:20", text: "Natürlich gerade nicht." },
+    { timeLabel: "14:55", text: "Gib mir kurz das Messgerät." },
+    { timeLabel: "16:10", text: "Lass sie nochmal laufen." },
   ],
   erzieher: [
-    {
-      timeLabel: "08:15",
-      text: "Der Raum ist laut, aber du hörst, wo es gerade kippt.",
-      realSentence: "Nicht alle gleichzeitig.",
-    },
-    {
-      timeLabel: "11:40",
-      text: "Ein Streit ist klein. Für zwei Kinder aber gerade riesig.",
-    },
-    {
-      timeLabel: "15:10",
-      text: "Du sagst einen ruhigen Satz. Er wirkt später als gedacht.",
-    },
+    { timeLabel: "08:15", text: "Nicht alle gleichzeitig.", realSentence: "Nicht alle gleichzeitig." },
+    { timeLabel: "09:02", text: "Das war gerade zu viel." },
+    { timeLabel: "10:26", text: "Komm, wir gehen kurz raus." },
+    { timeLabel: "11:40", text: "Der Streit ist klein. Für zwei Kinder nicht." },
+    { timeLabel: "13:55", text: "Ich habe dich gehört." },
+    { timeLabel: "15:10", text: "Der ruhige Satz wirkt später." },
   ],
   verkaeufer: [
-    {
-      timeLabel: "09:40",
-      text: "Jemand sucht etwas und weiß selbst nicht genau was.",
-      realSentence: "Ich schau kurz im Lager.",
-    },
-    {
-      timeLabel: "13:15",
-      text: "Die zweite Kasse geht auf, bevor die Schlange schlecht gelaunt wird.",
-    },
-    {
-      timeLabel: "18:05",
-      text: "Die Beine sind müde. Ein Regal sieht wieder ordentlich aus.",
-    },
+    { timeLabel: "09:40", text: "Ich schau kurz im Lager.", realSentence: "Ich schau kurz im Lager." },
+    { timeLabel: "10:35", text: "Das ist gerade leider ausverkauft." },
+    { timeLabel: "12:08", text: "Haben Sie Ihre Karte dabei?" },
+    { timeLabel: "13:15", text: "Zweite Kasse." },
+    { timeLabel: "16:22", text: "Einen Moment, ich komme gleich." },
+    { timeLabel: "18:05", text: "Beine müde. Regal wieder gerade." },
   ],
   koch: [
-    {
-      timeLabel: "10:20",
-      text: "Noch ist es ruhig. Das bleibt nicht so.",
-      realSentence: "Wie lange noch?",
-    },
-    {
-      timeLabel: "12:35",
-      text: "Tisch zwölf wartet. Die Pfanne ist zu heiß für lange Gedanken.",
-    },
-    {
-      timeLabel: "15:00",
-      text: "Kurz probieren. Noch Salz. Dann raus damit.",
-    },
+    { timeLabel: "10:20", text: "Wie lange noch?", realSentence: "Wie lange noch?" },
+    { timeLabel: "11:45", text: "Pfanne ist heiß." },
+    { timeLabel: "12:35", text: "Tisch zwölf wartet." },
+    { timeLabel: "13:10", text: "Das muss jetzt raus." },
+    { timeLabel: "14:25", text: "Kurz probieren. Noch Salz." },
+    { timeLabel: "15:00", text: "Wer hat den Bon?" },
   ],
   tischler: [
-    {
-      timeLabel: "08:30",
-      text: "Ein Millimeter fehlt. Das ist nicht klein.",
-      realSentence: "Ein Millimeter fehlt.",
-    },
-    {
-      timeLabel: "11:50",
-      text: "Du hältst kurz die Luft an, bevor das Teil sitzt.",
-    },
-    {
-      timeLabel: "16:00",
-      text: "Staub überall. Aber die Kante stimmt.",
-    },
+    { timeLabel: "08:30", text: "Ein Millimeter fehlt.", realSentence: "Ein Millimeter fehlt." },
+    { timeLabel: "09:50", text: "Halt das mal kurz fest." },
+    { timeLabel: "11:50", text: "Noch nicht bündig." },
+    { timeLabel: "13:30", text: "Ich schleife es nochmal." },
+    { timeLabel: "15:05", text: "Kurz nicht atmen. Jetzt sitzt es." },
+    { timeLabel: "16:00", text: "Staub überall. Kante stimmt." },
   ],
   bauzeichner: [
-    {
-      timeLabel: "09:10",
-      text: "Ein Maß stimmt nicht. Später wäre daraus eine echte Wand geworden.",
-      realSentence: "Das Maß stimmt nicht.",
-    },
-    {
-      timeLabel: "12:45",
-      text: "Du prüfst den Plan nochmal, obwohl niemand dramatisch wirkt.",
-    },
-    {
-      timeLabel: "15:35",
-      text: "Ein Schnitt fehlt. Ohne ihn versteht morgen keiner den Rest.",
-    },
+    { timeLabel: "09:10", text: "Das Maß stimmt nicht.", realSentence: "Das Maß stimmt nicht." },
+    { timeLabel: "10:35", text: "Welche Version ist aktuell?" },
+    { timeLabel: "12:45", text: "Die Wand liegt zwei Zentimeter anders." },
+    { timeLabel: "14:05", text: "Ich prüfe den Plan nochmal." },
+    { timeLabel: "15:35", text: "Der Schnitt fehlt noch." },
+    { timeLabel: "16:20", text: "Später wäre daraus eine echte Wand geworden." },
   ],
   industriemechaniker: [
-    {
-      timeLabel: "07:55",
-      text: "Die Anlage klingt anders. Du bleibst stehen.",
-      realSentence: "Die Anlage klingt anders.",
-    },
-    {
-      timeLabel: "11:15",
-      text: "Schwere Teile, kleine Abstände, wenig Platz für Ungenauigkeit.",
-    },
-    {
-      timeLabel: "15:30",
-      text: "Sie läuft ruhiger. In der Halle wird es sofort entspannter.",
-    },
+    { timeLabel: "07:55", text: "Die Anlage klingt anders.", realSentence: "Die Anlage klingt anders." },
+    { timeLabel: "09:18", text: "Das Lager hat Spiel." },
+    { timeLabel: "11:15", text: "Hol mal den Schlüssel." },
+    { timeLabel: "13:40", text: "Wir stellen das nochmal ein." },
+    { timeLabel: "15:30", text: "Jetzt läuft sie ruhiger." },
+    { timeLabel: "16:05", text: "In der Halle redet sofort jemand normaler." },
   ],
   veranstaltungstechniker: [
-    {
-      timeLabel: "10:00",
-      text: "Die Halle ist leer. Trotzdem ist schon Druck da.",
-      realSentence: "Wer hat den Adapter?",
-    },
-    {
-      timeLabel: "16:20",
-      text: "Ein Kabelweg entscheidet, ob später jemand stolpert.",
-    },
-    {
-      timeLabel: "23:40",
-      text: "Vorne war Applaus. Hinten fängt der Abbau an.",
-    },
+    { timeLabel: "10:00", text: "Wer hat den Adapter?", realSentence: "Wer hat den Adapter?" },
+    { timeLabel: "12:25", text: "Kabel bitte nicht über den Weg." },
+    { timeLabel: "16:20", text: "Noch einmal Soundcheck." },
+    { timeLabel: "19:10", text: "Licht steht." },
+    { timeLabel: "23:40", text: "Vorne Applaus. Hinten Abbau." },
+    { timeLabel: "00:18", text: "Nach der Show bauen wir ab." },
   ],
   "medizinische-fachangestellte": [
-    {
-      timeLabel: "08:05",
-      text: "Das Telefon hört nicht auf, bevor der Tag richtig angefangen hat.",
-      realSentence: "Haben Sie Ihre Karte dabei?",
-    },
-    {
-      timeLabel: "10:50",
-      text: "Jemand wirkt genervt. Eigentlich ist es Angst.",
-    },
-    {
-      timeLabel: "16:15",
-      text: "Noch ein Termin passt irgendwo dazwischen. Knapp, aber passt.",
-    },
+    { timeLabel: "08:05", text: "Haben Sie Ihre Karte dabei?", realSentence: "Haben Sie Ihre Karte dabei?" },
+    { timeLabel: "09:12", text: "Das Telefon hört heute nicht auf." },
+    { timeLabel: "10:50", text: "Setzen Sie sich bitte kurz ins Wartezimmer." },
+    { timeLabel: "12:18", text: "Ich frage die Ärztin." },
+    { timeLabel: "14:40", text: "Wir finden noch einen Termin." },
+    { timeLabel: "16:15", text: "Noch einer passt irgendwo dazwischen." },
   ],
   "kaufmann-bueromanagement": [
-    {
-      timeLabel: "09:00",
-      text: "Drei Mails meinen dasselbe. Keine sagt es klar.",
-      realSentence: "Wer hat die aktuelle Version?",
-    },
-    {
-      timeLabel: "11:30",
-      text: "Du legst etwas richtig ab, damit morgen niemand suchen muss.",
-    },
-    {
-      timeLabel: "15:55",
-      text: "Ein Kalender ist voll. Trotzdem findet sich eine Lücke.",
-    },
+    { timeLabel: "09:00", text: "Wer hat die aktuelle Version?", realSentence: "Wer hat die aktuelle Version?" },
+    { timeLabel: "10:12", text: "Kannst du mir das kurz weiterleiten?" },
+    { timeLabel: "11:30", text: "Ich lege das in den Ordner." },
+    { timeLabel: "13:05", text: "Der Termin steht im Kalender." },
+    { timeLabel: "15:55", text: "Sonst findet das morgen niemand mehr." },
+    { timeLabel: "16:35", text: "Drei Mails. Eine Sache." },
   ],
   friseur: [
-    {
-      timeLabel: "09:35",
-      text: "Jemand sagt „nur die Spitzen“ und meint etwas sehr Genaues.",
-      realSentence: "Nur die Spitzen?",
-    },
-    {
-      timeLabel: "12:25",
-      text: "Der Spiegel zeigt, ob jemand wirklich zufrieden ist.",
-    },
-    {
-      timeLabel: "17:10",
-      text: "Du stehst seit Stunden. Der Übergang sieht gut aus.",
-    },
+    { timeLabel: "09:35", text: "Nur die Spitzen?", realSentence: "Nur die Spitzen?" },
+    { timeLabel: "10:20", text: "Schau mal kurz in den Spiegel." },
+    { timeLabel: "12:25", text: "Das fällt gleich weicher." },
+    { timeLabel: "14:10", text: "Ich nehme noch ein bisschen Länge raus." },
+    { timeLabel: "16:05", text: "So sieht es natürlicher aus." },
+    { timeLabel: "17:10", text: "Der Übergang sieht gut aus." },
   ],
   florist: [
-    {
-      timeLabel: "08:25",
-      text: "Kalte Hände, nasse Stiele, ein Strauß, der noch kippt.",
-      realSentence: "Für welchen Anlass ist es?",
-    },
-    {
-      timeLabel: "12:05",
-      text: "Jemand ist unsicher. Du hörst es an der Pause.",
-    },
-    {
-      timeLabel: "16:40",
-      text: "Etwas Leichtes sieht leicht aus. Deine Finger wissen es besser.",
-    },
+    { timeLabel: "08:25", text: "Für welchen Anlass ist es?", realSentence: "Für welchen Anlass ist es?" },
+    { timeLabel: "09:30", text: "Die Stiele müssen noch kürzer." },
+    { timeLabel: "12:05", text: "Der Strauß kippt sonst nach links." },
+    { timeLabel: "13:45", text: "Ich binde das etwas lockerer." },
+    { timeLabel: "15:20", text: "Das hält mit genug Wasser." },
+    { timeLabel: "16:40", text: "Kalte Hände. Es wirkt leicht." },
   ],
   zugbegleiter: [
-    {
-      timeLabel: "07:42",
-      text: "Beim Einsteigen merkst du, wer schon gestresst ist.",
-      realSentence: "Die Fahrkarten bitte.",
-    },
-    {
-      timeLabel: "13:18",
-      text: "Verspätung verändert die Stimmung schneller als jede Durchsage.",
-    },
-    {
-      timeLabel: "19:05",
-      text: "Der Zug leert sich. Du bleibst freundlich klar.",
-    },
+    { timeLabel: "07:42", text: "Die Fahrkarten bitte.", realSentence: "Die Fahrkarten bitte." },
+    { timeLabel: "09:15", text: "Bitte einmal den Gang freimachen." },
+    { timeLabel: "13:18", text: "Wir haben ein paar Minuten Verspätung." },
+    { timeLabel: "14:06", text: "Der Anschluss wartet nicht." },
+    { timeLabel: "17:22", text: "Ich frage vorne nach." },
+    { timeLabel: "19:05", text: "Der Zug leert sich. Du bleibst klar." },
   ],
   tierpfleger: [
-    {
-      timeLabel: "07:10",
-      text: "Er frisst weniger. Du merkst es, bevor es jemand aufschreibt.",
-      realSentence: "Heute frisst er weniger.",
-    },
-    {
-      timeLabel: "11:25",
-      text: "Putzen ist nicht Nebenarbeit. Es zeigt, ob etwas stimmt.",
-    },
-    {
-      timeLabel: "15:20",
-      text: "Geduld fühlt sich heute eher nach genauem Hinsehen an.",
-    },
+    { timeLabel: "07:10", text: "Heute frisst er weniger.", realSentence: "Heute frisst er weniger." },
+    { timeLabel: "08:40", text: "Erst sauber machen, dann füttern." },
+    { timeLabel: "11:25", text: "Er wirkt anders als gestern." },
+    { timeLabel: "13:50", text: "Mach die Tür richtig zu." },
+    { timeLabel: "15:20", text: "Wir beobachten das nochmal." },
+    { timeLabel: "16:05", text: "Geduld heißt heute: genau hinsehen." },
   ],
+  ...careerExpansionDayMoments,
 };
 
 const careerRealSentences: Record<string, string[]> = {
@@ -2376,6 +3105,7 @@ const careerRealSentences: Record<string, string[]> = {
     "Mach die Tür richtig zu.",
     "Wir beobachten das nochmal.",
   ],
+  ...careerExpansionRealSentences,
 };
 
 export const careers: Career[] = careerEntries.map((career) => ({
@@ -2383,6 +3113,9 @@ export const careers: Career[] = careerEntries.map((career) => ({
   dayMoments: careerDayMoments[career.slug] ?? [],
   laterNotices: careerLaterNotices[career.slug] ?? [],
   lifeIndicators: careerLifeIndicators[career.slug] ?? defaultLifeIndicators,
+  signalWeights: careerSignalWeights[career.slug] ?? {},
+  realDifferences: careerRealDifferences[career.slug] ?? [],
+  oftenConfusedWith: careerOftenConfusedWith[career.slug],
   practicalSignals: careerPracticalSignals[career.slug] ?? defaultPracticalSignals,
   realSentences: careerRealSentences[career.slug] ?? [],
   realism: careerRealism[career.slug] ?? defaultCareerRealism,
@@ -2525,183 +3258,308 @@ export function getSituationsForCareer(slug: string) {
   return situations.filter((situation) => situation.slugs.includes(slug));
 }
 
+
 export const quizQuestions = [
   {
-    id: "endure",
-    question: "Was würdest du länger aushalten?",
+    id: "new-room",
+    scene: "Du kommst irgendwo neu rein. Es ist kurz still, dann passiert alles auf einmal.",
+    prompt: "Was faellt dir zuerst auf?",
     answers: [
       {
-        label: "lange Konzentration",
-        careers: [
-          "fachinformatiker-systemintegration",
-          "bauzeichner",
-          "mediengestalter",
-          "kaufmann-bueromanagement",
-        ],
-      },
-      {
-        label: "ständige Unterbrechungen",
-        careers: [
-          "pflegefachkraft",
-          "medizinische-fachangestellte",
-          "erzieher",
-          "verkaeufer",
-        ],
-      },
-    ],
-  },
-  {
-    id: "annoyance",
-    question: "Was nervt dich weniger?",
-    answers: [
-      {
-        label: "ein Problem, das einfach nicht weggeht",
-        careers: [
-          "fachinformatiker-systemintegration",
-          "elektroniker",
-          "mechatroniker",
-          "industriemechaniker",
-        ],
-      },
-      {
-        label: "viele Menschen, die gleichzeitig etwas wollen",
+        label: "Die Menschen",
+        signals: {
+          people: 3,
+          service: 2,
+          responsibility_for_people: 2,
+          chaos_tolerance: 1,
+          short_tasks: 1,
+          movement: 1,
+        },
         careers: [
           "pflegefachkraft",
-          "notfallsanitaeter",
-          "medizinische-fachangestellte",
-          "zugbegleiter",
-        ],
-      },
-    ],
-  },
-  {
-    id: "quiet",
-    question: "Was gibt dir eher Ruhe?",
-    answers: [
-      {
-        label: "wenn etwas endlich funktioniert",
-        careers: [
-          "elektroniker",
-          "mechatroniker",
-          "fachinformatiker-systemintegration",
-          "industriemechaniker",
-        ],
-      },
-      {
-        label: "wenn jemand sichtbar erleichtert ist",
-        careers: [
-          "pflegefachkraft",
-          "notfallsanitaeter",
           "medizinische-fachangestellte",
           "friseur",
+          "verkaeufer",
+          "hoerakustiker",
+        ],
+      },
+      {
+        label: "Was hier los ist",
+        signals: {
+          structure: 3,
+          problem_solving: 2,
+          responsibility_for_systems: 2,
+          focus: 2,
+          routine: 1,
+          chaos_tolerance: -1,
+        },
+        careers: [
+          "fachkraft-lagerlogistik",
+          "fachinformatiker-systemintegration",
+          "bauzeichner",
+          "kaufmann-bueromanagement",
+          "justizfachangestellter",
         ],
       },
     ],
   },
   {
-    id: "body-or-head",
-    question: "Was fühlt sich weniger falsch an?",
+    id: "fixed",
+    scene: "Etwas funktioniert ploetzlich wieder. Einen Moment lang ist alles leichter.",
+    prompt: "Was fuehlt sich besser an?",
     answers: [
       {
-        label: "mit Händen etwas machen",
+        label: "Endlich Ruhe",
+        signals: {
+          focus: 3,
+          solitude: 2,
+          problem_solving: 3,
+          technical: 2,
+          structure: 1,
+          responsibility_for_systems: 2,
+        },
+        careers: [
+          "fachinformatiker-systemintegration",
+          "mechatroniker",
+          "chemielaborant",
+          "medizinischer-technologe-laboratorium",
+        ],
+      },
+      {
+        label: "Jemand freut sich",
+        signals: {
+          people: 3,
+          service: 3,
+          responsibility_for_people: 2,
+          visible_results: 1,
+          short_tasks: 1,
+          hands_on: 1,
+        },
+        careers: [
+          "pflegefachkraft",
+          "hoerakustiker",
+          "orthopaedietechnik-mechaniker",
+          "medizinische-fachangestellte",
+        ],
+      },
+    ],
+  },
+  {
+    id: "long-afternoon",
+    scene: "Der Nachmittag zieht sich. Niemand sagt genau, was als Naechstes passiert.",
+    prompt: "Was macht dich eher unruhig?",
+    answers: [
+      {
+        label: "Nichts zu tun",
+        signals: {
+          movement: 2,
+          variety: 3,
+          short_tasks: 2,
+          chaos_tolerance: 2,
+          people: 1,
+          visible_results: 1,
+        },
+        careers: [
+          "veranstaltungstechniker",
+          "notfallsanitaeter",
+          "zugbegleiter",
+          "lokfuehrer",
+          "forstwirt",
+        ],
+      },
+      {
+        label: "Zu viel auf einmal",
+        signals: {
+          structure: 3,
+          focus: 2,
+          routine: 2,
+          solitude: 1,
+          chaos_tolerance: -2,
+          responsibility_for_systems: 1,
+        },
+        careers: [
+          "bauzeichner",
+          "fachinformatiker-systemintegration",
+          "technischer-produktdesigner",
+          "zahntechniker",
+          "pharmakant",
+        ],
+      },
+    ],
+  },
+  {
+    id: "small-mess",
+    scene: "Vor dir liegt ein kleines Durcheinander. Nicht schlimm, aber es stoert.",
+    prompt: "Was willst du zuerst machen?",
+    answers: [
+      {
+        label: "Sortieren",
+        signals: {
+          structure: 3,
+          routine: 2,
+          focus: 2,
+          responsibility_for_systems: 1,
+          visible_results: 1,
+          chaos_tolerance: -1,
+        },
+        careers: [
+          "fachkraft-lagerlogistik",
+          "kaufmann-bueromanagement",
+          "geomatiker",
+          "justizfachangestellter",
+        ],
+      },
+      {
+        label: "Anpacken",
+        signals: {
+          visible_results: 3,
+          hands_on: 3,
+          movement: 2,
+          technical: 1,
+          problem_solving: 1,
+          short_tasks: 1,
+        },
         careers: [
           "tischler",
           "elektroniker",
-          "florist",
-          "koch",
-          "fachkraft-lagerlogistik",
-        ],
-      },
-      {
-        label: "im Kopf etwas sortieren",
-        careers: [
-          "bauzeichner",
-          "kaufmann-bueromanagement",
-          "fachinformatiker-systemintegration",
-          "mediengestalter",
+          "gebaeudereiniger",
+          "anlagenmechaniker-shk",
+          "werkzeugmechaniker",
         ],
       },
     ],
   },
   {
-    id: "energy-cost",
-    question: "Was kostet dich weniger Energie?",
+    id: "quiet-detail",
+    scene: "Jemand sagt: Passt schon. Du siehst aber, dass etwas nicht ganz stimmt.",
+    prompt: "Was passiert eher in deinem Kopf?",
     answers: [
       {
-        label: "reden",
+        label: "Ich will es pruefen",
+        signals: {
+          focus: 3,
+          problem_solving: 3,
+          technical: 2,
+          structure: 2,
+          long_projects: 1,
+          responsibility_for_systems: 1,
+        },
         careers: [
-          "erzieher",
-          "verkaeufer",
-          "friseur",
-          "zugbegleiter",
-          "medizinische-fachangestellte",
+          "vermessungstechniker",
+          "chemielaborant",
+          "fachinformatiker-systemintegration",
+          "medizinischer-technologe-laboratorium",
+          "bauzeichner",
         ],
       },
       {
-        label: "beobachten",
+        label: "Ich will es schoener machen",
+        signals: {
+          creative: 3,
+          visible_results: 2,
+          hands_on: 2,
+          focus: 1,
+          variety: 1,
+          service: 1,
+        },
         careers: [
-          "tierpfleger",
-          "bauzeichner",
-          "fachinformatiker-systemintegration",
-          "fachkraft-lagerlogistik",
+          "mediengestalter",
           "florist",
+          "friseur",
+          "fahrzeuglackierer",
+          "zahntechniker",
+        ],
+      },
+    ],
+  },
+  {
+    id: "someone-needs-you",
+    scene: "Jemand steht neben dir und braucht gerade wirklich eine Antwort.",
+    prompt: "Was fuehlt sich natuerlicher an?",
+    answers: [
+      {
+        label: "Ruhig da bleiben",
+        signals: {
+          people: 3,
+          service: 2,
+          responsibility_for_people: 3,
+          focus: 1,
+          chaos_tolerance: 1,
+          solitude: -2,
+        },
+        careers: [
+          "pflegefachkraft",
+          "bestattungsfachkraft",
+          "erzieher",
+          "medizinische-fachangestellte",
+          "hoerakustiker",
+        ],
+      },
+      {
+        label: "Praktisch loesen",
+        signals: {
+          hands_on: 3,
+          problem_solving: 3,
+          technical: 2,
+          visible_results: 2,
+          movement: 1,
+          service: 1,
+        },
+        careers: [
+          "orthopaedietechnik-mechaniker",
+          "anlagenmechaniker-shk",
+          "elektroniker",
+          "industriemechaniker",
+          "umwelttechnologe-abwasser",
         ],
       },
     ],
   },
   {
     id: "after-day",
-    question: "Was wäre am Ende vom Tag besser?",
+    scene: "Du gehst nach Hause. Im Kopf bleibt noch ein Bild vom Tag haengen.",
+    prompt: "Welches Bild waere eher okay?",
     answers: [
       {
-        label: "etwas ist fertig",
+        label: "Etwas ist fertig",
+        signals: {
+          visible_results: 3,
+          hands_on: 3,
+          structure: 2,
+          routine: 1,
+          focus: 1,
+          technical: 2,
+          responsibility_for_systems: 1,
+        },
         careers: [
           "tischler",
-          "elektroniker",
-          "koch",
-          "florist",
-          "mediengestalter",
-        ],
-      },
-      {
-        label: "jemand ist nicht mehr allein",
-        careers: [
-          "pflegefachkraft",
-          "notfallsanitaeter",
-          "erzieher",
-          "medizinische-fachangestellte",
-        ],
-      },
-    ],
-  },
-  {
-    id: "bad-day",
-    question: "Was wäre an einem schlechten Tag eher auszuhalten?",
-    answers: [
-      {
-        label: "körperlich müde sein",
-        careers: [
-          "fachkraft-lagerlogistik",
-          "elektroniker",
-          "koch",
-          "tierpfleger",
+          "werkzeugmechaniker",
+          "fahrzeuglackierer",
           "industriemechaniker",
+          "gebaeudereiniger",
         ],
       },
       {
-        label: "im Kopf noch weiterdenken",
+        label: "Etwas ist passiert",
+        signals: {
+          variety: 3,
+          movement: 2,
+          people: 2,
+          chaos_tolerance: 2,
+          short_tasks: 2,
+          service: 1,
+        },
         careers: [
-          "fachinformatiker-systemintegration",
-          "mediengestalter",
-          "bauzeichner",
-          "kaufmann-bueromanagement",
           "veranstaltungstechniker",
+          "notfallsanitaeter",
+          "zugbegleiter",
+          "fachkraft-schutz-sicherheit",
+          "koch",
         ],
       },
     ],
   },
 ];
-
 export function getCareer(slug: string) {
   return careers.find((career) => career.slug === slug);
 }
@@ -2718,15 +3576,91 @@ export function getEmotionalPathways(slug: string) {
   }));
 }
 
-export function getExplorationCareers(selectedSlugs: string[]) {
-  const scores = new Map<string, number>();
+export function getOftenConfusedCareers(slug: string) {
+  const career = getCareer(slug);
+  if (!career?.oftenConfusedWith?.length) return [];
+
+  return career.oftenConfusedWith
+    .map((confusedSlug) => getCareer(confusedSlug))
+    .filter((confusedCareer): confusedCareer is Career => Boolean(confusedCareer))
+    .filter((confusedCareer) =>
+      getCareerDifferenceMoments(career.slug, confusedCareer.slug).length > 0,
+    )
+    .slice(0, 3);
+}
+
+export function getCareerDifferenceMoments(firstSlug: string, secondSlug: string) {
+  return careerDifferenceMoments[getCareerDifferenceKey(firstSlug, secondSlug)] ?? [];
+}
+
+function getCareerDifferenceKey(firstSlug: string, secondSlug: string) {
+  return [firstSlug, secondSlug].sort().join("__");
+}
+
+export function buildSignalProfile(signalAnswers: SignalWeights[]) {
+  const profile: SignalWeights = {};
+
+  for (const answer of signalAnswers) {
+    for (const signal of quizSignals) {
+      const value = answer[signal];
+
+      if (typeof value === "number") {
+        profile[signal] = (profile[signal] ?? 0) + value;
+      }
+    }
+  }
+
+  return profile;
+}
+
+export function getExplorationCareers(
+  selectedSlugs: string[],
+  signalProfile: SignalWeights = {},
+) {
+  const directScores = new Map<string, number>();
+  const hasSignals = quizSignals.some((signal) => (signalProfile[signal] ?? 0) !== 0);
 
   for (const slug of selectedSlugs) {
-    scores.set(slug, (scores.get(slug) ?? 0) + 1);
+    directScores.set(slug, (directScores.get(slug) ?? 0) + 1);
   }
 
   return [...careers].sort((a, b) => {
-    const scoreDiff = (scores.get(b.slug) ?? 0) - (scores.get(a.slug) ?? 0);
+    const scoreDiff =
+      getCareerQuizScore(b, directScores, signalProfile, hasSignals) -
+      getCareerQuizScore(a, directScores, signalProfile, hasSignals);
+
     return scoreDiff || careers.indexOf(a) - careers.indexOf(b);
   });
+}
+
+function getCareerQuizScore(
+  career: Career,
+  directScores: Map<string, number>,
+  signalProfile: SignalWeights,
+  hasSignals: boolean,
+) {
+  const directScore = directScores.get(career.slug) ?? 0;
+
+  if (!hasSignals) return directScore;
+
+  return getSignalSimilarity(signalProfile, career.signalWeights) * 8 + directScore;
+}
+
+function getSignalSimilarity(userProfile: SignalWeights, careerProfile: SignalWeights) {
+  let dot = 0;
+  let userMagnitude = 0;
+  let careerMagnitude = 0;
+
+  for (const signal of quizSignals) {
+    const userValue = userProfile[signal] ?? 0;
+    const careerValue = careerProfile[signal] ?? 0;
+
+    dot += userValue * careerValue;
+    userMagnitude += userValue * userValue;
+    careerMagnitude += careerValue * careerValue;
+  }
+
+  if (!userMagnitude || !careerMagnitude) return 0;
+
+  return dot / (Math.sqrt(userMagnitude) * Math.sqrt(careerMagnitude));
 }

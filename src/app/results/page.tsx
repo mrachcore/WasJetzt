@@ -10,7 +10,14 @@ import { AppShell } from "@/components/app-shell";
 import { DayMomentPlayer } from "@/components/day-moment-player";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { careers, getExplorationCareers, type Career } from "@/data/careers";
+import {
+  careers,
+  getExplorationCareers,
+  quizSignals,
+  type Career,
+  type SignalWeights,
+} from "@/data/careers";
+import { getNextWorkday } from "@/data/workday-flow";
 import {
   getFragmentsForCareers,
   getRealSentencesForCareers,
@@ -88,15 +95,25 @@ export default function ResultsPage() {
   const [hydrated, setHydrated] = useState(false);
   const [directionSaved, setDirectionSaved] = useState(false);
   const [storedAnswers, setStoredAnswers] = useState<string[]>([]);
+  const [storedSignalProfile, setStoredSignalProfile] = useState<SignalWeights>({});
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
       const raw = localStorage.getItem("wasjetzt.answers");
+      const rawSignalProfile = localStorage.getItem("wasjetzt.signalProfile");
 
       try {
         setStoredAnswers(raw ? JSON.parse(raw) : []);
       } catch {
         setStoredAnswers([]);
+      }
+
+      try {
+        setStoredSignalProfile(
+          rawSignalProfile ? parseSignalProfile(JSON.parse(rawSignalProfile)) : {},
+        );
+      } catch {
+        setStoredSignalProfile({});
       }
 
       setHydrated(true);
@@ -107,8 +124,8 @@ export default function ResultsPage() {
 
   const patternCareers = useMemo(() => {
     if (!storedAnswers.length) return careers.slice(0, 8);
-    return getExplorationCareers(storedAnswers).slice(0, 8);
-  }, [storedAnswers]);
+    return getExplorationCareers(storedAnswers, storedSignalProfile).slice(0, 8);
+  }, [storedAnswers, storedSignalProfile]);
 
   const patternSlugs = useMemo(
     () => patternCareers.map((career) => career.slug),
@@ -155,8 +172,8 @@ export default function ResultsPage() {
             die weniger falsch klingen könnten.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Tipp dich kurz durch ein paar Momente. Danach kannst du einen
-            Arbeitstag öffnen, merken oder vergleichen.
+            Tipp dich kurz durch ein paar Momente. Danach wartet direkt der
+            nächste andere Arbeitstag.
           </p>
           <div className="mt-9">
             <Button asChild variant="quiet">
@@ -172,7 +189,7 @@ export default function ResultsPage() {
           <div className="mb-8 max-w-2xl">
             <p className="text-sm text-primary">30 Sekunden Alltag</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-5xl">
-              Such dir einen Tag aus.
+              Arbeitstage
             </h2>
           </div>
 
@@ -188,7 +205,10 @@ export default function ResultsPage() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                <DayPreviewCard career={career} />
+                <DayPreviewCard
+                  career={career}
+                  nextWorkday={getNextWorkday(career.slug, patternCareers)}
+                />
               </motion.div>
             ))}
           </div>
@@ -218,9 +238,9 @@ export default function ResultsPage() {
 
         <section className="mt-14 sm:mt-18">
           <div className="mb-8 max-w-2xl">
-            <p className="text-sm text-primary">Was öfter dazu passt</p>
+            <p className="text-sm text-primary">Berufe oeffnen</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
-              Ein paar Berufe mit ähnlichem Arbeitstag.
+              Professionen, die zu diesen Arbeitstagen passen.
             </h2>
           </div>
 
@@ -254,7 +274,7 @@ export default function ResultsPage() {
                     <div className="flex flex-wrap gap-2 sm:items-start sm:pt-2">
                       {worldCareers.map((career) => (
                         <Link
-                          className="rounded-full border border-white/10 bg-white/[0.035] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:-translate-y-0.5 hover:bg-white/[0.08] hover:text-foreground"
+                          className="rounded-full border border-white/10 bg-white/[0.045] px-3.5 py-2 text-sm text-foreground/88 transition duration-500 hover:-translate-y-0.5 hover:border-primary/25 hover:bg-white/[0.09] hover:text-primary"
                           href={`/careers/${career.slug}`}
                           key={`${world.id}-${career.slug}`}
                         >
@@ -305,9 +325,15 @@ export default function ResultsPage() {
   );
 }
 
-function DayPreviewCard({ career }: { career: Career }) {
+function DayPreviewCard({
+  career,
+  nextWorkday,
+}: {
+  career: Career;
+  nextWorkday: Pick<Career, "slug" | "title"> | null;
+}) {
   return (
-    <DayMomentPlayer career={career} compact />
+    <DayMomentPlayer career={career} compact nextWorkday={nextWorkday} />
   );
 }
 
@@ -426,4 +452,21 @@ function getVisibleWorlds(answerSlugs: string[], patternSlugs: string[]) {
 
 function uniqueStrings(values: string[]) {
   return values.filter((value, index) => value && values.indexOf(value) === index);
+}
+
+function parseSignalProfile(value: unknown): SignalWeights {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+
+  const profile: SignalWeights = {};
+  const rawProfile = value as Record<string, unknown>;
+
+  for (const signal of quizSignals) {
+    const rawValue = rawProfile[signal];
+
+    if (typeof rawValue === "number" && Number.isFinite(rawValue)) {
+      profile[signal] = rawValue;
+    }
+  }
+
+  return profile;
 }

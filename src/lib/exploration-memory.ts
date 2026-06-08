@@ -2,6 +2,7 @@ import type { Career, Situation } from "@/data/careers";
 
 export const EXPLORATION_MEMORY_KEY = "wasjetzt.explorationMemory";
 export const EXPLORATION_MEMORY_EVENT = "wasjetzt:exploration-memory-changed";
+export const WORKDAY_SESSION_KEY = "wasjetzt.workdaySession";
 
 export const explorationTendencies = [
   "ruhe",
@@ -26,6 +27,7 @@ type ExplorationMemory = {
   viewedCareers: string[];
   savedCareers: string[];
   comparedCareers: string[];
+  experiencedWorkdays: string[];
   openedObservations: string[];
   selectedFilters: string[];
   clickedPathways: string[];
@@ -56,6 +58,7 @@ const emptyMemory: ExplorationMemory = {
   viewedCareers: [],
   savedCareers: [],
   comparedCareers: [],
+  experiencedWorkdays: [],
   openedObservations: [],
   selectedFilters: [],
   clickedPathways: [],
@@ -72,6 +75,7 @@ export const explorationSignalWeights = {
   observationOpen: 0.34,
   pathwayClick: 0.52,
   situationClick: 0.46,
+  workdayExperience: 0.38,
 } as const;
 
 export const explorationScoreCaps = {
@@ -148,6 +152,66 @@ const careerTendencies: Record<string, TendencyScores> = {
     bewegung: 0.8,
     menschen: -0.2,
   },
+  vermessungstechniker: {
+    ruhe: 0.9,
+    struktur: 1,
+    "draußen": 1.2,
+    praktisch: 0.8,
+  },
+  forstwirt: { "draußen": 1.5, bewegung: 1.3, praktisch: 1, ruhe: 0.4 },
+  hoerakustiker: { menschen: 1, ruhe: 0.7, praktisch: 0.7, direkt: 0.6 },
+  "orthopaedietechnik-mechaniker": {
+    praktisch: 1.1,
+    menschen: 0.8,
+    sichtbar: 1,
+    ruhe: 0.5,
+  },
+  chemielaborant: { ruhe: 1.1, struktur: 1.4, drinnen: 1, praktisch: 0.5 },
+  lokfuehrer: { ruhe: 0.9, struktur: 1.4, direkt: 0.4, bewegung: 0.5 },
+  bestattungsfachkraft: { menschen: 0.9, ruhe: 1, direkt: 0.8, struktur: 0.7 },
+  geomatiker: { ruhe: 1.1, struktur: 1, drinnen: 0.8, "draußen": 0.5 },
+  werkzeugmechaniker: { praktisch: 1.4, struktur: 1.1, sichtbar: 0.8 },
+  "anlagenmechaniker-shk": {
+    bewegung: 1.1,
+    praktisch: 1.3,
+    menschen: 0.4,
+    sichtbar: 1,
+  },
+  fahrzeuglackierer: { praktisch: 1.1, sichtbar: 1.3, ruhe: 0.5, kreativ: 0.4 },
+  zahntechniker: { ruhe: 1.3, struktur: 1.1, praktisch: 1, sichtbar: 0.9 },
+  "operationstechnischer-assistent": {
+    menschen: 0.8,
+    struktur: 1.2,
+    direkt: 1,
+    chaos: 0.7,
+  },
+  pharmakant: { struktur: 1.4, drinnen: 1, praktisch: 0.8, ruhe: 0.6 },
+  "umwelttechnologe-abwasser": {
+    praktisch: 1.2,
+    "draußen": 0.8,
+    sichtbar: 0.7,
+    struktur: 0.7,
+  },
+  "technischer-produktdesigner": {
+    ruhe: 1.2,
+    struktur: 1.2,
+    kreativ: 0.5,
+    drinnen: 1,
+  },
+  justizfachangestellter: { struktur: 1.4, menschen: 0.6, direkt: 0.6, drinnen: 1 },
+  gebaeudereiniger: { bewegung: 1.3, praktisch: 1.2, sichtbar: 1.1, ruhe: 0.3 },
+  "fachkraft-schutz-sicherheit": {
+    direkt: 1,
+    menschen: 0.8,
+    struktur: 0.8,
+    chaos: 0.6,
+  },
+  "medizinischer-technologe-laboratorium": {
+    ruhe: 1,
+    struktur: 1.4,
+    drinnen: 1,
+    praktisch: 0.7,
+  },
 };
 
 const filterTendencies: Record<string, TendencyScores> = {
@@ -179,6 +243,7 @@ function readMemory(): ExplorationMemory {
       viewedCareers: sanitizeStringArray(parsed.viewedCareers),
       savedCareers: sanitizeStringArray(parsed.savedCareers),
       comparedCareers: sanitizeStringArray(parsed.comparedCareers),
+      experiencedWorkdays: sanitizeStringArray(parsed.experiencedWorkdays),
       openedObservations: sanitizeStringArray(parsed.openedObservations),
       selectedFilters: sanitizeStringArray(parsed.selectedFilters),
       clickedPathways: sanitizeStringArray(parsed.clickedPathways),
@@ -212,6 +277,7 @@ function updateMemory(
     | "clickedPathways"
     | "clickedSituations"
     | "comparedCareers"
+    | "experiencedWorkdays"
     | "openedObservations"
     | "savedCareers"
     | "selectedFilters"
@@ -418,6 +484,20 @@ export function trackSituationClick(situation: Situation) {
   return updateMemory("clickedSituations", situation.prompt, tendencies);
 }
 
+export function trackWorkdayExperience(slug: string) {
+  updateWorkdaySession(slug);
+
+  return updateMemory(
+    "experiencedWorkdays",
+    slug,
+    getCareerTendencies(slug, explorationSignalWeights.workdayExperience),
+  );
+}
+
+export function getWorkdayExperienceSessionCount() {
+  return readWorkdaySession().slugs.length;
+}
+
 export function resetExplorationMemory() {
   return writeMemory({ ...emptyMemory });
 }
@@ -535,6 +615,7 @@ export function getExplorationProfile(): ExplorationProfile {
 function getSignalStrength(memory: ExplorationMemory) {
   return (
     memory.viewedCareers.length * 0.35 +
+    memory.experiencedWorkdays.length * 0.7 +
     memory.savedCareers.length * 1.45 +
     memory.comparedCareers.length * 1 +
     memory.openedObservations.length * 0.55 +
@@ -552,7 +633,7 @@ export function getAdaptiveCareerSuggestions<T extends Career>(
 
   if (!profile.hasAdaptiveConfidence) return sourceCareers.slice(0, limit);
 
-  return [...sourceCareers]
+  const ranked = [...sourceCareers]
     .map((career, index) => ({
       career,
       index,
@@ -564,8 +645,22 @@ export function getAdaptiveCareerSuggestions<T extends Career>(
       if (Math.abs(scoreDiff) < 0.45) return a.index - b.index;
       return scoreDiff;
     })
-    .slice(0, limit)
     .map(({ career }) => career);
+  const diversifyingCareer = getDiversifyingCareer(ranked, profile);
+  const diversified =
+    diversifyingCareer && limit > 1
+      ? [
+          ranked[0],
+          diversifyingCareer,
+          ...ranked.filter(
+            (career) =>
+              career.slug !== ranked[0]?.slug &&
+              career.slug !== diversifyingCareer.slug,
+          ),
+        ].filter((career): career is T => Boolean(career))
+      : ranked;
+
+  return diversified.slice(0, limit);
 }
 
 export function getAdaptiveSituations<T extends Situation>(sourceSituations: T[]) {
@@ -626,4 +721,101 @@ export function getExplorationDebugSnapshot(sourceCareers: Career[]) {
       title: career.title,
     })),
   } satisfies ExplorationDebugSnapshot;
+}
+
+type WorkdaySession = {
+  startedAt: string;
+  slugs: string[];
+};
+
+function hasSessionStorage() {
+  return typeof window !== "undefined" && Boolean(window.sessionStorage);
+}
+
+function readWorkdaySession(): WorkdaySession {
+  if (!hasSessionStorage()) {
+    return {
+      startedAt: "",
+      slugs: [],
+    };
+  }
+
+  try {
+    const raw = window.sessionStorage.getItem(WORKDAY_SESSION_KEY);
+    if (!raw) {
+      return {
+        startedAt: "",
+        slugs: [],
+      };
+    }
+
+    const parsed = JSON.parse(raw) as Partial<WorkdaySession>;
+
+    return {
+      startedAt: typeof parsed.startedAt === "string" ? parsed.startedAt : "",
+      slugs: sanitizeStringArray(parsed.slugs),
+    };
+  } catch {
+    return {
+      startedAt: "",
+      slugs: [],
+    };
+  }
+}
+
+function updateWorkdaySession(slug: string) {
+  if (!hasSessionStorage()) return;
+
+  const session = readWorkdaySession();
+  const nextSession: WorkdaySession = {
+    startedAt: session.startedAt || new Date().toISOString(),
+    slugs: prependRecent(session.slugs, slug),
+  };
+
+  window.sessionStorage.setItem(WORKDAY_SESSION_KEY, JSON.stringify(nextSession));
+}
+
+function getDiversifyingCareer<T extends Career>(
+  rankedCareers: T[],
+  profile: ExplorationProfile,
+) {
+  if (rankedCareers.length < 3) return null;
+
+  const alreadyRecent = new Set([
+    ...profile.memory.experiencedWorkdays.slice(0, 6),
+    ...profile.memory.viewedCareers.slice(0, 6),
+  ]);
+  const diversitySlugs = profile.isQuietLeaning
+    ? [
+        "pflegefachkraft",
+        "vermessungstechniker",
+        "forstwirt",
+        "bestattungsfachkraft",
+        "lokfuehrer",
+      ]
+    : profile.isPracticalLeaning
+      ? [
+          "hoerakustiker",
+          "chemielaborant",
+          "justizfachangestellter",
+          "bestattungsfachkraft",
+        ]
+      : profile.isPeopleLeaning
+        ? [
+            "vermessungstechniker",
+            "chemielaborant",
+            "werkzeugmechaniker",
+            "geomatiker",
+          ]
+        : [];
+
+  for (const slug of diversitySlugs) {
+    const career = rankedCareers.find(
+      (item) => item.slug === slug && !alreadyRecent.has(item.slug),
+    );
+
+    if (career) return career;
+  }
+
+  return null;
 }

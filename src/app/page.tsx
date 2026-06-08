@@ -15,6 +15,10 @@ import { SavedReturnMoment } from "@/components/saved-return-moment";
 import { Button } from "@/components/ui/button";
 import { careers, getSituationCareers, situations } from "@/data/careers";
 import {
+  getHomepageWorkdayCareers,
+  getNextWorkday,
+} from "@/data/workday-flow";
+import {
   ambientArbeitsweltFragments,
   arbeitsweltFragments,
   getFragmentsForCareers,
@@ -412,6 +416,10 @@ export default function Home() {
       ),
     ].slice(0, 3);
   }, [adaptiveMoments, selectedEntry]);
+  const tappableWorkdays = useMemo(
+    () => getHomepageWorkdayCareers(careers),
+    [],
+  );
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -644,6 +652,35 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="mx-auto w-full max-w-5xl px-5 pb-12 sm:px-8 sm:pb-16">
+        <div className="mb-6 max-w-2xl">
+          <p className="text-sm text-primary">Arbeitstage zum Antippen</p>
+          <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
+            Ein paar sehr verschiedene Tage.
+          </h2>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {tappableWorkdays.map((career) => (
+            <Link
+              className="group rounded-[1.25rem] border border-white/10 bg-white/[0.025] p-4 transition duration-500 hover:-translate-y-0.5 hover:border-primary/25 hover:bg-white/[0.06]"
+              href={`/careers/${career.slug}#30-sekunden`}
+              key={`tap-workday-${career.slug}`}
+            >
+              <p className="text-lg font-semibold leading-tight">
+                {career.title}
+              </p>
+              <p className="mt-4 min-h-16 text-sm font-semibold leading-6 text-foreground/86">
+                {career.realSentences[0]}
+              </p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm text-primary">
+                30 Sekunden fÃ¼hlen
+                <ArrowRight className="size-4 transition duration-500 group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <div className="mx-auto w-full max-w-5xl px-5 pb-28 sm:px-8">
         {continuation?.enoughHistory && continuation.summary ? (
           <section className="mb-14 max-w-3xl border-y border-white/10 py-5 sm:mb-20 sm:ml-[8%]">
@@ -748,6 +785,7 @@ export default function Home() {
                     career={career}
                     className={moment.className}
                     compareHref="/wege"
+                    nextWorkday={getNextWorkday(career.slug, careers)}
                   />
                 ) : (
                   <Link href={`/careers/${moment.slug}`} className="block">

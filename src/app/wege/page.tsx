@@ -24,6 +24,7 @@ import {
   careers,
   getSituationsForCareer,
 } from "@/data/careers";
+import { getNextWorkday } from "@/data/workday-flow";
 import { ambientArbeitsweltFragments } from "@/data/work-life-fragments";
 import { cn } from "@/lib/utils";
 import {
@@ -561,26 +562,14 @@ export default function WegePage() {
           </p>
         </div>
 
-        <section className="mt-12">
-          <div className="mb-6 max-w-2xl">
-            <p className="text-sm text-primary">Erstmal Arbeitstage ansehen</p>
-            <p className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
-              Tipp dich durch einen kurzen Arbeitstag.
-            </p>
-          </div>
-          <div className="grid gap-4">
-            {filteredCareers.slice(0, 3).map((career) => (
-              <DayMomentPlayer
-                career={career}
-                className="sm:max-w-3xl"
-                compact
-                key={`wege-preview-${career.slug}`}
-              />
-            ))}
-          </div>
-        </section>
+        <div className="mt-12 max-w-2xl border-t border-white/10 pt-8">
+          <p className="text-sm text-primary">Berufe finden</p>
+          <p className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
+            Suche direkt nach einem Beruf oder filtere nach dem Alltag.
+          </p>
+        </div>
 
-        <div className="sticky top-3 z-20 mt-10 sm:top-5">
+        <div className="sticky top-3 z-20 mt-6 sm:top-5">
           <div className="glass-surface flex items-center gap-3 rounded-[1.45rem] px-4 py-3 sm:px-5">
             <Search className="size-5 shrink-0 text-primary/80" />
             <input
@@ -616,11 +605,23 @@ export default function WegePage() {
           })}
         </div>
 
-        <div className="mt-7 flex items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>
+        <div className="mt-5 flex flex-col gap-4 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <div>
             {filteredCareers.length}{" "}
-            {filteredCareers.length === 1 ? "Weg" : "Wege"}
-          </p>
+            {filteredCareers.length === 1 ? "Beruf" : "Berufe"}
+            {activeFilters.length ? (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {activeFilters.map((filter) => (
+                  <span
+                    className="rounded-full border border-primary/20 bg-primary/[0.1] px-3 py-1 text-xs text-primary"
+                    key={`active-${filter}`}
+                  >
+                    {filter}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
           {adaptiveNudge && !query && activeFilters.length === 0 ? (
             <p className="max-w-[18rem] text-right text-primary/80">
               {adaptiveNudge}
@@ -693,6 +694,28 @@ export default function WegePage() {
             </p>
           </Card>
         )}
+
+        {filteredCareers.length > 0 ? (
+          <section className="mt-12 border-y border-white/10 py-7">
+            <div className="mb-6 max-w-2xl">
+              <p className="text-sm text-primary">Arbeitstage aus den Treffern</p>
+              <p className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
+                Drei kurze Ausschnitte, wenn du erst fühlen willst.
+              </p>
+            </div>
+            <div className="grid gap-4">
+              {filteredCareers.slice(0, 3).map((career) => (
+                <DayMomentPlayer
+                  career={career}
+                  className="sm:max-w-3xl"
+                  compact
+                  key={`wege-preview-${career.slug}`}
+                  nextWorkday={getNextWorkday(career.slug, filteredCareers)}
+                />
+              ))}
+            </div>
+          </section>
+        ) : null}
       </section>
 
       {compareSlugs.length > 0 ? (
@@ -881,18 +904,23 @@ function CareerExplorerCard({
   return (
     <Card
       className={cn(
-        "p-5 transition duration-700 ease-out hover:-translate-y-1 hover:bg-white/[0.075] active:translate-y-0 sm:p-6",
+        "group relative overflow-hidden p-5 transition duration-700 ease-out hover:-translate-y-1 hover:border-primary/25 hover:bg-white/[0.075] active:translate-y-0 active:scale-[0.995] sm:p-6",
         prominent && "energy-surface",
       )}
     >
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+      <Link
+        aria-label={`${career.title} öffnen`}
+        className="absolute inset-0 z-0"
+        href={`/careers/${career.slug}`}
+      />
+      <div className="pointer-events-none relative z-10 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="max-w-3xl">
           <div className="mb-3 flex flex-wrap gap-2">
             {career.tags.slice(0, 3).map((tag) => (
               <Badge key={tag}>{tag}</Badge>
             ))}
           </div>
-          <h2 className="text-2xl font-semibold leading-tight">
+          <h2 className="text-2xl font-semibold leading-tight transition duration-500 group-hover:text-primary">
             {career.title}
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
@@ -905,7 +933,7 @@ function CareerExplorerCard({
           <PracticalSignals career={career} className="mt-4" />
         </div>
 
-        <div className="flex shrink-0 flex-col gap-2 sm:min-w-44">
+        <div className="pointer-events-auto flex shrink-0 flex-col gap-2 sm:min-w-44">
           <button
             className={cn(
               "rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.07] hover:text-foreground",
@@ -926,13 +954,21 @@ function CareerExplorerCard({
         </div>
       </div>
 
-      <Link
-        className="mt-7 inline-flex items-center gap-2 text-sm text-foreground transition duration-500 hover:text-primary"
-        href={`/careers/${career.slug}`}
-      >
-        kurz reinschauen
-        <ArrowRight className="size-4 text-primary" />
-      </Link>
+      <div className="pointer-events-auto relative z-20 mt-7 flex flex-wrap gap-3">
+        <Link
+          className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.1] px-4 py-2 text-sm text-primary transition duration-500 hover:-translate-y-0.5 hover:bg-primary/[0.16]"
+          href={`/careers/${career.slug}#30-sekunden`}
+        >
+          30 Sekunden fühlen
+          <ArrowRight className="size-4" />
+        </Link>
+        <Link
+          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-sm text-muted-foreground transition duration-500 hover:-translate-y-0.5 hover:bg-white/[0.08] hover:text-foreground"
+          href={`/careers/${career.slug}`}
+        >
+          Beruf öffnen
+        </Link>
+      </div>
     </Card>
   );
 }
@@ -1028,11 +1064,11 @@ function CompareDialog({
           <div className="min-w-0 pr-2">
             <p className="text-sm text-primary">Was fühlt sich anders an?</p>
             <h2 className="mt-2 max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
-              Nicht besser oder schlechter. Nur anders.
+              Was fühlt sich anders an?
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">
-              Ein ruhiger Blick darauf, was Energie kostet: Menschen, Bewegung,
-              Struktur, Druck, Wiederholung.
+              Kein Urteil. Eher ein ruhiger Blick darauf, welche Art Tag
+              jeweils entsteht.
             </p>
           </div>
           <button
@@ -1046,6 +1082,7 @@ function CompareDialog({
         </div>
 
         <div className="mt-8 space-y-7">
+          <CompareRealDifferences careers={careers} />
           <CompareIndicatorRows careers={careers} />
 
           <section className="border-t border-white/10 pt-6">
@@ -1114,6 +1151,36 @@ function CompareDialog({
 
 function allCareersExcept(slugs: string[]) {
   return careers.filter((career) => !slugs.includes(career.slug));
+}
+
+function CompareRealDifferences({ careers }: { careers: Career[] }) {
+  return (
+    <section className="border-t border-white/10 pt-6 first:border-t-0 first:pt-0">
+      <p className="text-sm text-primary">Was hier anders wirkt</p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        {careers.map((career) => (
+          <div
+            className="rounded-[1.1rem] border border-white/10 bg-white/[0.03] p-4"
+            key={`compare-real-difference-${career.slug}`}
+          >
+            <p className="text-sm font-medium text-foreground/90">
+              {career.title}
+            </p>
+            <div className="mt-4 space-y-3">
+              {career.realDifferences.slice(0, 3).map((difference) => (
+                <p
+                  className="text-sm font-semibold leading-6 text-foreground/88"
+                  key={difference}
+                >
+                  {difference}
+                </p>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 function CompareIndicatorRows({ careers }: { careers: Career[] }) {
@@ -1208,6 +1275,7 @@ function buildCareerDocument(career: Career): CareerSearchDocument {
     career.discoveryNote,
     career.laterNotices.join(" "),
     career.realSentences.join(" "),
+    career.realDifferences.join(" "),
     career.whyItMightFit,
     career.observations.join(" "),
     career.typicalTuesday.map((item) => `${item.time} ${item.text}`).join(" "),

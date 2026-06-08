@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 
 import { SaveCareerButton } from "@/components/save-career-button";
 import { Button } from "@/components/ui/button";
 import type { Career } from "@/data/careers";
+import { trackWorkdayExperience } from "@/lib/exploration-memory";
 import { cn } from "@/lib/utils";
 
 type DayMomentPlayerProps = {
@@ -15,6 +16,7 @@ type DayMomentPlayerProps = {
   compact?: boolean;
   compareLabel?: string;
   compareHref?: string;
+  nextWorkday?: Pick<Career, "slug" | "title"> | null;
   showTitle?: boolean;
 };
 
@@ -24,15 +26,84 @@ export function DayMomentPlayer({
   compact = false,
   compareLabel = "vergleichen",
   compareHref = "/wege",
+  nextWorkday = null,
   showTitle = true,
 }: DayMomentPlayerProps) {
-  const [index, setIndex] = useState(0);
+  const [playerState, setPlayerState] = useState({
+    experienceTracked: false,
+    index: 0,
+    slug: career.slug,
+    startIndex: 0,
+  });
+  const currentState =
+    playerState.slug === career.slug
+      ? playerState
+      : {
+          experienceTracked: false,
+          index: 0,
+          slug: career.slug,
+          startIndex: 0,
+        };
+  const { experienceTracked, index, startIndex } = currentState;
   const moments = career.dayMoments.length
     ? career.dayMoments
     : [{ timeLabel: "09:12", text: "Ein kurzer Moment aus diesem Arbeitstag." }];
-  const finished = index >= moments.length;
-  const moment = moments[Math.min(index, moments.length - 1)];
-  const parts = splitMomentText(moment.text);
+  const momentWindowSize = Math.min(4, moments.length);
+  const visibleMoments = Array.from({ length: momentWindowSize }, (_, offset) => {
+    const momentIndex = (startIndex + offset) % moments.length;
+    return moments[momentIndex];
+  });
+  const finished = index >= visibleMoments.length;
+  const canShowMore = moments.length > visibleMoments.length;
+
+  function markExperienced() {
+    if (experienceTracked) return;
+
+    trackWorkdayExperience(career.slug);
+  }
+
+  function showNextMoment() {
+    markExperienced();
+    setPlayerState((current) => {
+      const state =
+        current.slug === career.slug
+          ? current
+          : {
+              experienceTracked: false,
+              index: 0,
+              slug: career.slug,
+              startIndex: 0,
+            };
+
+      return {
+        ...state,
+        experienceTracked: true,
+        index: state.index + 1,
+      };
+    });
+  }
+
+  function showMoreMoments() {
+    markExperienced();
+    setPlayerState((current) => {
+      const state =
+        current.slug === career.slug
+          ? current
+          : {
+              experienceTracked: false,
+              index: 0,
+              slug: career.slug,
+              startIndex: 0,
+            };
+
+      return {
+        ...state,
+        experienceTracked: true,
+        index: 0,
+        startIndex: (state.startIndex + visibleMoments.length) % moments.length,
+      };
+    });
+  }
 
   return (
     <article
@@ -60,42 +131,73 @@ export function DayMomentPlayer({
 
       {!finished ? (
         <>
-          <div className="min-h-36 border-l border-primary/45 pl-4 sm:min-h-40">
-            <p className="text-sm font-semibold text-primary">{moment.timeLabel}</p>
-            <div
-              className={cn(
-                "mt-4 max-w-2xl font-semibold leading-tight text-foreground",
-                compact ? "text-2xl" : "text-3xl sm:text-5xl",
-              )}
-            >
-              {parts.prefix ? (
-                <p className="text-foreground/78">{parts.prefix}</p>
-              ) : null}
-              <p>{parts.main}</p>
-              {parts.after ? (
-                <p className="mt-4 text-foreground/88">{parts.after}</p>
-              ) : null}
-            </div>
-            {moment.realSentence ? (
-              <p className="mt-5 max-w-xl text-sm leading-6 text-muted-foreground">
-                Jemand sagt: &quot;{moment.realSentence}&quot;
-              </p>
-            ) : null}
+          <div className={cn("space-y-4", compact && "space-y-3")}>
+            {visibleMoments.slice(0, index + 1).map((moment, momentIndex) => {
+              const parts = splitMomentText(moment.text);
+              const current = momentIndex === index;
+
+              return (
+                <div key={`${moment.timeLabel}-${moment.text}`}>
+                  <div
+                    className={cn(
+                      "border-l pl-4 transition duration-500",
+                      current
+                        ? "border-primary/55 opacity-100"
+                        : "border-white/10 opacity-62",
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <p className="text-sm font-semibold text-primary">
+                        {moment.timeLabel}
+                      </p>
+                      {current ? (
+                        <p className="text-xs font-medium text-muted-foreground">
+                          {momentIndex + 1} von {visibleMoments.length}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div
+                      className={cn(
+                        "mt-3 max-w-2xl font-semibold leading-tight text-foreground",
+                        compact ? "text-2xl" : "text-3xl sm:text-5xl",
+                      )}
+                    >
+                      {parts.prefix ? (
+                        <p className="text-foreground/78">{parts.prefix}</p>
+                      ) : null}
+                      <p>{parts.main}</p>
+                      {parts.after ? (
+                        <p className="mt-3 text-foreground/88">{parts.after}</p>
+                      ) : null}
+                    </div>
+                    {moment.realSentence ? (
+                      <p className="mt-4 max-w-xl text-sm leading-6 text-muted-foreground">
+                        &quot;{moment.realSentence}&quot;
+                      </p>
+                    ) : null}
+                  </div>
+
+                  {momentIndex < index ? (
+                    <div className="ml-4 flex items-center gap-2 py-1 text-xs font-medium text-muted-foreground">
+                      <ArrowDown className="size-3.5 text-primary/70" />
+                      <span>Nächster Moment</span>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <Button
               className="border-primary/30 bg-primary/[0.18] text-primary hover:bg-primary/[0.25]"
-              onClick={() => setIndex((current) => current + 1)}
+              onClick={showNextMoment}
               type="button"
               variant="quiet"
             >
               Nächster Moment
-              <ArrowRight className="size-4" />
+              <ArrowDown className="size-4" />
             </Button>
-            <span className="text-xs font-medium text-muted-foreground">
-              {index + 1} von {moments.length}
-            </span>
             <Link
               className="text-sm text-muted-foreground transition duration-500 hover:text-foreground"
               href={`/careers/${career.slug}`}
@@ -108,29 +210,43 @@ export function DayMomentPlayer({
         <div className="min-h-36 sm:min-h-40">
           <p className="text-sm text-primary">Das war nur ein kurzer Ausschnitt.</p>
           <div className="mt-5 flex flex-wrap gap-2">
+            {nextWorkday ? (
+              <Button asChild variant="quiet">
+                <Link href={`/careers/${nextWorkday.slug}#30-sekunden`}>
+                  NÃ¤chster Arbeitstag
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            ) : null}
+            {canShowMore ? (
+              <Button onClick={showMoreMoments} type="button" variant="quiet">
+                Mehr davon
+                <ArrowRight className="size-4" />
+              </Button>
+            ) : null}
             <Button asChild variant="quiet">
               <Link href={`/careers/${career.slug}`}>
-                mehr über diesen Alltag
+                Beruf öffnen
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
-            <SaveCareerButton
-              compact
-              savedLabel="gemerkt"
-              slug={career.slug}
-              unsavedLabel="merken"
-            />
             <Link
               className="rounded-full border border-white/10 bg-white/[0.045] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.08] hover:text-foreground"
               href={compareHref}
             >
-              {compareLabel}
+              {compareLabel === "vergleichen" ? "Vergleichen" : compareLabel}
             </Link>
+            <SaveCareerButton
+              compact
+              savedLabel="Gemerkt"
+              slug={career.slug}
+              unsavedLabel="Merken"
+            />
             <Link
               className="rounded-full border border-white/10 bg-white/[0.045] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.08] hover:text-foreground"
               href={`/karte?career=${career.slug}`}
             >
-              auf Karte ansehen
+              Karte öffnen
             </Link>
           </div>
         </div>

@@ -109,6 +109,10 @@ export function CareerMap({ careers }: { careers: Career[] }) {
     () => getClosestCareers(selectedCareer, mapCareers, 5),
     [mapCareers, selectedCareer],
   );
+  const differenceComparison = useMemo(
+    () => getMapDifferenceComparison(selectedCareer, mapCareers, neighbors),
+    [mapCareers, neighbors, selectedCareer],
+  );
   const closestSlugs = new Set(neighbors.slice(0, 3).map((career) => career.slug));
   const trails = useMemo(
     () => getExplorationTrails(selectedCareer, mapCareers),
@@ -280,6 +284,17 @@ export function CareerMap({ careers }: { careers: Career[] }) {
               </p>
             </div>
 
+            {differenceComparison ? (
+              <div className="mt-4 rounded-[1rem] border border-primary/15 bg-primary/[0.055] p-3.5">
+                <p className="text-xs text-primary/85">
+                  Das hier wirkt oft anders als {differenceComparison.career.title}
+                </p>
+                <p className="mt-2 text-sm font-semibold leading-6 text-foreground/90">
+                  {differenceComparison.note}
+                </p>
+              </div>
+            ) : null}
+
             <div className="mt-4 border-l border-primary/20 pl-4">
               <p className="text-xs text-primary/85">
                 Was man dort öfter sagt
@@ -349,13 +364,21 @@ export function CareerMap({ careers }: { careers: Career[] }) {
               </ul>
             </section>
 
-            <Link
-              className="mt-7 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.12] px-4 py-2 text-sm text-primary transition duration-500 hover:-translate-y-0.5 hover:bg-primary/[0.18]"
-              href={`/careers/${selectedCareer.slug}`}
-            >
-              Alltag ansehen
-              <ArrowRight className="size-4" />
-            </Link>
+            <div className="mt-7 flex flex-wrap gap-2">
+              <Link
+                className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.12] px-4 py-2 text-sm text-primary transition duration-500 hover:-translate-y-0.5 hover:bg-primary/[0.18]"
+                href={`/careers/${selectedCareer.slug}#30-sekunden`}
+              >
+                30 Sekunden fÃ¼hlen
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-sm text-muted-foreground transition duration-500 hover:-translate-y-0.5 hover:bg-white/[0.08] hover:text-foreground"
+                href={`/careers/${selectedCareer.slug}`}
+              >
+                Beruf Ã¶ffnen
+              </Link>
+            </div>
           </>
         ) : null}
       </aside>
@@ -400,6 +423,27 @@ function getClosestCareers(
     .sort((a, b) => a.distance - b.distance || a.index - b.index)
     .slice(0, limit)
     .map(({ career }) => career);
+}
+
+function getMapDifferenceComparison(
+  selected: MapCareer | undefined,
+  careers: MapCareer[],
+  neighbors: MapCareer[],
+) {
+  if (!selected) return null;
+
+  const confusedCareer = selected.oftenConfusedWith
+    ?.map((slug) => careers.find((career) => career.slug === slug))
+    .find((career): career is MapCareer => Boolean(career));
+  const comparisonCareer = confusedCareer ?? neighbors[0];
+  const note = selected.realDifferences[0];
+
+  if (!comparisonCareer || !note) return null;
+
+  return {
+    career: comparisonCareer,
+    note,
+  };
 }
 
 function getAdaptiveMapCareers(careers: MapCareer[], profile: ExplorationProfile) {
