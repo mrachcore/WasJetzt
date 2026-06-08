@@ -8,12 +8,11 @@ import { AppShell } from "@/components/app-shell";
 import { ContinuationLine } from "@/components/continuation-line";
 import { DayMomentPlayer } from "@/components/day-moment-player";
 import { TrackCareerView, TrackedPathwayLink } from "@/components/exploration-tracker";
-import { LifeIndicatorSnapshot } from "@/components/life-indicators";
 import { PracticalSignals } from "@/components/practical-signals";
 import { SaveCareerButton } from "@/components/save-career-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   type Career,
   careers,
@@ -396,7 +395,6 @@ export default async function CareerDetailPage({
   const emotionalPathways = getEmotionalPathways(slug);
   const oftenConfusedCareers = getOftenConfusedCareers(slug);
   const profile = careerPageProfiles[career.slug] ?? defaultProfile;
-  const tone = getCareerTone(career.slug);
 
   return (
     <AppShell>
@@ -469,16 +467,9 @@ export default async function CareerDetailPage({
         </div>
 
         <DayMomentSection career={career} />
-        <LifeIndicatorSnapshot
-          career={career}
-          className="mt-14 max-w-3xl opacity-80 sm:ml-[8%]"
-        />
         <RealDifferencesSection career={career} />
-        <FitSection career={career} profile={profile} />
-        <ObservationStream career={career} profile={profile} />
         <RealSentencesWall career={career} />
         <LaterNoticeCards career={career} />
-        <DayFragments career={career} profile={profile} tone={tone} />
         <RealismLayer career={career} />
         <OftenConfusedSection career={career} careers={oftenConfusedCareers} />
 
@@ -542,50 +533,6 @@ export default async function CareerDetailPage({
   );
 }
 
-function getCareerTone(slug: string) {
-  if (
-    [
-      "pflegefachkraft",
-      "notfallsanitaeter",
-      "erzieher",
-      "medizinische-fachangestellte",
-      "friseur",
-      "zugbegleiter",
-    ].includes(slug)
-  ) {
-    return "menschen";
-  }
-
-  if (
-    [
-      "elektroniker",
-      "mechatroniker",
-      "industriemechaniker",
-      "veranstaltungstechniker",
-      "koch",
-    ].includes(slug)
-  ) {
-    return "bewegung";
-  }
-
-  if (
-    [
-      "fachinformatiker-systemintegration",
-      "bauzeichner",
-      "fachkraft-lagerlogistik",
-      "kaufmann-bueromanagement",
-    ].includes(slug)
-  ) {
-    return "struktur";
-  }
-
-  if (["mediengestalter", "florist", "tischler"].includes(slug)) {
-    return "ueberraschung";
-  }
-
-  return "ruhe";
-}
-
 function DayMomentSection({ career }: { career: Career }) {
   const nextWorkday = getNextWorkday(career.slug, careers);
 
@@ -619,107 +566,6 @@ function RealDifferencesSection({ career }: { career: Career }) {
         ))}
       </div>
     </section>
-  );
-}
-
-function FitSection({
-  career,
-  profile,
-}: {
-  career: Career;
-  profile: CareerPageProfile;
-}) {
-  if (profile.fitStyle === "note") {
-    return (
-      <div className="mt-16 max-w-2xl sm:ml-[8%]">
-        <p className="text-sm text-primary">
-          Warum manche bleiben
-        </p>
-        <p className="mt-4 text-xl font-semibold leading-snug text-foreground/88 sm:text-2xl">
-          {career.whyItMightFit}
-        </p>
-        <p className="mt-5 max-w-xl text-sm leading-6 text-muted-foreground">
-          {career.discoveryNote}
-        </p>
-      </div>
-    );
-  }
-
-  if (profile.fitStyle === "split") {
-    return (
-      <div className="mt-16 grid gap-5 sm:grid-cols-[1fr_0.8fr] sm:items-start">
-        <Card className="energy-surface p-6 sm:p-8">
-          <p className="text-sm text-primary">Warum manche bleiben</p>
-          <p className="mt-4 text-lg font-semibold leading-snug sm:text-xl">
-            {career.whyItMightFit}
-          </p>
-        </Card>
-        <div className="pt-2 sm:pt-8">
-          <p className="max-w-md text-base leading-7 text-muted-foreground">
-            {career.discoveryNote}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <Card className="energy-surface mt-16">
-      <CardHeader className="pb-4">
-        <div className="flex items-center gap-3">
-          <CardTitle>Warum manche bleiben</CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <p className="max-w-3xl leading-7 text-muted-foreground">
-          {career.whyItMightFit}
-        </p>
-        <p className="mt-5 max-w-2xl text-sm leading-6 text-primary/80">
-          {career.discoveryNote}
-        </p>
-      </CardContent>
-    </Card>
-  );
-}
-
-function ObservationStream({
-  career,
-  profile,
-}: {
-  career: Career;
-  profile: CareerPageProfile;
-}) {
-  return (
-    <div
-      className={cn(
-        "my-16 space-y-10 sm:my-20",
-        profile.observationStyle === "tight" && "space-y-7 sm:my-16",
-        profile.observationStyle === "wide" && "space-y-12 sm:my-24",
-      )}
-    >
-      {career.observations.map((observation, index) => (
-        <p
-          className={cn(
-            "max-w-2xl text-2xl font-semibold leading-snug text-foreground/90 sm:text-3xl",
-            profile.observationStyle === "tight" && "text-xl sm:text-2xl",
-            profile.observationStyle === "wide" && "text-3xl sm:text-4xl",
-            profile.observationStyle === "stepped" &&
-              (index % 2 === 0 ? "sm:ml-[8%]" : "sm:ml-auto"),
-            profile.observationStyle === "tight" &&
-              (index === 1 ? "sm:ml-auto sm:max-w-xl" : "sm:ml-[6%]"),
-            profile.observationStyle === "wide" &&
-              (index === 0
-                ? "sm:ml-[4%]"
-                : index === 1
-                  ? "sm:ml-auto sm:max-w-3xl"
-                  : "sm:ml-[18%]"),
-          )}
-          key={observation}
-        >
-          {observation}
-        </p>
-      ))}
-    </div>
   );
 }
 
@@ -774,59 +620,6 @@ function LaterNoticeCards({ career }: { career: Career }) {
       </div>
     </section>
   );
-}
-
-function DayFragments({
-  career,
-  profile,
-  tone,
-}: {
-  career: Career;
-  profile: CareerPageProfile;
-  tone: string;
-}) {
-  const content = (
-    <>
-      <div className="mb-8 flex items-center gap-3">
-        <span className="wj-marker" data-tone={tone} />
-        <h2 className="text-3xl font-semibold leading-tight">
-          {profile.dayTitle}
-        </h2>
-      </div>
-      <div className="cinematic-line mb-6 h-px w-32" />
-      <div
-        className={cn(
-          "space-y-8",
-          profile.dayStyle === "loose" && "space-y-10",
-          profile.dayStyle === "panel" && "space-y-5",
-        )}
-      >
-        {career.typicalTuesday.map((item, index) => (
-          <div
-            className={cn(
-              "grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-[150px_1fr]",
-              profile.dayStyle === "loose" &&
-                (index % 2 === 0 ? "sm:mr-[10%]" : "sm:ml-[10%]"),
-              profile.dayStyle === "panel" &&
-                "rounded-[1.3rem] border border-white/10 bg-white/[0.035] p-4 sm:grid-cols-[130px_1fr] sm:p-5",
-            )}
-            key={`${item.time}-${item.text}`}
-          >
-            <span className="text-sm text-primary">{item.time}</span>
-            <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-              {item.text}
-            </p>
-          </div>
-        ))}
-      </div>
-    </>
-  );
-
-  if (profile.dayStyle === "panel") {
-    return <Card className="mt-18 p-5 sm:p-8">{content}</Card>;
-  }
-
-  return <section className="mt-18">{content}</section>;
 }
 
 function RealismLayer({ career }: { career: Career }) {

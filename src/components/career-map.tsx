@@ -254,12 +254,6 @@ export function CareerMap({ careers }: { careers: Career[] }) {
       </div>
 
       <aside className="glass-soft rounded-[1.45rem] p-5 lg:sticky lg:top-24">
-        {profile?.hasAdaptiveConfidence ? (
-          <div className="mb-5 rounded-[1rem] border border-primary/15 bg-primary/[0.06] px-3.5 py-3 text-sm leading-6 text-primary/85">
-            Vielleicht kommst du hier öfter vorbei.
-          </div>
-        ) : null}
-
         {selectedCareer ? (
           <>
             <div className="flex items-start gap-3">
