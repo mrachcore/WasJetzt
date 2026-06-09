@@ -538,7 +538,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     atmosphere:
       "Schleifen, Abkleben, Farbton, Kabine, Staub, Licht und die Frage, ob man den Übergang später sieht.",
     secretlyLike:
-      "Wenn eine Stelle wieder so wirkt, als waere nie etwas gewesen.",
+      "Wenn eine Stelle wieder so wirkt, als wäre nie etwas gewesen.",
     annoys:
       "Staub, Zeitdruck, Farbunterschiede, schlechte Vorarbeit und Macken, die erst im Licht auftauchen.",
     comfortableFor:

@@ -432,13 +432,15 @@ export default async function CareerDetailPage({
             className="mt-5"
             label="typisch"
           />
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8">
             <Button asChild>
               <Link href="#30-sekunden">
                 30 Sekunden fühlen
                 <ArrowDown className="size-4" />
               </Link>
             </Button>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-3">
             <SaveCareerButton slug={career.slug} />
             <Button asChild variant="quiet">
               <Link href={`/karte?career=${career.slug}`}>
@@ -447,7 +449,10 @@ export default async function CareerDetailPage({
               </Link>
             </Button>
           </div>
-          <div className="mt-5 flex flex-wrap gap-2">
+          <nav
+            aria-label="Abschnitte auf dieser Berufsseite"
+            className="mt-5 flex flex-wrap gap-2 border-t border-white/10 pt-4"
+          >
             {[
               { href: "#anders", label: "Was anders ist" },
               { href: "#saetze", label: "Sätze aus dem Alltag" },
@@ -455,14 +460,14 @@ export default async function CareerDetailPage({
               { href: "#aehnliche-tage", label: "Ähnliche Tage" },
             ].map((action) => (
               <Link
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:-translate-y-0.5 hover:border-primary/25 hover:bg-white/[0.075] hover:text-foreground"
+                className="rounded-full border border-white/12 bg-white/[0.03] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:-translate-y-0.5 hover:border-primary/25 hover:bg-white/[0.07] hover:text-foreground"
                 href={action.href}
                 key={action.href}
               >
                 {action.label}
               </Link>
             ))}
-          </div>
+          </nav>
           <ContinuationLine careerSlug={career.slug} className="mt-5" />
         </div>
 

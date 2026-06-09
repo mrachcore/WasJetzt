@@ -12,8 +12,8 @@ export default function Home() {
 
   return (
     <AppShell>
-      <section className="mx-auto flex min-h-[calc(100vh-68px)] w-full max-w-5xl flex-col justify-center px-5 pb-10 pt-6 sm:min-h-[calc(100vh-76px)] sm:px-8 sm:pb-14 sm:pt-10">
-        <div className="relative py-3 sm:py-8">
+      <section className="mx-auto flex min-h-[calc(76vh-68px)] w-full max-w-5xl flex-col justify-center px-5 pb-6 pt-5 sm:min-h-[calc(82vh-76px)] sm:px-8 sm:pb-10 sm:pt-8">
+        <div className="relative py-2 sm:py-6">
           <Image
             src="/logo-mark.png"
             alt=""
@@ -35,15 +35,18 @@ export default function Home() {
             dann die Berufe, die hängen bleiben.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button asChild size="lg" className="w-full sm:w-auto">
               <Link href="/quiz">
                 Fragen starten
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
-            <Button asChild variant="quiet" className="w-full sm:w-auto">
-              <Link href="/wege">Erstmal Arbeitstage ansehen</Link>
+            <Button asChild size="lg" variant="quiet" className="w-full sm:w-auto">
+              <Link href="/wege">
+                Ersten Arbeitstag fühlen
+                <ArrowRight className="size-4" />
+              </Link>
             </Button>
             <Link
               className="inline-flex justify-center rounded-full px-3 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.055] hover:text-foreground sm:justify-start"
@@ -55,7 +58,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-5 pb-28 sm:px-8">
+      <section className="mx-auto w-full max-w-5xl px-5 pb-28 pt-2 sm:px-8">
         <div className="mb-6 max-w-2xl">
           <p className="text-sm text-primary">Arbeitstage zum Antippen</p>
           <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
@@ -65,7 +68,7 @@ export default function Home() {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {workdays.map((career) => (
             <Link
-              className="group rounded-[1.25rem] border border-white/10 bg-white/[0.025] p-4 transition duration-500 hover:-translate-y-0.5 hover:border-primary/25 hover:bg-white/[0.06] active:translate-y-0"
+              className="group rounded-[1.25rem] border border-white/16 bg-white/[0.05] p-4 transition duration-500 hover:-translate-y-0.5 hover:border-primary/35 hover:bg-white/[0.085] active:translate-y-0 active:bg-primary/[0.09]"
               href={`/careers/${career.slug}#30-sekunden`}
               key={career.slug}
             >

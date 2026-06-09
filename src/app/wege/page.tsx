@@ -405,7 +405,7 @@ export default function WegePage() {
 
   return (
     <AppShell>
-      <section className="mx-auto w-full max-w-5xl px-5 pb-36 pt-12 sm:px-8">
+      <section className="mx-auto w-full max-w-5xl px-5 pb-36 pt-8 sm:px-8 sm:pt-12">
         <div className="relative max-w-3xl">
           <Image
             src="/logo-mark.png"
@@ -415,41 +415,41 @@ export default function WegePage() {
             className="mark-breathe pointer-events-none absolute -right-8 -top-10 hidden w-28 sm:block"
             priority
           />
-          <Badge className="mb-7 text-primary">Alltag statt Jobtitel</Badge>
-          <h1 className="text-5xl font-semibold leading-[0.98] sm:text-7xl">
-            Wege
+          <Badge className="mb-5 text-primary">Alltag statt Jobtitel</Badge>
+          <h1 className="text-4xl font-semibold leading-[1.02] sm:text-7xl">
+            Berufe finden
           </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
+          <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
             Fang mit einem Arbeitstag an. Tipp dich kurz durch ein paar
             Momente, dann schau weiter.
           </p>
-          <p className="mt-7 max-w-md border-l border-white/10 pl-4 text-sm leading-6 text-muted-foreground/70">
+          <p className="mt-5 max-w-md border-l border-white/10 pl-4 text-sm leading-6 text-muted-foreground/78">
             {ambientArbeitsweltFragments[4]}
           </p>
         </div>
 
-        <div className="mt-12 max-w-2xl border-t border-white/10 pt-8">
-          <p className="text-sm text-primary">Berufe finden</p>
-          <p className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
-            Suche direkt nach einem Beruf oder filtere nach dem Alltag.
+        <div className="mt-8 max-w-2xl border-t border-white/10 pt-6">
+          <p className="text-sm text-primary">Arbeitstage suchen</p>
+          <p className="mt-3 text-xl font-semibold leading-tight sm:text-3xl">
+            Such direkt nach einem Beruf oder filtere nach Alltag.
           </p>
         </div>
 
-        <div className="sticky top-3 z-20 mt-6 sm:top-5">
-          <div className="glass-surface flex items-center gap-3 rounded-[1.45rem] px-4 py-3 sm:px-5">
+        <div className="sticky top-3 z-20 mt-5 sm:top-5">
+          <div className="glass-surface flex items-center gap-3 rounded-[1.45rem] px-4 py-3.5 sm:px-5">
             <Search className="size-5 shrink-0 text-primary/80" />
             <input
               aria-label="Wege durchsuchen"
               className="min-w-0 flex-1 bg-transparent text-base text-foreground outline-none placeholder:text-muted-foreground"
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Such nach Gefühl, Rhythmus oder Alltag..."
+              placeholder="Such nach Beruf oder Gefühl"
               type="search"
               value={query}
             />
           </div>
         </div>
 
-        <div className="scrollbar-hide -mx-5 mt-7 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
+        <div className="scrollbar-hide -mx-5 mt-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
           {adaptiveFilters.map((filter) => {
             const active = activeFilters.includes(filter.label);
 
@@ -457,8 +457,8 @@ export default function WegePage() {
               <button
                 aria-pressed={active}
                 className={cn(
-                  "choice-surface inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 px-3.5 py-2 text-sm text-muted-foreground transition duration-500 ease-out hover:-translate-y-0.5 hover:text-foreground active:translate-y-0",
-                  active && "border-primary/30 bg-primary/10 text-foreground",
+                  "choice-surface inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-white/16 px-3.5 py-2 text-sm text-foreground/82 transition duration-500 ease-out hover:-translate-y-0.5 hover:border-primary/30 hover:text-foreground active:translate-y-0 active:bg-primary/[0.12]",
+                  active && "border-primary/45 bg-primary/[0.14] text-foreground",
                 )}
                 key={filter.label}
                 onClick={() => toggleFilter(filter.label)}
@@ -515,7 +515,7 @@ export default function WegePage() {
         ) : null}
 
         {filteredCareers.length > 0 ? (
-          <div className="mt-8 space-y-4 sm:space-y-5">
+          <div className="mt-6 space-y-4 sm:space-y-5">
             {filteredCareers.map((career, index) => (
               <div key={career.slug}>
                 <CareerExplorerCard
@@ -640,7 +640,7 @@ function CareerExplorerCard({
   return (
     <Card
       className={cn(
-        "group relative overflow-hidden p-5 transition duration-500 ease-out hover:-translate-y-1 hover:border-primary/25 hover:bg-white/[0.075] active:translate-y-0 sm:p-6",
+        "group relative overflow-hidden border-white/16 bg-white/[0.045] p-5 transition duration-500 ease-out hover:-translate-y-1 hover:border-primary/35 hover:bg-white/[0.085] active:translate-y-0 active:bg-primary/[0.07] sm:p-6",
         prominent && "energy-surface",
       )}
     >
@@ -677,9 +677,9 @@ function CareerExplorerCard({
         <div className="pointer-events-auto flex shrink-0 flex-col gap-2 sm:min-w-44">
           <button
             className={cn(
-              "rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.07] hover:text-foreground",
+              "min-h-11 rounded-full border border-white/16 bg-white/[0.055] px-4 py-2 text-sm text-foreground/82 transition duration-500 hover:bg-white/[0.09] hover:text-foreground",
               "hover:-translate-y-0.5 active:translate-y-0",
-              compareSelected && "border-primary/25 bg-primary/10 text-primary",
+              compareSelected && "border-primary/35 bg-primary/[0.14] text-primary",
             )}
             onClick={onCompare}
             type="button"
@@ -697,14 +697,14 @@ function CareerExplorerCard({
 
       <div className="pointer-events-auto relative z-20 mt-7 flex flex-wrap gap-3">
         <Link
-          className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.1] px-4 py-2 text-sm text-primary transition duration-500 hover:-translate-y-0.5 hover:bg-primary/[0.16]"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.14] px-4 py-2 text-sm font-medium text-primary transition duration-500 hover:-translate-y-0.5 hover:bg-primary/[0.2] active:translate-y-0"
           href={`/careers/${career.slug}`}
         >
           Beruf öffnen
           <ArrowRight className="size-4" />
         </Link>
         <Link
-          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-sm text-muted-foreground transition duration-500 hover:-translate-y-0.5 hover:bg-white/[0.08] hover:text-foreground"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/16 bg-white/[0.055] px-4 py-2 text-sm text-foreground/82 transition duration-500 hover:-translate-y-0.5 hover:bg-white/[0.09] hover:text-foreground active:translate-y-0"
           href={`/careers/${career.slug}#30-sekunden`}
         >
           30 Sekunden

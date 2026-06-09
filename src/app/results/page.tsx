@@ -140,6 +140,7 @@ export default function ResultsPage() {
     [patternSlugs, storedAnswers],
   );
   const dominantPatternLabel = visibleWorlds[0]?.title ?? "diese Richtung";
+  const firstCareer = patternCareers[0];
 
   function saveCurrentDirection() {
     const slugs = patternCareers.slice(0, 3).map((career) => career.slug);
@@ -152,7 +153,7 @@ export default function ResultsPage() {
 
   return (
     <AppShell>
-      <section className="mx-auto w-full max-w-5xl px-5 pb-24 pt-12 sm:px-8">
+      <section className="mx-auto w-full max-w-5xl px-5 pb-24 pt-8 sm:px-8 sm:pt-12">
         <div className="relative max-w-3xl">
           <Image
             src="/logo-mark.png"
@@ -161,40 +162,59 @@ export default function ResultsPage() {
             height={112}
             className="mark-breathe pointer-events-none absolute -right-6 -top-8 hidden w-24 sm:block"
           />
-          <Badge className="mb-7 text-primary">
+          <Badge className="mb-5 text-primary">
             {hydrated && storedAnswers.length
               ? "Nach ein paar Antworten"
               : "Zum Reinfühlen"}
           </Badge>
-          <h1 className="text-4xl font-semibold leading-[1.05] sm:text-6xl">
+          <h1 className="text-3xl font-semibold leading-[1.08] sm:text-6xl">
             Ein paar Arbeitstage,
             <br />
             die weniger falsch klingen könnten.
           </h1>
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
+          <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
             Tipp dich kurz durch ein paar Momente. Danach wartet direkt der
             nächste andere Arbeitstag.
           </p>
-          <div className="mt-9">
-            <Button asChild variant="quiet">
-              <Link href="/quiz">
-                <RefreshCcw className="size-4" />
-                nochmal anders antworten
-              </Link>
-            </Button>
-          </div>
         </div>
 
-        <section className="mt-14 sm:mt-20">
-          <div className="mb-8 max-w-2xl">
+        {firstCareer ? (
+          <section className="mt-8 sm:mt-12">
+            <div className="mb-5 max-w-2xl">
+              <p className="text-sm text-primary">30 Sekunden Alltag</p>
+              <h2 className="mt-3 text-2xl font-semibold leading-tight sm:text-4xl">
+                Erst kurz fühlen. Dann öffnen.
+              </h2>
+            </div>
+
+            <DayPreviewCard
+              career={firstCareer}
+              nextWorkday={getNextWorkday(firstCareer.slug, patternCareers)}
+            />
+
+            <CareerQuickLinks careers={patternCareers.slice(0, 3)} />
+
+            <div className="mt-5">
+              <Button asChild variant="ghost">
+                <Link href="/quiz">
+                  <RefreshCcw className="size-4" />
+                  nochmal anders antworten
+                </Link>
+              </Button>
+            </div>
+          </section>
+        ) : null}
+
+        <section className="mt-10 sm:mt-16">
+          <div className="mb-6 max-w-2xl">
             <p className="text-sm text-primary">30 Sekunden Alltag</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-5xl">
-              Arbeitstage
+              Weitere Arbeitstage
             </h2>
           </div>
 
           <div className="grid gap-5">
-            {patternCareers.slice(0, 4).map((career, index) => (
+            {patternCareers.slice(1, 4).map((career, index) => (
               <motion.div
                 key={`day-preview-${career.slug}`}
                 initial={{ opacity: 0, y: 14 }}
@@ -334,6 +354,24 @@ function DayPreviewCard({
 }) {
   return (
     <DayMomentPlayer career={career} compact nextWorkday={nextWorkday} />
+  );
+}
+
+function CareerQuickLinks({ careers }: { careers: Career[] }) {
+  if (!careers.length) return null;
+
+  return (
+    <div className="mt-5 flex flex-wrap gap-2">
+      {careers.map((career) => (
+        <Link
+          className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/[0.12] px-3.5 py-2 text-sm font-medium text-primary transition duration-500 hover:-translate-y-0.5 hover:bg-primary/[0.18] active:translate-y-0"
+          href={`/careers/${career.slug}`}
+          key={`quick-${career.slug}`}
+        >
+          {career.title}
+        </Link>
+      ))}
+    </div>
   );
 }
 

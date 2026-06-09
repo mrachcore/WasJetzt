@@ -43,7 +43,7 @@ export default function QuizPage() {
       setSignalAnswers(nextSignalAnswers);
       setStep((current) => current + 1);
       setSelectedIndex(null);
-    }, 320);
+    }, 180);
   }
 
   function back() {
@@ -60,7 +60,7 @@ export default function QuizPage() {
 
   return (
     <AppShell>
-      <section className="mx-auto flex min-h-[calc(100vh-84px)] w-full max-w-4xl flex-col justify-center px-5 pb-20 pt-8 sm:px-8">
+      <section className="mx-auto flex min-h-[calc(100vh-84px)] w-full max-w-4xl flex-col justify-center px-5 pb-16 pt-7 sm:px-8">
         <div className="mb-8 flex items-center justify-between text-sm text-muted-foreground">
           <button
             className="inline-flex items-center gap-2 rounded-full px-3 py-2 transition duration-500 hover:bg-white/[0.055] hover:text-foreground active:scale-[0.98]"
@@ -73,7 +73,7 @@ export default function QuizPage() {
           <span>{progressText}</span>
         </div>
 
-        <div className="mb-14 sm:mb-18">
+        <div className="mb-10 sm:mb-14">
           <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.07] backdrop-blur-sm">
             <motion.div
               animate={{
@@ -104,33 +104,40 @@ export default function QuizPage() {
               </h1>
             </div>
 
-            <div className="mt-12 grid gap-4 sm:mt-14 sm:grid-cols-2">
+            <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2">
               {question.answers.map((answer, index) => (
                 <div key={answer.label}>
                   <motion.button
                     animate={{
                       opacity:
                         selectedIndex === null || selectedIndex === index ? 1 : 0.58,
-                      scale: selectedIndex === index ? 1.012 : 1,
+                      scale: selectedIndex === index ? 1.018 : 1,
                     }}
                     className="group h-full w-full text-left"
+                    disabled={selectedIndex !== null}
                     onClick={() => choose(answer, index)}
-                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
                     type="button"
                   >
                     <span
-                      className={`block h-full rounded-[1.45rem] border px-5 py-5 shadow-[0_16px_50px_rgba(0,0,0,0.16)] transition duration-500 ease-out group-hover:-translate-y-1 group-hover:border-primary/35 group-hover:bg-white/[0.07] group-active:translate-y-0 sm:px-6 sm:py-7 ${
+                      className={`block h-full rounded-[1.45rem] border px-5 py-5 shadow-[0_10px_28px_rgba(0,0,0,0.18)] transition duration-300 ease-out group-hover:-translate-y-1 group-hover:border-primary/45 group-hover:bg-white/[0.095] group-active:translate-y-0 group-active:bg-primary/[0.16] sm:px-6 sm:py-7 ${
                         selectedIndex === index
-                          ? "border-primary/45 bg-primary/[0.14]"
-                          : "border-white/10 bg-white/[0.035]"
+                          ? "border-primary/70 bg-primary/[0.22] shadow-[0_12px_30px_rgba(0,0,0,0.24)]"
+                          : "border-white/18 bg-white/[0.06]"
                       }`}
                     >
-                      <span className="flex h-full min-h-24 items-end justify-between gap-4 sm:min-h-32">
+                      <span className="flex h-full min-h-28 items-end justify-between gap-4 sm:min-h-32">
                         <span className="text-3xl font-semibold leading-tight sm:text-5xl">
                           {answer.label}
                         </span>
-                        <span className="mb-1 rounded-full border border-primary/20 bg-primary/[0.1] p-2 text-primary transition duration-500 group-hover:translate-x-0.5 group-hover:bg-primary/[0.16]">
-                          <ArrowRight className="size-4 shrink-0" />
+                        <span
+                          className={`mb-1 rounded-full border p-2.5 transition duration-300 group-hover:translate-x-0.5 ${
+                            selectedIndex === index
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-primary/35 bg-primary/[0.16] text-primary group-hover:bg-primary/[0.24]"
+                          }`}
+                        >
+                          <ArrowRight className="size-4.5 shrink-0" />
                         </span>
                       </span>
                     </span>

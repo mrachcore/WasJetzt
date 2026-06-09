@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     ".tmp-edge-codex/**",
     "out/**",
     "build/**",
+    ".agents/**",
+    ".impeccable/**",
     "next-env.d.ts",
   ]),
 ]);

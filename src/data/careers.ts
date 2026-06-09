@@ -3518,7 +3518,7 @@ export const quizQuestions = [
   {
     id: "after-day",
     scene: "Du gehst nach Hause. Im Kopf bleibt noch ein Bild vom Tag hängen.",
-    prompt: "Welches Bild waere eher okay?",
+    prompt: "Welches Bild wäre eher okay?",
     answers: [
       {
         label: "Etwas ist fertig",

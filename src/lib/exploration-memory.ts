@@ -517,7 +517,7 @@ export function seedExplorationProfile(seed: ExplorationSeed) {
         "fachkraft-lagerlogistik",
       ],
       selectedFilters: ["ruhe", "struktur"],
-      clickedPathways: ["Wenn dir daran eher die Ruhe gefÃ¤llt"],
+      clickedPathways: ["Wenn dir daran eher die Ruhe gefällt"],
       clickedSituations: ["Wenn Menschen dich schnell leer machen"],
       tendencies: {
         drinnen: 1.7,
@@ -531,7 +531,7 @@ export function seedExplorationProfile(seed: ExplorationSeed) {
       savedCareers: ["elektroniker"],
       comparedCareers: ["elektroniker", "tischler"],
       selectedFilters: ["bewegung"],
-      clickedPathways: ["Wenn dir daran eher das Sichtbare gefÃ¤llt"],
+      clickedPathways: ["Wenn dir daran eher das Sichtbare gefällt"],
       clickedSituations: ["Wenn du am Ende vom Tag sehen willst, dass etwas fertig ist"],
       tendencies: {
         bewegung: 4.4,
@@ -549,7 +549,7 @@ export function seedExplorationProfile(seed: ExplorationSeed) {
       savedCareers: ["notfallsanitaeter"],
       comparedCareers: ["pflegefachkraft", "notfallsanitaeter"],
       selectedFilters: ["echtes", "menschen"],
-      clickedPathways: ["Wenn dir daran eher die NÃ¤he gefÃ¤llt"],
+      clickedPathways: ["Wenn dir daran eher die Nähe gefällt"],
       clickedSituations: ["Wenn du etwas willst, das nicht komplett sinnlos wirkt"],
       tendencies: {
         direkt: 4.1,
