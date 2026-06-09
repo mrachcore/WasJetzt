@@ -704,7 +704,12 @@ function OftenConfusedSection({
             <div>
               <p className="text-sm text-primary/80">Wirkt manchmal nah dran</p>
               <h3 className="mt-3 text-xl font-semibold leading-tight">
-                {confusedCareer.title}
+                <Link
+                  className="rounded-sm transition duration-500 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary/55"
+                  href={`/careers/${confusedCareer.slug}`}
+                >
+                  {confusedCareer.title}
+                </Link>
               </h3>
               <p className="mt-4 text-sm leading-6 text-muted-foreground">
                 {confusedCareer.discoveryNote}
@@ -738,7 +743,16 @@ function OftenConfusedSection({
             >
               <div className="mb-7 max-w-2xl">
                 <p className="text-sm text-primary">
-                  {career.title} / {confusedCareer.title}
+                  <Link className="hover:text-primary" href={`/careers/${career.slug}`}>
+                    {career.title}
+                  </Link>{" "}
+                  /{" "}
+                  <Link
+                    className="hover:text-primary"
+                    href={`/careers/${confusedCareer.slug}`}
+                  >
+                    {confusedCareer.title}
+                  </Link>
                 </p>
                 <h3 className="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
                   Gleicher Moment. Andere Reaktion.

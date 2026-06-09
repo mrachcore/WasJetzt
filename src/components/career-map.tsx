@@ -261,7 +261,12 @@ export function CareerMap({ careers }: { careers: Career[] }) {
               <div>
                 <p className="text-xs text-primary/85">Gerade hier</p>
                 <h2 className="mt-1 text-2xl font-semibold leading-tight">
-                  {selectedCareer.title}
+                  <Link
+                    className="rounded-sm transition duration-500 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary/55"
+                    href={`/careers/${selectedCareer.slug}`}
+                  >
+                    {selectedCareer.title}
+                  </Link>
                 </h2>
               </div>
             </div>

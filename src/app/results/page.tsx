@@ -238,7 +238,7 @@ export default function ResultsPage() {
 
         <section className="mt-14 sm:mt-18">
           <div className="mb-8 max-w-2xl">
-            <p className="text-sm text-primary">Berufe oeffnen</p>
+            <p className="text-sm text-primary">Berufe öffnen</p>
             <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">
               Professionen, die zu diesen Arbeitstagen passen.
             </h2>

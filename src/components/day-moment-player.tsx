@@ -124,7 +124,12 @@ export function DayMomentPlayer({
               compact ? "text-lg" : "text-2xl sm:text-3xl",
             )}
           >
-            {career.title}
+            <Link
+              className="rounded-sm transition duration-500 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary/55"
+              href={`/careers/${career.slug}`}
+            >
+              {career.title}
+            </Link>
           </h3>
         </div>
       ) : null}

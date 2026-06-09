@@ -3263,7 +3263,7 @@ export const quizQuestions = [
   {
     id: "new-room",
     scene: "Du kommst irgendwo neu rein. Es ist kurz still, dann passiert alles auf einmal.",
-    prompt: "Was faellt dir zuerst auf?",
+    prompt: "Was fällt dir zuerst auf?",
     answers: [
       {
         label: "Die Menschen",
@@ -3306,7 +3306,7 @@ export const quizQuestions = [
   {
     id: "fixed",
     scene: "Etwas funktioniert ploetzlich wieder. Einen Moment lang ist alles leichter.",
-    prompt: "Was fuehlt sich besser an?",
+    prompt: "Was fühlt sich besser an?",
     answers: [
       {
         label: "Endlich Ruhe",
@@ -3346,7 +3346,7 @@ export const quizQuestions = [
   },
   {
     id: "long-afternoon",
-    scene: "Der Nachmittag zieht sich. Niemand sagt genau, was als Naechstes passiert.",
+    scene: "Der Nachmittag zieht sich. Niemand sagt genau, was als N?chstes passiert.",
     prompt: "Was macht dich eher unruhig?",
     answers: [
       {
@@ -3389,7 +3389,7 @@ export const quizQuestions = [
   },
   {
     id: "small-mess",
-    scene: "Vor dir liegt ein kleines Durcheinander. Nicht schlimm, aber es stoert.",
+    scene: "Vor dir liegt ein kleines Durcheinander. Nicht schlimm, aber es stört.",
     prompt: "Was willst du zuerst machen?",
     answers: [
       {
@@ -3435,7 +3435,7 @@ export const quizQuestions = [
     prompt: "Was passiert eher in deinem Kopf?",
     answers: [
       {
-        label: "Ich will es pruefen",
+        label: "Ich will es prüfen",
         signals: {
           focus: 3,
           problem_solving: 3,
@@ -3453,7 +3453,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Ich will es schoener machen",
+        label: "Ich will es schöner machen",
         signals: {
           creative: 3,
           visible_results: 2,
@@ -3475,7 +3475,7 @@ export const quizQuestions = [
   {
     id: "someone-needs-you",
     scene: "Jemand steht neben dir und braucht gerade wirklich eine Antwort.",
-    prompt: "Was fuehlt sich natuerlicher an?",
+    prompt: "Was fühlt sich natürlicher an?",
     answers: [
       {
         label: "Ruhig da bleiben",
@@ -3496,7 +3496,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Praktisch loesen",
+        label: "Praktisch lösen",
         signals: {
           hands_on: 3,
           problem_solving: 3,
@@ -3517,7 +3517,7 @@ export const quizQuestions = [
   },
   {
     id: "after-day",
-    scene: "Du gehst nach Hause. Im Kopf bleibt noch ein Bild vom Tag haengen.",
+    scene: "Du gehst nach Hause. Im Kopf bleibt noch ein Bild vom Tag hängen.",
     prompt: "Welches Bild waere eher okay?",
     answers: [
       {

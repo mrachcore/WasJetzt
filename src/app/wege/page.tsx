@@ -238,11 +238,11 @@ const searchIntentGroups = [
       "chaos nervt mich",
       "ich brauche struktur",
       "klare abläufe",
-      "klare ablaeufe",
+      "klare abläufe",
       "nicht ständig reagieren",
       "nicht staendig reagieren",
     ],
-    tokens: ["chaos", "struktur", "ablaeufe", "ordnung"],
+    tokens: ["chaos", "struktur", "abläufe", "ordnung"],
     slugs: [
       "fachkraft-lagerlogistik",
       "kaufmann-bueromanagement",
@@ -253,7 +253,7 @@ const searchIntentGroups = [
   },
   {
     id: "hands",
-    phrases: ["etwas mit händen", "etwas mit haenden", "mit den händen", "praktisch arbeiten"],
+    phrases: ["etwas mit händen", "etwas mit händen", "mit den händen", "praktisch arbeiten"],
     tokens: ["haende", "handwerk", "praktisch", "werkzeug"],
     slugs: [
       "elektroniker",
@@ -645,7 +645,7 @@ function CareerExplorerCard({
       )}
     >
       <Link
-        aria-label={`${career.title} oeffnen`}
+        aria-label={`${career.title} öffnen`}
         className="absolute inset-0 z-0"
         href={`/careers/${career.slug}`}
       />
@@ -656,8 +656,13 @@ function CareerExplorerCard({
               <Badge key={tag}>{tag}</Badge>
             ))}
           </div>
-          <h2 className="text-2xl font-semibold leading-tight transition duration-500 group-hover:text-primary">
-            {career.title}
+          <h2 className="text-2xl font-semibold leading-tight">
+            <Link
+              className="pointer-events-auto rounded-sm transition duration-500 group-hover:text-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary/55"
+              href={`/careers/${career.slug}`}
+            >
+              {career.title}
+            </Link>
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
             {career.short}
@@ -679,7 +684,7 @@ function CareerExplorerCard({
             onClick={onCompare}
             type="button"
           >
-            {compareSelected ? "Ausgewaehlt" : "Vergleichen"}
+            {compareSelected ? "Ausgewählt" : "Vergleichen"}
           </button>
           <SaveCareerButton
             compact
@@ -695,7 +700,7 @@ function CareerExplorerCard({
           className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.1] px-4 py-2 text-sm text-primary transition duration-500 hover:-translate-y-0.5 hover:bg-primary/[0.16]"
           href={`/careers/${career.slug}`}
         >
-          Beruf oeffnen
+          Beruf öffnen
           <ArrowRight className="size-4" />
         </Link>
         <Link
@@ -730,7 +735,7 @@ function CompareBar({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-medium text-foreground">
-              {count === 1 ? "Noch einen Beruf waehlen" : `${count} Berufe`}
+              {count === 1 ? "Noch einen Beruf wählen" : `${count} Berufe`}
             </p>
             {notice ? (
               <p className="mt-1 text-xs text-muted-foreground">{notice}</p>
@@ -757,7 +762,7 @@ function CompareBar({
               onClick={onClear}
               type="button"
             >
-              Zurueck
+              Zurück
             </button>
           </div>
         </div>
@@ -780,11 +785,11 @@ function CompareDialog({
           <div>
             <p className="text-sm text-primary">Vergleichen</p>
             <h2 className="mt-2 text-3xl font-semibold leading-tight sm:text-4xl">
-              Was fuehlt sich anders an?
+              Was fühlt sich anders an?
             </h2>
           </div>
           <button
-            aria-label="Vergleich schliessen"
+            aria-label="Vergleich schließen"
             className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] p-2.5 text-muted-foreground transition hover:bg-white/[0.08] hover:text-foreground"
             onClick={onClose}
             type="button"
@@ -800,7 +805,12 @@ function CompareDialog({
               key={`compare-${career.slug}`}
             >
               <h3 className="text-xl font-semibold leading-tight">
-                {career.title}
+                <Link
+                  className="rounded-sm transition duration-500 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary/55"
+                  href={`/careers/${career.slug}`}
+                >
+                  {career.title}
+                </Link>
               </h3>
               <div className="mt-4 space-y-3">
                 {career.realDifferences.slice(0, 3).map((difference) => (
@@ -817,7 +827,7 @@ function CompareDialog({
                   className="rounded-full border border-primary/20 bg-primary/[0.1] px-3.5 py-2 text-sm text-primary transition duration-500 hover:bg-primary/[0.16]"
                   href={`/careers/${career.slug}`}
                 >
-                  Oeffnen
+                  öffnen
                 </Link>
                 <Link
                   className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-sm text-muted-foreground transition duration-500 hover:bg-white/[0.08] hover:text-foreground"

@@ -9,7 +9,7 @@ import { careers } from "@/data/careers";
 export const metadata: Metadata = {
   title: "Karte",
   description:
-    "Eine Karte, auf der sich Berufe nach Alltag, Naehe, Bewegung und Struktur verteilen.",
+    "Eine Karte, auf der sich Berufe nach Alltag, Nähe, Bewegung und Struktur verteilen.",
 };
 
 export default function KartePage() {
@@ -22,7 +22,7 @@ export default function KartePage() {
             Berufe auf der Karte.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Waehle einen Beruf, fuehle kurz den Arbeitstag oder oeffne die Seite.
+            Wähle einen Beruf, fühle kurz den Arbeitstag oder öffne die Seite.
           </p>
         </div>
 

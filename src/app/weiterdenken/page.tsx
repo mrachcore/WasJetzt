@@ -60,7 +60,7 @@ export default function SavedCareersPage() {
             Gemerkte Berufe.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Ein ruhiger Ort fuer das, was du spaeter nochmal ansehen willst.
+            Ein ruhiger Ort für das, was du später nochmal ansehen willst.
           </p>
         </div>
 
@@ -79,7 +79,12 @@ export default function SavedCareersPage() {
               >
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                   <h2 className="text-2xl font-semibold leading-tight">
-                    {career.title}
+                    <Link
+                      className="rounded-sm transition duration-500 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary/55"
+                      href={`/careers/${career.slug}`}
+                    >
+                      {career.title}
+                    </Link>
                   </h2>
                   <SaveCareerButton removeAction slug={career.slug} />
                 </div>
@@ -98,7 +103,7 @@ export default function SavedCareersPage() {
                     className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3.5 py-2 text-sm text-foreground/85 transition duration-500 hover:border-primary/25 hover:text-primary"
                     href={`/careers/${career.slug}`}
                   >
-                    Oeffnen
+                    Öffnen
                     <ArrowRight className="size-4 text-primary" />
                   </Link>
                   <Link
