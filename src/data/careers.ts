@@ -3262,11 +3262,11 @@ export function getSituationsForCareer(slug: string) {
 export const quizQuestions = [
   {
     id: "new-room",
-    scene: "Du kommst irgendwo neu rein. Es ist kurz still, dann passiert alles auf einmal.",
+    scene: "Du kommst irgendwo neu rein. Jacken, Stimmen, Sachen liegen rum.",
     prompt: "Was fällt dir zuerst auf?",
     answers: [
       {
-        label: "Die Menschen",
+        label: "wer hier wie tickt",
         signals: {
           people: 3,
           service: 2,
@@ -3284,7 +3284,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Was hier los ist",
+        label: "was hier gerade schiefläuft",
         signals: {
           structure: 3,
           problem_solving: 2,
@@ -3305,11 +3305,11 @@ export const quizQuestions = [
   },
   {
     id: "fixed",
-    scene: "Etwas funktioniert ploetzlich wieder. Einen Moment lang ist alles leichter.",
-    prompt: "Was fühlt sich besser an?",
+    scene: "Etwas klappt plötzlich wieder. Der Raum atmet kurz aus.",
+    prompt: "Was bleibt bei dir hängen?",
     answers: [
       {
-        label: "Endlich Ruhe",
+        label: "das Problem ist weg",
         signals: {
           focus: 3,
           solitude: 2,
@@ -3326,7 +3326,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Jemand freut sich",
+        label: "jemand schaut erleichtert",
         signals: {
           people: 3,
           service: 3,
@@ -3346,11 +3346,11 @@ export const quizQuestions = [
   },
   {
     id: "long-afternoon",
-    scene: "Der Nachmittag zieht sich. Niemand sagt genau, was als N?chstes passiert.",
-    prompt: "Was macht dich eher unruhig?",
+    scene: "Ein Nachmittag zieht sich. Niemand sagt, was als Nächstes kommt.",
+    prompt: "Was nervt dich eher?",
     answers: [
       {
-        label: "Nichts zu tun",
+        label: "nur rumsitzen und warten",
         signals: {
           movement: 2,
           variety: 3,
@@ -3368,7 +3368,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Zu viel auf einmal",
+        label: "keinen klaren Plan haben",
         signals: {
           structure: 3,
           focus: 2,
@@ -3389,11 +3389,11 @@ export const quizQuestions = [
   },
   {
     id: "small-mess",
-    scene: "Vor dir liegt ein kleines Durcheinander. Nicht schlimm, aber es stört.",
-    prompt: "Was willst du zuerst machen?",
+    scene: "Vor dir liegt kleines Chaos. Nicht schlimm, aber es stört.",
+    prompt: "Was machst du eher?",
     answers: [
       {
-        label: "Sortieren",
+        label: "kurz sortieren, dann los",
         signals: {
           structure: 3,
           routine: 2,
@@ -3410,7 +3410,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Anpacken",
+        label: "anfassen und ausprobieren",
         signals: {
           visible_results: 3,
           hands_on: 3,
@@ -3431,11 +3431,11 @@ export const quizQuestions = [
   },
   {
     id: "quiet-detail",
-    scene: "Jemand sagt: Passt schon. Du siehst aber, dass etwas nicht ganz stimmt.",
-    prompt: "Was passiert eher in deinem Kopf?",
+    scene: "Jemand sagt: passt schon. Du siehst eine Stelle, die nicht stimmt.",
+    prompt: "Was zieht dich eher rein?",
     answers: [
       {
-        label: "Ich will es prüfen",
+        label: "rausfinden, warum es hakt",
         signals: {
           focus: 3,
           problem_solving: 3,
@@ -3453,7 +3453,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Ich will es schöner machen",
+        label: "etwas sichtbar besser machen",
         signals: {
           creative: 3,
           visible_results: 2,
@@ -3474,11 +3474,11 @@ export const quizQuestions = [
   },
   {
     id: "someone-needs-you",
-    scene: "Jemand steht neben dir und braucht gerade wirklich eine Antwort.",
-    prompt: "Was fühlt sich natürlicher an?",
+    scene: "Jemand steht vor dir und braucht jetzt eine Antwort.",
+    prompt: "Was geht schneller bei dir?",
     answers: [
       {
-        label: "Ruhig da bleiben",
+        label: "ruhig bleiben und zuhören",
         signals: {
           people: 3,
           service: 2,
@@ -3496,7 +3496,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Praktisch lösen",
+        label: "praktisch helfen, Schritt für Schritt",
         signals: {
           hands_on: 3,
           problem_solving: 3,
@@ -3517,11 +3517,11 @@ export const quizQuestions = [
   },
   {
     id: "after-day",
-    scene: "Du gehst nach Hause. Im Kopf bleibt noch ein Bild vom Tag hängen.",
-    prompt: "Welches Bild wäre eher okay?",
+    scene: "Du gehst nach Hause. Ein Bild vom Tag bleibt hängen.",
+    prompt: "Was wäre eher ein guter Tag?",
     answers: [
       {
-        label: "Etwas ist fertig",
+        label: "etwas ist sichtbar fertig",
         signals: {
           visible_results: 3,
           hands_on: 3,
@@ -3540,7 +3540,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "Etwas ist passiert",
+        label: "es war Bewegung drin",
         signals: {
           variety: 3,
           movement: 2,

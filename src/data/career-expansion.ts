@@ -26,11 +26,11 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die draußen stehen können und trotzdem millimetergenau denken.",
     atmosphere:
-      "Morgens kalte Luft, Stativ, Warnweste, Bodenpunkte, Baustellenlaerm und Zahlen, die später echte Grenzen werden.",
+      "Morgens kalte Luft, Stativ, Warnweste, Bodenpunkte, Baustellenlärm und Zahlen, die später echte Grenzen werden.",
     secretlyLike:
       "Wenn ein Punkt endlich stimmt und damit ein ganzer Plan ruhiger wird.",
     annoys:
-      "Wetter, Verkehr, unklare Pläne, schweres Geraet und Menschen, die Messpunkte für Deko halten.",
+      "Wetter, Verkehr, unklare Pläne, schweres Gerät und Menschen, die Messpunkte für Deko halten.",
     comfortableFor:
       "Menschen, die draußen arbeiten wollen, aber nicht einfach nur draußen sein wollen.",
     color: "from-[#9fb6a5]/28 to-[#24221b]/30",
@@ -41,7 +41,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     observations: [
       "Du merkst, dass ein paar Zentimeter sehr real werden können.",
       "Manche Tage fühlen sich nach Baustelle an, obwohl du vor allem misst.",
-      "Draußen arbeiten heisst hier nicht weniger denken.",
+      "Draußen arbeiten heißt hier nicht weniger denken.",
     ],
     emotionalPathways: [
       {
@@ -56,16 +56,16 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
       {
         prompt: "Wenn du die Genauigkeit magst, aber drinnen",
-        note: "Praezision bleibt, das Wetter nicht.",
+        note: "Präzision bleibt, das Wetter nicht.",
         slugs: ["zahntechniker", "technischer-produktdesigner"],
       },
     ],
     whyItMightFit:
       "Wenn du gern konkret arbeitest und es dich reizt, wenn ein unscheinbarer Punkt später für viele wichtig ist.",
     typicalTuesday: [
-      { time: "Morgens", text: "Geraet laden, Plan prüfen, raus zur Baustelle." },
+      { time: "Morgens", text: "Gerät laden, Plan prüfen, raus zur Baustelle." },
       { time: "Vor Ort", text: "Stativ aufbauen und merken, dass genau hier jemand geparkt hat." },
-      { time: "Mittags", text: "Messpunkte sichern, Daten kontrollieren, kurz die Finger waermen." },
+      { time: "Mittags", text: "Messpunkte sichern, Daten kontrollieren, kurz die Finger wärmen." },
       { time: "Nachmittags", text: "Zurück übertragen, Abweichung suchen, nochmal rechnen." },
       { time: "Vor Schluss", text: "Daten ablegen, damit morgen niemand am falschen Punkt beginnt." },
     ],
@@ -79,9 +79,9 @@ export const careerExpansionEntries: CareerEntry[] = [
     atmosphere:
       "Nasser Waldboden, Motorsäge, Schutzkleidung, Wege, Holz, Wetter und Entscheidungen, die erst später sichtbar werden.",
     secretlyLike:
-      "Wenn du siehst, dass ein Stueck Wald wieder Platz, Licht oder Ordnung bekommt.",
+      "Wenn du siehst, dass ein Stück Wald wieder Platz, Licht oder Ordnung bekommt.",
     annoys:
-      "Kaelte, Regen, schwere Arbeit, Gefahr und romantische Sätze von Menschen, die den Wald nur sonntags sehen.",
+      "Kälte, Regen, schwere Arbeit, Gefahr und romantische Sätze von Menschen, die den Wald nur sonntags sehen.",
     comfortableFor:
       "Menschen, die draußen nicht sofort weich werden und mit Werkzeug respektvoll umgehen.",
     color: "from-[#8faa82]/28 to-[#24221b]/30",
@@ -97,7 +97,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     emotionalPathways: [
       {
         prompt: "Wenn dir daran die Natur gefällt",
-        note: "Auch draußen, aber technischer und staedtischer.",
+        note: "Auch draußen, aber technischer und städtischer.",
         slugs: ["umwelttechnologe-abwasser", "vermessungstechniker"],
       },
       {
@@ -114,34 +114,34 @@ export const careerExpansionEntries: CareerEntry[] = [
     whyItMightFit:
       "Wenn du echte Natur näher findest als saubere Naturbilder und mit anstrengenden Tagen leben kannst.",
     typicalTuesday: [
-      { time: "Frueh", text: "Wetter checken, Ausruestung an, raus." },
+      { time: "Früh", text: "Wetter checken, Ausrüstung an, raus." },
       { time: "Im Bestand", text: "Schauen, was stehen bleibt und was nicht." },
       { time: "Vormittags", text: "Sägen, ziehen, sichern, Abstand halten." },
       { time: "Nachmittags", text: "Wege freimachen, Werkzeug prüfen, Holz sortieren." },
-      { time: "Am Ende", text: "Muede Beine, dreckige Kleidung, ein Waldstueck wirkt anders." },
+      { time: "Am Ende", text: "Müde Beine, dreckige Kleidung, ein Waldstück wirkt anders." },
     ],
   },
   {
     slug: "hoerakustiker",
-    title: "Hoerakustiker",
+    title: "Hörakustiker",
     searchKeywords: ["hören", "akustik", "gesundheit", "technik"],
     short:
       "Für Leute, die Technik mögen, aber merken wollen, was sie im Leben eines Menschen verändert.",
     atmosphere:
-      "Kleine Geraete, ruhige Gespräche, Hoertests, feine Einstellungen und der Moment, wenn jemand etwas wieder wahrnimmt.",
+      "Kleine Geräte, ruhige Gespräche, Hörtests, feine Einstellungen und der Moment, wenn jemand etwas wieder wahrnimmt.",
     secretlyLike:
-      "Wenn Technik ploetzlich nicht technisch wirkt, sondern wie Erleichterung.",
+      "Wenn Technik plötzlich nicht technisch wirkt, sondern wie Erleichterung.",
     annoys:
       "Fummelige Teile, Geduldsschleifen, schwierige Erwartungen und Menschen, denen Hören peinlich ist.",
     comfortableFor:
       "Menschen, die genau arbeiten können und mit Unsicherheit freundlich umgehen.",
     color: "from-[#a7b9aa]/28 to-[#24221b]/30",
-    tags: ["technisch", "nah", "praezise"],
+    tags: ["technisch", "nah", "präzise"],
     discoveryNote:
       "Gesundheitsnah, aber nicht Klinik. Handwerklich, aber sehr fein.",
     discoveryGroup: "Wenn kleine Technik viel verändert",
     observations: [
-      "Du lernst, dass ein winziges Geraet einen Raum verändern kann.",
+      "Du lernst, dass ein winziges Gerät einen Raum verändern kann.",
       "Viele Gespräche gehen nicht nur ums Hören, sondern ums Älterwerden.",
       "Feine Einstellungen brauchen mehr Geduld als große Gesten.",
     ],
@@ -165,8 +165,8 @@ export const careerExpansionEntries: CareerEntry[] = [
     whyItMightFit:
       "Wenn du technische Genauigkeit magst und trotzdem nicht vergessen willst, für wen du sie einstellst.",
     typicalTuesday: [
-      { time: "Morgens", text: "Geraete prüfen, Termine ansehen, Ohrpassstuecke sortieren." },
-      { time: "Vormittags", text: "Hoertest, leise Erklaerung, nochmal nachfragen." },
+      { time: "Morgens", text: "Geräte prüfen, Termine ansehen, Ohrpassstücke sortieren." },
+      { time: "Vormittags", text: "Hörtest, leise Erklärung, nochmal nachfragen." },
       { time: "Mittags", text: "Ein kleines Teil passt nicht ganz." },
       { time: "Nachmittags", text: "Feineinstellung. Ein Klick macht den Raum anders." },
       { time: "Vor Schluss", text: "Dokumentieren, reinigen, für morgen bereitlegen." },
@@ -174,7 +174,7 @@ export const careerExpansionEntries: CareerEntry[] = [
   },
   {
     slug: "orthopaedietechnik-mechaniker",
-    title: "Orthopaedietechnik-Mechaniker",
+    title: "Orthopädietechnik-Mechaniker",
     searchKeywords: ["orthopaedie", "prothese", "technik", "gesundheit", "handwerk"],
     short:
       "Für Leute, die mit Material arbeiten wollen und dabei nie vergessen, dass es an einem Menschen landet.",
@@ -193,8 +193,8 @@ export const careerExpansionEntries: CareerEntry[] = [
     discoveryGroup: "Wenn Handwerk direkt am Menschen landet",
     observations: [
       "Du merkst, dass ein Millimeter am Körper anders zählt.",
-      "Nicht jede Loesung sieht groß aus. Manche laufen einfach besser mit.",
-      "Werkstattarbeit wird ploetzlich sehr persoenlich.",
+      "Nicht jede Lösung sieht groß aus. Manche laufen einfach besser mit.",
+      "Werkstattarbeit wird plötzlich sehr persönlich.",
     ],
     emotionalPathways: [
       {
@@ -209,7 +209,7 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
       {
         prompt: "Wenn du Material ohne Menschennähe willst",
-        note: "Praezision bleibt, Abstand wird größer.",
+        note: "Präzision bleibt, Abstand wird größer.",
         slugs: ["werkzeugmechaniker", "tischler"],
       },
     ],
@@ -220,7 +220,7 @@ export const careerExpansionEntries: CareerEntry[] = [
       { time: "Werkstatt", text: "Schleifen, anpassen, nochmal anhalten." },
       { time: "Anprobe", text: "Ein Druckpunkt verändert den ganzen Plan." },
       { time: "Nachmittags", text: "Nacharbeiten, Kante weicher machen, Gurt neu setzen." },
-      { time: "Am Ende", text: "Das Teil sieht unspektakulaer aus. Für jemanden ist es viel." },
+      { time: "Am Ende", text: "Das Teil sieht unspektakulär aus. Für jemanden ist es viel." },
     ],
   },
   {
@@ -230,13 +230,13 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die ruhig genau bleiben können, während kleine Abweichungen alles verändern.",
     atmosphere:
-      "Pipetten, Glas, Etiketten, Schutzbrille, Protokolle, Gerueche und der Respekt vor Dingen, die man nicht einfach anfassen sollte.",
+      "Pipetten, Glas, Etiketten, Schutzbrille, Protokolle, Gerüche und der Respekt vor Dingen, die man nicht einfach anfassen sollte.",
     secretlyLike:
-      "Wenn ein Ergebnis endlich sauber aussieht und nicht nur ungefaehr stimmt.",
+      "Wenn ein Ergebnis endlich sauber aussieht und nicht nur ungefähr stimmt.",
     annoys:
-      "Wartezeiten, Wiederholungen, strenge Vorschriften und Fehler, die man erst spaet bemerkt.",
+      "Wartezeiten, Wiederholungen, strenge Vorschriften und Fehler, die man erst spät bemerkt.",
     comfortableFor:
-      "Menschen, die Genauigkeit nicht langweilig finden und mit Routine sorgfaeltig bleiben.",
+      "Menschen, die Genauigkeit nicht langweilig finden und mit Routine sorgfältig bleiben.",
     color: "from-[#9fb6b2]/28 to-[#24221b]/30",
     tags: ["labor", "genau", "ruhig"],
     discoveryNote:
@@ -245,7 +245,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     observations: [
       "Du lernst, dass sauber arbeiten nicht nur ordentlich aussieht.",
       "Manchmal besteht der Tag aus Warten auf ein Ergebnis, das sehr wichtig ist.",
-      "Ein falsch beschriftetes Gefaess macht sofort alles anders.",
+      "Ein falsch beschriftetes Gefäß macht sofort alles anders.",
     ],
     emotionalPathways: [
       {
@@ -270,32 +270,32 @@ export const careerExpansionEntries: CareerEntry[] = [
       { time: "Morgens", text: "Proben annehmen, Etiketten prüfen, nichts verwechseln." },
       { time: "Vormittags", text: "Pipettieren, warten, protokollieren." },
       { time: "Mittags", text: "Ein Wert sieht komisch aus. Nochmal." },
-      { time: "Nachmittags", text: "Geraet reinigen, Ergebnis vergleichen, Abweichung suchen." },
+      { time: "Nachmittags", text: "Gerät reinigen, Ergebnis vergleichen, Abweichung suchen." },
       { time: "Vor Schluss", text: "Alles dokumentieren, damit morgen noch klar ist, was heute war." },
     ],
   },
   {
     slug: "lokfuehrer",
-    title: "Lokfuehrer",
+    title: "Lokführer",
     searchKeywords: ["bahn", "zug", "transport", "sicherheit"],
     short:
-      "Für Leute, die lange konzentriert bleiben können, während Verantwortung leise mitfaehrt.",
+      "Für Leute, die lange konzentriert bleiben können, während Verantwortung leise mitfährt.",
     atmosphere:
       "Führerstand, Signale, Fahrplan, Strecke, Funk, Dunkelheit morgens und der Blick, der immer wieder nach vorne geht.",
     secretlyLike:
       "Wenn ein schwerer Zug ruhig durch den Tag kommt.",
     annoys:
-      "Schichten, Stoerungen, Verspaetungen, monotone Phasen und Verantwortung, die kaum jemand sieht.",
+      "Schichten, Störungen, Verspätungen, monotone Phasen und Verantwortung, die kaum jemand sieht.",
     comfortableFor:
       "Menschen, die allein arbeiten können und dabei nicht abschalten.",
     color: "from-[#9aa5ad]/28 to-[#24221b]/30",
     tags: ["transport", "verantwortung", "fokus"],
     discoveryNote:
       "Nicht nur Zug fahren. Eher lange Konzentration mit Menschen im Hintergrund.",
-    discoveryGroup: "Wenn Verantwortung leise mitfaehrt",
+    discoveryGroup: "Wenn Verantwortung leise mitfährt",
     observations: [
       "Du bist oft allein, aber nie ohne Verantwortung.",
-      "Routine darf hier nicht einschlaefern.",
+      "Routine darf hier nicht einschläfern.",
       "Ein Signal ist ein kleiner Moment mit großer Bedeutung.",
     ],
     emotionalPathways: [
@@ -318,10 +318,10 @@ export const careerExpansionEntries: CareerEntry[] = [
     whyItMightFit:
       "Wenn du Ruhe nicht mit Unaufmerksamkeit verwechselst und Verantwortung auch ohne Publikum ernst nimmst.",
     typicalTuesday: [
-      { time: "Frueh", text: "Dienstbeginn, Strecke, Fahrzeug, Unterlagen." },
-      { time: "Abfahrt", text: "Signal, Tuer, Funk, Blick nach vorn." },
+      { time: "Früh", text: "Dienstbeginn, Strecke, Fahrzeug, Unterlagen." },
+      { time: "Abfahrt", text: "Signal, Tür, Funk, Blick nach vorn." },
       { time: "Unterwegs", text: "Kilometer, Konzentration, nichts Dramatisches und genau deshalb wach bleiben." },
-      { time: "Bei Stoerung", text: "Ruhig bleiben, melden, warten, weiterdenken." },
+      { time: "Bei Störung", text: "Ruhig bleiben, melden, warten, weiterdenken." },
       { time: "Nach Dienst", text: "Der Zug steht. Die Anspannung merkt man erst später." },
     ],
   },
@@ -340,14 +340,14 @@ export const careerExpansionEntries: CareerEntry[] = [
     comfortableFor:
       "Menschen, die respektvoll praktisch sein können und schwierige Nähe aushalten.",
     color: "from-[#9d9a90]/28 to-[#24221b]/30",
-    tags: ["ruhig", "menschen", "wuerdevoll"],
+    tags: ["ruhig", "menschen", "würdevoll"],
     discoveryNote:
       "Kein dramatischer Beruf. Eher leise Verantwortung in sehr echten Momenten.",
     discoveryGroup: "Wenn Ruhe anderen Halt geben kann",
     observations: [
       "Du lernst, dass praktische Fragen auch in Trauer wichtig sind.",
       "Manche Sätze sagt man sehr langsam.",
-      "Wuerde entsteht oft durch Details, die kaum jemand benennt.",
+      "Würde entsteht oft durch Details, die kaum jemand benennt.",
     ],
     emotionalPathways: [
       {
@@ -356,7 +356,7 @@ export const careerExpansionEntries: CareerEntry[] = [
         slugs: ["medizinische-fachangestellte", "justizfachangestellter"],
       },
       {
-        prompt: "Wenn dir Gestaltung in Anlaessen gefällt",
+        prompt: "Wenn dir Gestaltung in Anlässen gefällt",
         note: "Mehr Farbe, weniger schwere Stille.",
         slugs: ["florist"],
       },
@@ -367,10 +367,10 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
     ],
     whyItMightFit:
-      "Wenn du in schweren Momenten weder fluechten noch groß auftreten musst.",
+      "Wenn du in schweren Momenten weder flüchten noch groß auftreten musst.",
     typicalTuesday: [
       { time: "Morgens", text: "Anrufe, Termine, Unterlagen, leise Stimmen." },
-      { time: "Vormittags", text: "Ein Gespräch, in dem jemand nicht weiss, was als Nächstes kommt." },
+      { time: "Vormittags", text: "Ein Gespräch, in dem jemand nicht weiß, was als Nächstes kommt." },
       { time: "Mittags", text: "Organisation, Wege, Abstimmungen." },
       { time: "Nachmittags", text: "Ein Detail muss stimmen, gerade weil niemand viel sagt." },
       { time: "Am Ende", text: "Der Tag war ruhig. Nicht leicht." },
@@ -383,7 +383,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die Karten nicht nur anschauen, sondern verstehen wollen, wie aus Daten Orientierung wird.",
     atmosphere:
-      "Bildschirme, Luftbilder, Koordinaten, Layer, Datenfehler und der Moment, wenn ein Raum ploetzlich lesbar wird.",
+      "Bildschirme, Luftbilder, Koordinaten, Layer, Datenfehler und der Moment, wenn ein Raum plötzlich lesbar wird.",
     secretlyLike:
       "Wenn viele unklare Punkte auf einer Karte endlich Sinn ergeben.",
     annoys:
@@ -403,7 +403,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     emotionalPathways: [
       {
         prompt: "Wenn dir Raum und Genauigkeit gefallen",
-        note: "Mehr draußen, mehr Geraet.",
+        note: "Mehr draußen, mehr Gerät.",
         slugs: ["vermessungstechniker", "bauzeichner"],
       },
       {
@@ -421,7 +421,7 @@ export const careerExpansionEntries: CareerEntry[] = [
       "Wenn du gern verstehst, wo Dinge liegen, und es dich stört, wenn Daten die Welt ungenau machen.",
     typicalTuesday: [
       { time: "Morgens", text: "Daten laden, Layer prüfen, Projekt öffnen." },
-      { time: "Vormittags", text: "Eine Flaeche passt nicht zu den Koordinaten." },
+      { time: "Vormittags", text: "Eine Fläche passt nicht zu den Koordinaten." },
       { time: "Mittags", text: "Luftbild, Tabelle, Karte. Irgendwo widerspricht sich etwas." },
       { time: "Nachmittags", text: "Korrigieren, exportieren, nochmal prüfen." },
       { time: "Vor Schluss", text: "Eine Karte sieht ruhig aus, weil du lange sortiert hast." },
@@ -440,15 +440,15 @@ export const careerExpansionEntries: CareerEntry[] = [
     annoys:
       "Winzige Abweichungen, lange Nacharbeit, harte Materialien und der Satz: fast reicht.",
     comfortableFor:
-      "Menschen, die Praezision ernst nehmen und nicht jeden Erfolg sofort sehen müssen.",
+      "Menschen, die Präzision ernst nehmen und nicht jeden Erfolg sofort sehen müssen.",
     color: "from-[#a6a28e]/28 to-[#24221b]/30",
-    tags: ["metall", "praezise", "werkstatt"],
+    tags: ["metall", "präzise", "werkstatt"],
     discoveryNote:
       "Nicht das Produkt selbst. Eher das Ding, das Produkte erst möglich macht.",
-    discoveryGroup: "Wenn Praezision wiederholbar werden muss",
+    discoveryGroup: "Wenn Präzision wiederholbar werden muss",
     observations: [
       "Du arbeitest oft an etwas, das andere später nur benutzen.",
-      "Ein kleines Mass entscheidet, ob vieles danach passt.",
+      "Ein kleines Maß entscheidet, ob vieles danach passt.",
       "Material hat hier Widerstand und Geduld.",
     ],
     emotionalPathways: [
@@ -458,8 +458,8 @@ export const careerExpansionEntries: CareerEntry[] = [
         slugs: ["industriemechaniker", "mechatroniker"],
       },
       {
-        prompt: "Wenn du mehr sichtbares Einzelstueck willst",
-        note: "Mehr Holz, Raum und Oberflaeche.",
+        prompt: "Wenn du mehr sichtbares Einzelstück willst",
+        note: "Mehr Holz, Raum und Oberfläche.",
         slugs: ["tischler"],
       },
       {
@@ -472,7 +472,7 @@ export const careerExpansionEntries: CareerEntry[] = [
       "Wenn du gern an Dingen arbeitest, deren Bedeutung erst später im Prozess sichtbar wird.",
     typicalTuesday: [
       { time: "Morgens", text: "Zeichnung lesen, Material holen, Maschine vorbereiten." },
-      { time: "Vormittags", text: "Fraesen, messen, nochmal messen." },
+      { time: "Vormittags", text: "Fräsen, messen, nochmal messen." },
       { time: "Mittags", text: "Eine Kante stimmt fast. Fast reicht nicht." },
       { time: "Nachmittags", text: "Nacharbeiten, prüfen, einsetzen." },
       { time: "Am Ende", text: "Das Werkzeug sieht ruhig aus. Darin steckt der Tag." },
@@ -485,7 +485,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die praktische Technik mögen und kein Problem damit haben, wenn Arbeit nah am Alltag anderer passiert.",
     atmosphere:
-      "Keller, Baeder, Rohre, Wasser, Wärme, enge Stellen, Kundentermine und der Satz: seit gestern ist es kalt.",
+      "Keller, Bäder, Rohre, Wasser, Wärme, enge Stellen, Kundentermine und der Satz: seit gestern ist es kalt.",
     secretlyLike:
       "Wenn Wasser, Wärme oder Luft wieder dort sind, wo sie hingehören.",
     annoys:
@@ -510,7 +510,7 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
       {
         prompt: "Wenn du Versorgungssysteme spannend findest",
-        note: "Mehr oeffentliche Infrastruktur.",
+        note: "Mehr öffentliche Infrastruktur.",
         slugs: ["umwelttechnologe-abwasser"],
       },
       {
@@ -544,9 +544,9 @@ export const careerExpansionEntries: CareerEntry[] = [
     comfortableFor:
       "Menschen, die mit Händen und Auge arbeiten und Geduld für Vorbereitung haben.",
     color: "from-[#b0a79a]/28 to-[#24221b]/30",
-    tags: ["farbe", "oberflaeche", "genau"],
+    tags: ["farbe", "oberfläche", "genau"],
     discoveryNote:
-      "Nicht nur Farbe drauf. Viel Vorbereitung, Licht und feine Übergaenge.",
+      "Nicht nur Farbe drauf. Viel Vorbereitung, Licht und feine Übergänge.",
     discoveryGroup: "Wenn Oberflächen ehrlich sind",
     observations: [
       "Du siehst Kratzer, die andere erst nach deinem Hinweis sehen.",
@@ -566,14 +566,14 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
       {
         prompt: "Wenn du technische Fahrzeuge magst",
-        note: "Mehr Mechanik, weniger Oberflaeche.",
+        note: "Mehr Mechanik, weniger Oberfläche.",
         slugs: ["mechatroniker"],
       },
     ],
     whyItMightFit:
       "Wenn du gern sichtbar arbeitest und dich kleine Fehler in Oberflächen nicht loslassen.",
     typicalTuesday: [
-      { time: "Morgens", text: "Schaden ansehen, Flaeche vorbereiten, Licht prüfen." },
+      { time: "Morgens", text: "Schaden ansehen, Fläche vorbereiten, Licht prüfen." },
       { time: "Vormittags", text: "Schleifen, abkleben, nochmal reinigen." },
       { time: "Mittags", text: "Farbton wirkt fast richtig. Fast ist gefährlich." },
       { time: "Nachmittags", text: "Lackieren, warten, schauen." },
@@ -585,11 +585,11 @@ export const careerExpansionEntries: CareerEntry[] = [
     title: "Zahntechniker",
     searchKeywords: ["zahn", "labor", "prothese", "keramik", "gesundheit"],
     short:
-      "Für Leute, die extrem fein arbeiten wollen, ohne staendig direkt im Gespräch zu stehen.",
+      "Für Leute, die extrem fein arbeiten wollen, ohne ständig direkt im Gespräch zu stehen.",
     atmosphere:
       "Labor, Modelle, Keramik, Wachs, kleine Werkzeuge, Farben und Formen, die später in einem Mund funktionieren müssen.",
     secretlyLike:
-      "Wenn etwas winziges ploetzlich natürlich wirkt.",
+      "Wenn etwas winziges plötzlich natürlich wirkt.",
     annoys:
       "Fummelige Korrekturen, enge Termine, kleine Fehler und dass kaum jemand sieht, wie viel Arbeit drinsteckt.",
     comfortableFor:
@@ -611,7 +611,7 @@ export const careerExpansionEntries: CareerEntry[] = [
         slugs: ["hoerakustiker", "orthopaedietechnik-mechaniker"],
       },
       {
-        prompt: "Wenn du lieber Industrie-Praezision willst",
+        prompt: "Wenn du lieber Industrie-Präzision willst",
         note: "Größer, metallischer, weniger Körperbezug.",
         slugs: ["werkzeugmechaniker"],
       },
@@ -642,13 +642,13 @@ export const careerExpansionEntries: CareerEntry[] = [
     secretlyLike:
       "Wenn alles vorbereitet ist und im richtigen Moment da liegt.",
     annoys:
-      "Druck, lange Konzentration, Stehen, Notfaelle und dass Fehler hier wenig Raum haben.",
+      "Druck, lange Konzentration, Stehen, Notfälle und dass Fehler hier wenig Raum haben.",
     comfortableFor:
       "Menschen, die Struktur brauchen und mit medizinischer Nähe umgehen können.",
     color: "from-[#9fb7b1]/28 to-[#24221b]/30",
     tags: ["medizin", "struktur", "konzentration"],
     discoveryNote:
-      "Nah an Medizin, aber mit viel Vorbereitung, Sterilitaet und genauer Reihenfolge.",
+      "Nah an Medizin, aber mit viel Vorbereitung, Sterilität und genauer Reihenfolge.",
     discoveryGroup: "Wenn im ernsten Moment alles bereit sein muss",
     observations: [
       "Du merkst, wie viel Ruhe aus Vorbereitung entsteht.",
@@ -689,9 +689,9 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die saubere Prozesse mögen und Verantwortung lieber in Regeln, Anlagen und Chargen sehen.",
     atmosphere:
-      "Produktionsraeume, Schutzkleidung, Anlagen, Chargenprotokolle, Kontrollen und ein Ablauf, der nicht ungefaehr sein darf.",
+      "Produktionsräume, Schutzkleidung, Anlagen, Chargenprotokolle, Kontrollen und ein Ablauf, der nicht ungefähr sein darf.",
     secretlyLike:
-      "Wenn ein Prozess sauber durchlaeuft und alles nachvollziehbar bleibt.",
+      "Wenn ein Prozess sauber durchläuft und alles nachvollziehbar bleibt.",
     annoys:
       "Strenge Vorgaben, Dokumentation, Wiederholung und Stillstand, wenn eine Abweichung auftaucht.",
     comfortableFor:
@@ -728,7 +728,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     typicalTuesday: [
       { time: "Morgens", text: "Umziehen, Hygiene, Anlage checken." },
       { time: "Vormittags", text: "Charge starten, Werte beobachten." },
-      { time: "Mittags", text: "Eine Abweichung. Erst stoppen, dann klaeren." },
+      { time: "Mittags", text: "Eine Abweichung. Erst stoppen, dann klären." },
       { time: "Nachmittags", text: "Protokoll, Probe, Freigabe abwarten." },
       { time: "Vor Schluss", text: "Reinigen, dokumentieren, nichts offen lassen." },
     ],
@@ -740,20 +740,20 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die Infrastruktur spannend finden, auch wenn sie nicht sauber und sichtbar daherkommt.",
     atmosphere:
-      "Klaerbecken, Pumpen, Geruch, Wasserproben, Kontrollgaenge, Geraeusche und Technik, die eine Stadt still am Laufen haelt.",
+      "Klärbecken, Pumpen, Geruch, Wasserproben, Kontrollgänge, Geräusche und Technik, die eine Stadt still am Laufen hält.",
     secretlyLike:
       "Wenn Werte stimmen und man merkt: das System arbeitet.",
     annoys:
-      "Geruch, Wetter, Stoerungen, Dreck und dass kaum jemand diese Arbeit bemerkt.",
+      "Geruch, Wetter, Störungen, Dreck und dass kaum jemand diese Arbeit bemerkt.",
     comfortableFor:
       "Menschen, die technische Verantwortung draußen und drinnen aushalten.",
     color: "from-[#8fb2ad]/28 to-[#24221b]/30",
     tags: ["umwelt", "technik", "systeme"],
     discoveryNote:
-      "Umweltarbeit ohne romantischen Filter: Wasser, Anlage, Probe, Stoerung.",
+      "Umweltarbeit ohne romantischen Filter: Wasser, Anlage, Probe, Störung.",
     discoveryGroup: "Wenn unsichtbare Infrastruktur wichtig ist",
     observations: [
-      "Du merkst, wie viel Alltag unter der Oberflaeche passiert.",
+      "Du merkst, wie viel Alltag unter der Oberfläche passiert.",
       "Ein Wert auf dem Display kann wichtiger sein als ein voller Kalender.",
       "Saubere Umweltarbeit kann ziemlich dreckig anfangen.",
     ],
@@ -765,7 +765,7 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
       {
         prompt: "Wenn dir Versorgungstechnik liegt",
-        note: "Mehr Kundenkontakt und Gebaeudetechnik.",
+        note: "Mehr Kundenkontakt und Gebäudetechnik.",
         slugs: ["anlagenmechaniker-shk"],
       },
       {
@@ -777,11 +777,11 @@ export const careerExpansionEntries: CareerEntry[] = [
     whyItMightFit:
       "Wenn du Systeme ernst nimmst, die niemand sieht, solange sie funktionieren.",
     typicalTuesday: [
-      { time: "Morgens", text: "Rundgang, Werte, Geraeusche, Geruch." },
+      { time: "Morgens", text: "Rundgang, Werte, Geräusche, Geruch." },
       { time: "Vormittags", text: "Probe nehmen, Pumpe prüfen, etwas klingt anders." },
       { time: "Mittags", text: "Laborwert passt nicht. Nochmal schauen." },
-      { time: "Nachmittags", text: "Stoerung beheben, Anlage reinigen, Daten eintragen." },
-      { time: "Am Ende", text: "Das Wasser laeuft weiter. Genau darum ging es." },
+      { time: "Nachmittags", text: "Störung beheben, Anlage reinigen, Daten eintragen." },
+      { time: "Am Ende", text: "Das Wasser läuft weiter. Genau darum ging es." },
     ],
   },
   {
@@ -791,7 +791,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die Ideen nicht nur schön finden, sondern baubar machen wollen.",
     atmosphere:
-      "CAD, Skizzen, Maße, Bauteile, Varianten, Rückfragen und der Moment, in dem eine Form ploetzlich technisch Sinn ergibt.",
+      "CAD, Skizzen, Maße, Bauteile, Varianten, Rückfragen und der Moment, in dem eine Form plötzlich technisch Sinn ergibt.",
     secretlyLike:
       "Wenn ein Entwurf nicht nur gut aussieht, sondern auch funktionieren könnte.",
     annoys:
@@ -826,10 +826,10 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
     ],
     whyItMightFit:
-      "Wenn du gern zwischen Idee und Realitaet sitzt und beide Seiten ernst nimmst.",
+      "Wenn du gern zwischen Idee und Realität sitzt und beide Seiten ernst nimmst.",
     typicalTuesday: [
       { time: "Morgens", text: "Modell öffnen, Änderung lesen, kurz seufzen." },
-      { time: "Vormittags", text: "Kante verschieben, Mass prüfen, Kollision finden." },
+      { time: "Vormittags", text: "Kante verschieben, Maß prüfen, Kollision finden." },
       { time: "Mittags", text: "Das Teil sieht gut aus. Passt aber nicht." },
       { time: "Nachmittags", text: "Variante bauen, exportieren, Rückfrage beantworten." },
       { time: "Vor Schluss", text: "Ein Entwurf wird leiser, weil er endlich Sinn macht." },
@@ -842,7 +842,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die Ordnung, Fristen und Menschenkontakt in einem ernsten Rahmen aushalten.",
     atmosphere:
-      "Akten, Fristen, Schreiben, Flure im Gericht, wartende Menschen, klare Regeln und Sachverhalte, die nicht privat werden duerfen.",
+      "Akten, Fristen, Schreiben, Flure im Gericht, wartende Menschen, klare Regeln und Sachverhalte, die nicht privat werden dürfen.",
     secretlyLike:
       "Wenn ein komplizierter Vorgang endlich sauber im Ablauf liegt.",
     annoys:
@@ -850,12 +850,12 @@ export const careerExpansionEntries: CareerEntry[] = [
     comfortableFor:
       "Menschen, die freundlich sachlich bleiben und Verantwortung in Ordnung sehen.",
     color: "from-[#a5a194]/28 to-[#24221b]/30",
-    tags: ["oeffentlich", "struktur", "akten"],
+    tags: ["öffentlich", "struktur", "akten"],
     discoveryNote:
-      "Oeffentlicher Dienst, aber nicht beliebig. Regeln, Menschen und ernste Themen.",
+      "Öffentlicher Dienst, aber nicht beliebig. Regeln, Menschen und ernste Themen.",
     discoveryGroup: "Wenn Ordnung offiziell wird",
     observations: [
-      "Du lernst, dass ein falsches Datum echten Aerger machen kann.",
+      "Du lernst, dass ein falsches Datum echten Ärger machen kann.",
       "Menschen kommen oft angespannt, auch wenn es nur um ein Schreiben geht.",
       "Sachlich bleiben ist manchmal Arbeit.",
     ],
@@ -866,7 +866,7 @@ export const careerExpansionEntries: CareerEntry[] = [
         slugs: ["kaufmann-bueromanagement"],
       },
       {
-        prompt: "Wenn dir oeffentliche Verantwortung liegt",
+        prompt: "Wenn dir öffentliche Verantwortung liegt",
         note: "Mehr Draußen, mehr Sicherheit.",
         slugs: ["fachkraft-schutz-sicherheit"],
       },
@@ -882,18 +882,18 @@ export const careerExpansionEntries: CareerEntry[] = [
       { time: "Morgens", text: "Post, Akten, Fristen prüfen." },
       { time: "Vormittags", text: "Ein Anruf ist unruhig. Du bleibst sachlich." },
       { time: "Mittags", text: "Ein Datum passt nicht. Nochmal Akte." },
-      { time: "Nachmittags", text: "Schreiben raus, Vorgang weiter, n?chste Frist." },
+      { time: "Nachmittags", text: "Schreiben raus, Vorgang weiter, nächste Frist." },
       { time: "Am Ende", text: "Der Stapel ist kleiner. Nicht alles fühlt sich leicht an." },
     ],
   },
   {
     slug: "gebaeudereiniger",
-    title: "Gebaeudereiniger",
+    title: "Gebäudereiniger",
     searchKeywords: ["reinigung", "gebaeude", "sauberkeit", "glas"],
     short:
       "Für Leute, die sichtbare Arbeit mögen und damit leben können, dass andere sie oft erst bemerken, wenn sie fehlt.",
     atmosphere:
-      "Eimer, Maschinen, Glas, Boeden, fruehe Zeiten, leere Räume und Schmutz, der sehr konkret zeigt, was getan wurde.",
+      "Eimer, Maschinen, Glas, Böden, frühe Zeiten, leere Räume und Schmutz, der sehr konkret zeigt, was getan wurde.",
     secretlyLike:
       "Wenn ein Raum danach anders wirkt, ohne dass jemand lange darÜber redet.",
     annoys:
@@ -918,7 +918,7 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
       {
         prompt: "Wenn du mehr Technik willst",
-        note: "Mehr Anlage, weniger Flaeche.",
+        note: "Mehr Anlage, weniger Fläche.",
         slugs: ["anlagenmechaniker-shk"],
       },
       {
@@ -930,9 +930,9 @@ export const careerExpansionEntries: CareerEntry[] = [
     whyItMightFit:
       "Wenn du gern siehst, dass ein Ort nach dir anders ist, ohne daraus eine große Sache zu machen.",
     typicalTuesday: [
-      { time: "Frueh", text: "Schlüssel, Wagen, Plan, los." },
-      { time: "Vormittags", text: "Boeden, Glas, Ecken, die niemand sieht." },
-      { time: "Mittags", text: "Eine Maschine macht ein komisches Geraeusch." },
+      { time: "Früh", text: "Schlüssel, Wagen, Plan, los." },
+      { time: "Vormittags", text: "Böden, Glas, Ecken, die niemand sieht." },
+      { time: "Mittags", text: "Eine Maschine macht ein komisches Geräusch." },
       { time: "Nachmittags", text: "Noch ein Raum, noch ein Fleck, nochmal Wasser." },
       { time: "Am Ende", text: "Der Raum ist leerer im Kopf, weil er sauberer ist." },
     ],
@@ -944,7 +944,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     short:
       "Für Leute, die ruhig beobachten können, bevor eine Situation groß wird.",
     atmosphere:
-      "Eingaenge, Rundgaenge, Kameras, Veranstaltungen, Schlüssel, klare Regeln und Menschen, die Grenzen nicht immer mögen.",
+      "Eingänge, Rundgänge, Kameras, Veranstaltungen, Schlüssel, klare Regeln und Menschen, die Grenzen nicht immer mögen.",
     secretlyLike:
       "Wenn deine Anwesenheit reicht, damit etwas ruhig bleibt.",
     annoys:
@@ -963,7 +963,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     ],
     emotionalPathways: [
       {
-        prompt: "Wenn dir oeffentliche Verantwortung gefällt",
+        prompt: "Wenn dir öffentliche Verantwortung gefällt",
         note: "Mehr Akten, weniger Rundgang.",
         slugs: ["justizfachangestellter"],
       },
@@ -979,10 +979,10 @@ export const careerExpansionEntries: CareerEntry[] = [
       },
     ],
     whyItMightFit:
-      "Wenn du Situationen frueh wahrnimmst und Grenzen setzen kannst, ohne sofort hart zu werden.",
+      "Wenn du Situationen früh wahrnimmst und Grenzen setzen kannst, ohne sofort hart zu werden.",
     typicalTuesday: [
       { time: "Morgens", text: "Übergabe, Schlüssel, Rundgang." },
-      { time: "Vormittags", text: "Ein Blick bleibt zu lange an der Tuer." },
+      { time: "Vormittags", text: "Ein Blick bleibt zu lange an der Tür." },
       { time: "Mittags", text: "Kontrolle, kurzer Satz, weitergehen." },
       { time: "Abends", text: "Mehr Menschen, mehr Stimmung, gleicher Blick." },
       { time: "Nach Dienst", text: "Du merkst erst zuhause, wie wach du warst." },
@@ -993,11 +993,11 @@ export const careerExpansionEntries: CareerEntry[] = [
     title: "Medizinischer Technologe Laboratorium",
     searchKeywords: ["mtl", "medizin", "labor", "diagnostik", "blut"],
     short:
-      "Für Leute, die medizinische Verantwortung tragen wollen, ohne staendig am Bett zu stehen.",
+      "Für Leute, die medizinische Verantwortung tragen wollen, ohne ständig am Bett zu stehen.",
     atmosphere:
-      "Proben, Geraete, Blut, Werte, Kontrollen, Hygiene und die stille Frage, ob ein Ergebnis zu einem Menschen passt.",
+      "Proben, Geräte, Blut, Werte, Kontrollen, Hygiene und die stille Frage, ob ein Ergebnis zu einem Menschen passt.",
     secretlyLike:
-      "Wenn ein Wert endlich erklaert, warum etwas nicht stimmt.",
+      "Wenn ein Wert endlich erklärt, warum etwas nicht stimmt.",
     annoys:
       "Zeitdruck, heikle Proben, strenge Abläufe, Nachkontrollen und Verantwortung, die kaum sichtbar ist.",
     comfortableFor:
@@ -1005,7 +1005,7 @@ export const careerExpansionEntries: CareerEntry[] = [
     color: "from-[#9fb4b4]/28 to-[#24221b]/30",
     tags: ["labor", "medizin", "diagnostik"],
     discoveryNote:
-      "Medizinisch wichtig, aber oft hinter der Tuer: Probe, Wert, Kontrolle.",
+      "Medizinisch wichtig, aber oft hinter der Tür: Probe, Wert, Kontrolle.",
     discoveryGroup: "Wenn Werte zu Menschen gehören",
     observations: [
       "Du siehst selten den Menschen, aber die Probe gehört zu jemandem.",
@@ -1032,11 +1032,11 @@ export const careerExpansionEntries: CareerEntry[] = [
     whyItMightFit:
       "Wenn du medizinische Bedeutung ernst nimmst, aber in konzentrierter Laborarbeit klarer wirst.",
     typicalTuesday: [
-      { time: "Morgens", text: "Proben kommen rein. Erst Identitaet, dann Analyse." },
-      { time: "Vormittags", text: "Geraet laeuft, Kontrolle daneben." },
+      { time: "Morgens", text: "Proben kommen rein. Erst Identität, dann Analyse." },
+      { time: "Vormittags", text: "Gerät läuft, Kontrolle daneben." },
       { time: "Mittags", text: "Ein Wert passt nicht. Wiederholen." },
-      { time: "Nachmittags", text: "Befund raus, n?chste Probe, Handschuhe wechseln." },
-      { time: "Am Ende", text: "Viele Menschen waren heute nur als Roehrchen da." },
+      { time: "Nachmittags", text: "Befund raus, nächste Probe, Handschuhe wechseln." },
+      { time: "Am Ende", text: "Viele Menschen waren heute nur als Röhrchen da." },
     ],
   },
 ];
@@ -1113,14 +1113,14 @@ export const careerExpansionOftenConfusedWith: Record<string, string[]> = {
 export const careerExpansionRealDifferences: Record<string, string[]> = {
   vermessungstechniker: ["Draußen wird Genauigkeit zu Koordinaten.", "Ein kleiner Punkt kann später eine Grenze sein.", "Wetter und Millimeter gehören hier zusammen."],
   forstwirt: ["Natur ist hier schwer, nass und manchmal gefährlich.", "Man entscheidet mit Werkzeug, nicht nur mit Gefühl.", "Das Ergebnis sieht oft erst später nach Pflege aus."],
-  hoerakustiker: ["Technik wird hier sehr persoenlich.", "Ein kleiner Klick kann einen Raum anders machen.", "Beratung und Praezision passieren im selben Moment."],
+  hoerakustiker: ["Technik wird hier sehr persönlich.", "Ein kleiner Klick kann einen Raum anders machen.", "Beratung und Präzision passieren im selben Moment."],
   "orthopaedietechnik-mechaniker": ["Material muss an einem Körper funktionieren.", "Ein Druckpunkt kann den ganzen Plan verändern.", "Handwerk wird hier direkt alltagstauglich."],
-  chemielaborant: ["Kleine Abweichungen zählen mehr als große Gesten.", "Routine schuetzt vor Fehlern.", "Das Ergebnis ist oft eine Zahl, nicht ein fertiges Ding."],
-  lokfuehrer: ["Man ist oft allein und trotzdem für viele verantwortlich.", "Routine darf nicht einschlaefern.", "Der wichtigste Blick geht immer wieder nach vorn."],
-  bestattungsfachkraft: ["Praktische Ordnung kann in schweren Momenten Halt geben.", "Viele Sätze werden langsamer gesagt.", "Wuerde entsteht oft in leisen Details."],
+  chemielaborant: ["Kleine Abweichungen zählen mehr als große Gesten.", "Routine schützt vor Fehlern.", "Das Ergebnis ist oft eine Zahl, nicht ein fertiges Ding."],
+  lokfuehrer: ["Man ist oft allein und trotzdem für viele verantwortlich.", "Routine darf nicht einschläfern.", "Der wichtigste Blick geht immer wieder nach vorn."],
+  bestattungsfachkraft: ["Praktische Ordnung kann in schweren Momenten Halt geben.", "Viele Sätze werden langsamer gesagt.", "Würde entsteht oft in leisen Details."],
   geomatiker: ["Orte werden hier zu Daten, Layern und Entscheidungen.", "Eine Karte kann gut aussehen und trotzdem falsch sein.", "Raum wird sortiert, nicht nur angesehen."],
-  werkzeugmechaniker: ["Du baust oft das Werkzeug, nicht das sichtbare Endprodukt.", "Fast passend ist hier noch nicht passend.", "Praezision muss wiederholbar werden."],
-  "anlagenmechaniker-shk": ["Technik liegt mitten im Alltag anderer Menschen.", "Wasser oder Wärme fehlen sofort, wenn etwas nicht laeuft.", "Viele Loesungen beginnen in engen Kellern."],
+  werkzeugmechaniker: ["Du baust oft das Werkzeug, nicht das sichtbare Endprodukt.", "Fast passend ist hier noch nicht passend.", "Präzision muss wiederholbar werden."],
+  "anlagenmechaniker-shk": ["Technik liegt mitten im Alltag anderer Menschen.", "Wasser oder Wärme fehlen sofort, wenn etwas nicht läuft.", "Viele Lösungen beginnen in engen Kellern."],
   fahrzeuglackierer: ["Der eigentliche Lackmoment ist kurz; Vorbereitung trägt den Tag.", "Farbe stimmt erst im Licht.", "Eine gute Stelle soll später unauffällig wirken."],
   zahntechniker: ["Feines Handwerk soll später natürlich wirken.", "Man arbeitet nah am Körper, aber meist ohne Gespräch.", "Winzige Formen können sehr viel Geduld brauchen."],
   "operationstechnischer-assistent": ["Vorbereitung wird hier zu Ruhe im ernsten Moment.", "Ein Griff zur richtigen Zeit zählt.", "Der Ton bleibt oft leise, obwohl viel auf dem Spiel steht."],
@@ -1128,7 +1128,7 @@ export const careerExpansionRealDifferences: Record<string, string[]> = {
   "umwelttechnologe-abwasser": ["Umweltarbeit beginnt hier oft dreckig.", "Unsichtbare Infrastruktur bestimmt den Tag.", "Ein Wert am Display kann wichtiger sein als ein voller Kalender."],
   "technischer-produktdesigner": ["Ideen müssen hier baubar werden.", "Eine schöne Form kann technisch falsch sein.", "Kreativität hat Maße, Normen und Material."],
   justizfachangestellter: ["Ordnung wird hier offiziell.", "Ein Datum kann echte Folgen haben.", "Sachlich bleiben ist manchmal die eigentliche Arbeit."],
-  gebaeudereiniger: ["Das Ergebnis ist sofort sichtbar und oft schnell wieder gefaehrdet.", "Viele merken die Arbeit erst, wenn sie fehlt.", "Leere Räume können nach dir anders wirken."],
+  gebaeudereiniger: ["Das Ergebnis ist sofort sichtbar und oft schnell wieder gefährdet.", "Viele merken die Arbeit erst, wenn sie fehlt.", "Leere Räume können nach dir anders wirken."],
   "fachkraft-schutz-sicherheit": ["Aufmerksamkeit ist oft wichtiger als Eingreifen.", "Der beste Moment bleibt manchmal klein.", "Grenzen setzen kann freundlich und anstrengend zugleich sein."],
   "medizinischer-technologe-laboratorium": ["Der Mensch ist oft nur als Probe im Raum.", "Ein Wert kann den nächsten medizinischen Schritt verändern.", "Schnell sein darf nicht ungenau werden."],
 };
@@ -1142,40 +1142,40 @@ export const careerExpansionPracticalSignals: Record<string, string[]> = {
   lokfuehrer: ["Ausbildung", "Schicht möglich", "hohe Verantwortung"],
   bestattungsfachkraft: ["Ausbildung", "ruhiger Kontakt", "Organisation"],
   geomatiker: ["Ausbildung", "Geodaten", "viel Bildschirm"],
-  werkzeugmechaniker: ["Ausbildung", "Metall", "Praezision"],
+  werkzeugmechaniker: ["Ausbildung", "Metall", "Präzision"],
   "anlagenmechaniker-shk": ["Ausbildung", "unterwegs", "Versorgungstechnik"],
-  fahrzeuglackierer: ["Ausbildung", "Oberflaeche", "sichtbare Arbeit"],
+  fahrzeuglackierer: ["Ausbildung", "Oberfläche", "sichtbare Arbeit"],
   zahntechniker: ["Ausbildung", "Labor", "feine Handarbeit"],
   "operationstechnischer-assistent": ["Ausbildung", "OP", "klare Abläufe"],
   pharmakant: ["Ausbildung", "Produktion", "strenge Vorgaben"],
   "umwelttechnologe-abwasser": ["Ausbildung", "Infrastruktur", "Technik draußen"],
   "technischer-produktdesigner": ["Ausbildung", "CAD", "technische Gestaltung"],
-  justizfachangestellter: ["Ausbildung", "oeffentlicher Dienst", "Fristen"],
+  justizfachangestellter: ["Ausbildung", "öffentlicher Dienst", "Fristen"],
   gebaeudereiniger: ["Ausbildung", "sichtbare Arbeit", "körperlich"],
   "fachkraft-schutz-sicherheit": ["Ausbildung", "Schicht möglich", "Konflikte"],
   "medizinischer-technologe-laboratorium": ["Ausbildung", "Labor", "medizinische Werte"],
 };
 
 export const careerExpansionLaterNotices: Record<string, string[]> = {
-  vermessungstechniker: ["Du siehst Punkte, wo andere nur Flaeche sehen.", "Eine Grenze wirkt ploetzlich weniger abstrakt.", "Wetter wird Teil deiner Planung."],
-  forstwirt: ["Du liest Baeume anders.", "Romantische Waldbilder werden ungenauer.", "Du merkst, wie viel Arbeit in Wegen steckt."],
-  hoerakustiker: ["Leise Räume fallen dir mehr auf.", "Technik wirkt weniger kalt.", "Du hoerst Unsicherheit in Pausen."],
-  "orthopaedietechnik-mechaniker": ["Du achtest auf Bewegungen.", "Material fühlt sich persoenlicher an.", "Ein Druckpunkt klingt nicht mehr klein."],
-  chemielaborant: ["Etiketten werden wichtiger.", "Sauberkeit meint ploetzlich Sicherheit.", "Warten kann Teil von Genauigkeit sein."],
+  vermessungstechniker: ["Du siehst Punkte, wo andere nur Fläche sehen.", "Eine Grenze wirkt plötzlich weniger abstrakt.", "Wetter wird Teil deiner Planung."],
+  forstwirt: ["Du liest Bäume anders.", "Romantische Waldbilder werden ungenauer.", "Du merkst, wie viel Arbeit in Wegen steckt."],
+  hoerakustiker: ["Leise Räume fallen dir mehr auf.", "Technik wirkt weniger kalt.", "Du hörst Unsicherheit in Pausen."],
+  "orthopaedietechnik-mechaniker": ["Du achtest auf Bewegungen.", "Material fühlt sich persönlicher an.", "Ein Druckpunkt klingt nicht mehr klein."],
+  chemielaborant: ["Etiketten werden wichtiger.", "Sauberkeit meint plötzlich Sicherheit.", "Warten kann Teil von Genauigkeit sein."],
   lokfuehrer: ["Signale wirken größer.", "Alleinsein fühlt sich nicht leer an.", "Routine und Wachheit gehören zusammen."],
   bestattungsfachkraft: ["Leise Details bekommen Gewicht.", "Praktische Fragen wirken weniger kalt.", "Du merkst, wie unterschiedlich Menschen trauern."],
   geomatiker: ["Karten wirken weniger neutral.", "Datenfehler springen dir schneller ins Auge.", "Orte bekommen Layer."],
   werkzeugmechaniker: ["Du siehst Werkzeuge hinter Produkten.", "Fast passend stört dich mehr.", "Metall klingt nach Geduld."],
-  "anlagenmechaniker-shk": ["Wärme wirkt weniger selbstverstaendlich.", "Keller werden interessanter.", "Ein Rohr ist selten nur ein Rohr."],
-  fahrzeuglackierer: ["Licht wird zum Prüfgeraet.", "Farbunterschiede verfolgen dich.", "Vorbereitung wirkt größer als der letzte Spruehgang."],
+  "anlagenmechaniker-shk": ["Wärme wirkt weniger selbstverständlich.", "Keller werden interessanter.", "Ein Rohr ist selten nur ein Rohr."],
+  fahrzeuglackierer: ["Licht wird zum Prüfgerät.", "Farbunterschiede verfolgen dich.", "Vorbereitung wirkt größer als der letzte Sprühgang."],
   zahntechniker: ["Natürlich aussehen wirkt schwieriger.", "Kleine Formen werden ernst.", "Stille Arbeit kann sehr nah am Menschen sein."],
   "operationstechnischer-assistent": ["Reihenfolge beruhigt dich.", "Leise Ansagen wirken wichtiger.", "Vorbereitung bekommt Gewicht."],
   pharmakant: ["Protokolle wirken weniger langweilig.", "Eine Charge klingt nach Verantwortung.", "Saubere Prozesse fallen dir auf."],
-  "umwelttechnologe-abwasser": ["Abfluesse wirken weniger unsichtbar.", "Geruch sagt manchmal etwas Technisches.", "Infrastruktur wird konkreter."],
+  "umwelttechnologe-abwasser": ["Abflüsse wirken weniger unsichtbar.", "Geruch sagt manchmal etwas Technisches.", "Infrastruktur wird konkreter."],
   "technischer-produktdesigner": ["Du fragst schneller: lässt sich das bauen?", "Schöne Formen wirken nicht automatisch richtig.", "Maße werden kreativ."],
   justizfachangestellter: ["Fristen wirken realer.", "Sachlichkeit bekommt einen anderen Wert.", "Akten sind weniger papierhaft."],
-  gebaeudereiniger: ["Saubere Räume wirken weniger zufaellig.", "Ecken fallen dir auf.", "Unsichtbare Arbeit wird sichtbarer."],
-  "fachkraft-schutz-sicherheit": ["Du liest Räume genauer.", "Kleine Unruhe fällt frueher auf.", "Grenzen wirken weniger theoretisch."],
+  gebaeudereiniger: ["Saubere Räume wirken weniger zufällig.", "Ecken fallen dir auf.", "Unsichtbare Arbeit wird sichtbarer."],
+  "fachkraft-schutz-sicherheit": ["Du liest Räume genauer.", "Kleine Unruhe fällt früher auf.", "Grenzen wirken weniger theoretisch."],
   "medizinischer-technologe-laboratorium": ["Proben wirken weniger anonym.", "Werte bekommen Gesichter im Kopf.", "Kontrolle klingt nach Verantwortung."],
 };
 
@@ -1186,7 +1186,7 @@ export const careerExpansionDayMoments: Record<
   vermessungstechniker: [
     { timeLabel: "07:48", text: "Stativ raus. Der Boden ist weich.", realSentence: "Der Punkt muss hier hin." },
     { timeLabel: "09:15", text: "Da steht ein Auto genau falsch." },
-    { timeLabel: "10:40", text: "Noch ein Zentimeter. Nicht ungefaehr." },
+    { timeLabel: "10:40", text: "Noch ein Zentimeter. Nicht ungefähr." },
     { timeLabel: "12:25", text: "Die Koordinate passt nicht zum Plan." },
     { timeLabel: "14:10", text: "Nochmal messen, bevor jemand baut." },
     { timeLabel: "16:05", text: "Der Punkt ist klein. Morgen hängt viel daran." },
@@ -1201,11 +1201,11 @@ export const careerExpansionDayMoments: Record<
   ],
   hoerakustiker: [
     { timeLabel: "09:05", text: "Bitte einmal den Knopf drücken, wenn Sie etwas hören.", realSentence: "War das schon ein Ton?" },
-    { timeLabel: "10:25", text: "Das Geraet ist klein. Die Erwartung nicht." },
+    { timeLabel: "10:25", text: "Das Gerät ist klein. Die Erwartung nicht." },
     { timeLabel: "11:50", text: "Ein Klick lauter. Zu viel." },
     { timeLabel: "13:40", text: "Jetzt klingt die Stimme anders." },
-    { timeLabel: "15:15", text: "Das Ohrpassstueck drückt." },
-    { timeLabel: "16:20", text: "Jemand laechelt, weil die Tuer wieder klingt." },
+    { timeLabel: "15:15", text: "Das Ohrpassstück drückt." },
+    { timeLabel: "16:20", text: "Jemand lächelt, weil die Tür wieder klingt." },
   ],
   "orthopaedietechnik-mechaniker": [
     { timeLabel: "08:10", text: "Gipsstaub auf dem Tisch.", realSentence: "Da drückt es noch." },
@@ -1220,14 +1220,14 @@ export const careerExpansionDayMoments: Record<
     { timeLabel: "09:35", text: "Pipette ruhig halten." },
     { timeLabel: "11:10", text: "Der Wert passt nicht." },
     { timeLabel: "12:55", text: "Nochmal ansetzen. Nicht diskutieren." },
-    { timeLabel: "14:40", text: "Das Geraet piept." },
+    { timeLabel: "14:40", text: "Das Gerät piept." },
     { timeLabel: "16:05", text: "Protokoll fertig. Erst dann ist es fertig." },
   ],
   lokfuehrer: [
-    { timeLabel: "04:58", text: "Dienstbeginn. Kaffee zu heiss.", realSentence: "Signal steht." },
+    { timeLabel: "04:58", text: "Dienstbeginn. Kaffee zu heiß.", realSentence: "Signal steht." },
     { timeLabel: "06:12", text: "Blick nach vorn. Wieder." },
     { timeLabel: "09:30", text: "Funk knackt. Kurz nichts." },
-    { timeLabel: "12:05", text: "Verspaetung. Ruhig bleiben." },
+    { timeLabel: "12:05", text: "Verspätung. Ruhig bleiben." },
     { timeLabel: "14:44", text: "Die Strecke kennt dich nicht." },
     { timeLabel: "16:18", text: "Zug steht. Schultern erst jetzt runter." },
   ],
@@ -1242,14 +1242,14 @@ export const careerExpansionDayMoments: Record<
   geomatiker: [
     { timeLabel: "09:10", text: "Layer an. Layer aus.", realSentence: "Die Koordinate passt nicht." },
     { timeLabel: "10:35", text: "Das Luftbild sagt etwas anderes." },
-    { timeLabel: "12:15", text: "Eine Flaeche verschwindet im falschen Datensatz." },
+    { timeLabel: "12:15", text: "Eine Fläche verschwindet im falschen Datensatz." },
     { timeLabel: "14:00", text: "Export. Fehlermeldung." },
     { timeLabel: "15:30", text: "Jetzt liegt der Ort richtig." },
     { timeLabel: "16:25", text: "Die Karte wirkt ruhig. Endlich." },
   ],
   werkzeugmechaniker: [
-    { timeLabel: "07:30", text: "Zeichnung auf. Mass im Kopf.", realSentence: "Fast reicht nicht." },
-    { timeLabel: "09:05", text: "Fraeser laeuft. Nicht zu schnell." },
+    { timeLabel: "07:30", text: "Zeichnung auf. Maß im Kopf.", realSentence: "Fast reicht nicht." },
+    { timeLabel: "09:05", text: "Fräser läuft. Nicht zu schnell." },
     { timeLabel: "11:40", text: "Nochmal messen." },
     { timeLabel: "13:20", text: "Die Kante ist noch nicht sauber." },
     { timeLabel: "15:00", text: "Einsetzen. Kurz warten." },
@@ -1260,12 +1260,12 @@ export const careerExpansionDayMoments: Record<
     { timeLabel: "09:10", text: "Absperren. Erst dann lösen." },
     { timeLabel: "11:05", text: "Das Teil passt nicht ganz." },
     { timeLabel: "13:30", text: "Wasser auf. Kurz nichts sagen." },
-    { timeLabel: "15:25", text: "Druck haelt." },
+    { timeLabel: "15:25", text: "Druck hält." },
     { timeLabel: "16:40", text: "Im Bad sieht niemand, wie eng es war." },
   ],
   fahrzeuglackierer: [
     { timeLabel: "08:15", text: "Schleifen, bis die Stelle ehrlich ist.", realSentence: "Man sieht es im Licht." },
-    { timeLabel: "10:20", text: "Abkleben dauert laenger als gedacht." },
+    { timeLabel: "10:20", text: "Abkleben dauert länger als gedacht." },
     { timeLabel: "12:05", text: "Der Farbton ist fast richtig." },
     { timeLabel: "13:50", text: "Kabine zu." },
     { timeLabel: "15:35", text: "Ein Staubkorn. Natürlich." },
@@ -1300,12 +1300,12 @@ export const careerExpansionDayMoments: Record<
     { timeLabel: "09:00", text: "Probe nehmen. Deckel zu." },
     { timeLabel: "11:35", text: "Pumpe klingt nicht gut." },
     { timeLabel: "13:10", text: "Handschuhe wechseln." },
-    { timeLabel: "15:00", text: "Stoerung weg. Wasser laeuft." },
+    { timeLabel: "15:00", text: "Störung weg. Wasser läuft." },
     { timeLabel: "16:25", text: "Niemand merkt, dass es heute knapp war." },
   ],
   "technischer-produktdesigner": [
     { timeLabel: "09:05", text: "Modell auf. Änderung rot markiert.", realSentence: "Das passt so nicht rein." },
-    { timeLabel: "10:40", text: "Kante verschieben. Mass springt mit." },
+    { timeLabel: "10:40", text: "Kante verschieben. Maß springt mit." },
     { timeLabel: "12:10", text: "Sieht gut aus. Funktioniert nicht." },
     { timeLabel: "14:30", text: "Neue Variante." },
     { timeLabel: "15:50", text: "Export für Rückfrage." },
@@ -1337,11 +1337,11 @@ export const careerExpansionDayMoments: Record<
   ],
   "medizinischer-technologe-laboratorium": [
     { timeLabel: "07:55", text: "Probe rein. Name prüfen.", realSentence: "Der Wert passt nicht." },
-    { timeLabel: "09:25", text: "Geraet laeuft. Kontrolle daneben." },
+    { timeLabel: "09:25", text: "Gerät läuft. Kontrolle daneben." },
     { timeLabel: "11:10", text: "Nochmal messen." },
     { timeLabel: "13:40", text: "Telefon aus der Station." },
     { timeLabel: "15:05", text: "Befund raus." },
-    { timeLabel: "16:20", text: "Viele Menschen waren heute Roehrchen." },
+    { timeLabel: "16:20", text: "Viele Menschen waren heute Röhrchen." },
   ],
 };
 
@@ -1350,21 +1350,21 @@ export const careerExpansionRealSentences: Record<string, string[]> = {
   forstwirt: ["Der hängt unter Spannung.", "Abstand halten.", "Säge aus.", "Der Weg muss frei.", "Wetter wird nicht besser."],
   hoerakustiker: ["War das schon ein Ton?", "Ein Klick leiser.", "Drückt das?", "So klingt es besser?", "Wir probieren es nochmal."],
   "orthopaedietechnik-mechaniker": ["Da drückt es noch.", "Einmal gehen bitte.", "Die Kante muss weicher.", "Das sitzt fast.", "Wir passen es an."],
-  chemielaborant: ["Welche Probe war das?", "Nochmal ansetzen.", "Der Wert passt nicht.", "Etikett zuerst.", "Das Geraet piept."],
-  lokfuehrer: ["Signal steht.", "Funk bitte wiederholen.", "Abfahrt.", "Stoerung auf der Strecke.", "Blick nach vorn."],
+  chemielaborant: ["Welche Probe war das?", "Nochmal ansetzen.", "Der Wert passt nicht.", "Etikett zuerst.", "Das Gerät piept."],
+  lokfuehrer: ["Signal steht.", "Funk bitte wiederholen.", "Abfahrt.", "Störung auf der Strecke.", "Blick nach vorn."],
   bestattungsfachkraft: ["Was müssen wir jetzt tun?", "Ganz in Ruhe.", "Der Termin steht.", "Schlicht bitte.", "Ich kümmere mich darum."],
-  geomatiker: ["Die Koordinate passt nicht.", "Layer aus.", "Das Luftbild ist aelter.", "Export laeuft.", "Die Flaeche fehlt."],
-  werkzeugmechaniker: ["Fast reicht nicht.", "Nochmal messen.", "Die Kante ist zu hart.", "Das Werkzeug sitzt.", "Maschine laeuft."],
-  "anlagenmechaniker-shk": ["Seit gestern bleibt es kalt.", "Wasser ist abgestellt.", "Das Teil passt nicht.", "Druck haelt.", "Kurz warten."],
+  geomatiker: ["Die Koordinate passt nicht.", "Layer aus.", "Das Luftbild ist älter.", "Export läuft.", "Die Fläche fehlt."],
+  werkzeugmechaniker: ["Fast reicht nicht.", "Nochmal messen.", "Die Kante ist zu hart.", "Das Werkzeug sitzt.", "Maschine läuft."],
+  "anlagenmechaniker-shk": ["Seit gestern bleibt es kalt.", "Wasser ist abgestellt.", "Das Teil passt nicht.", "Druck hält.", "Kurz warten."],
   fahrzeuglackierer: ["Man sieht es im Licht.", "Der Farbton ist fast richtig.", "Nochmal schleifen.", "Kabine zu.", "Da ist Staub drin."],
   zahntechniker: ["Die Farbe stimmt noch nicht.", "Die Kante ist zu hart.", "Nochmal brennen.", "Das wirkt natürlicher.", "Modell ist da."],
   "operationstechnischer-assistent": ["Hast du das Sieb komplett?", "Steril bleiben.", "Instrument bitte.", "Zählen wir nochmal.", "Saal ist bereit."],
   pharmakant: ["Welche Charge ist das?", "Abweichung stoppen.", "Freigabe fehlt.", "Wert eintragen.", "Erst reinigen."],
-  "umwelttechnologe-abwasser": ["Der Wert ist zu hoch.", "Pumpe zwei klingt anders.", "Probe ist raus.", "Deckel zu.", "Stoerung ist weg."],
+  "umwelttechnologe-abwasser": ["Der Wert ist zu hoch.", "Pumpe zwei klingt anders.", "Probe ist raus.", "Deckel zu.", "Störung ist weg."],
   "technischer-produktdesigner": ["Das passt so nicht rein.", "Kante verschieben.", "Welche Version?", "Export ist fertig.", "Die Bohrung kollidiert."],
   justizfachangestellter: ["Die Akte fehlt.", "Frist ist morgen.", "Ich verbinde Sie.", "Das muss schriftlich rein.", "Datum prüfen."],
   gebaeudereiniger: ["Wo ist der Wagen?", "Glas zeigt alles.", "Der Fleck bleibt.", "Noch ein Raum.", "Maschine ist leer."],
-  "fachkraft-schutz-sicherheit": ["Einmal den Ausweis bitte.", "Bitte hier warten.", "Rundgang ist frei.", "Nicht durch diese Tuer.", "Ich klaere das."],
+  "fachkraft-schutz-sicherheit": ["Einmal den Ausweis bitte.", "Bitte hier warten.", "Rundgang ist frei.", "Nicht durch diese Tür.", "Ich kläre das."],
   "medizinischer-technologe-laboratorium": ["Der Wert passt nicht.", "Probe wiederholen.", "Name prüfen.", "Befund ist raus.", "Kontrolle zuerst."],
 };
 
@@ -1380,8 +1380,8 @@ export const careerExpansionDifferenceMoments: Record<string, CareerDifferenceMo
     { time: "16:00", setup: "Pflege sieht nicht weich aus.", lines: { forstwirt: "Der Wald wirkt später anders.", tierpfleger: "Das Tier wirkt vielleicht nur ein bisschen ruhiger." } },
   ],
   "hoerakustiker__medizinische-fachangestellte": [
-    { time: "09:05", setup: "Jemand ist unsicher.", lines: { hoerakustiker: "Du gehst in Klang, Geraet, Einstellung.", "medizinische-fachangestellte": "Du haeltst Termin, Telefon, Wartezimmer." } },
-    { time: "11:40", setup: "Es geht um Gesundheit.", lines: { hoerakustiker: "Technik wird sehr persoenlich.", "medizinische-fachangestellte": "Organisation wird sehr menschlich." } },
+    { time: "09:05", setup: "Jemand ist unsicher.", lines: { hoerakustiker: "Du gehst in Klang, Gerät, Einstellung.", "medizinische-fachangestellte": "Du hältst Termin, Telefon, Wartezimmer." } },
+    { time: "11:40", setup: "Es geht um Gesundheit.", lines: { hoerakustiker: "Technik wird sehr persönlich.", "medizinische-fachangestellte": "Organisation wird sehr menschlich." } },
     { time: "15:15", setup: "Ein kleiner Satz bleibt.", lines: { hoerakustiker: "Jetzt klingt es anders.", "medizinische-fachangestellte": "Wir finden noch einen Termin." } },
   ],
   "hoerakustiker__zahntechniker": [
@@ -1405,24 +1405,24 @@ export const careerExpansionDifferenceMoments: Record<string, CareerDifferenceMo
     { time: "15:30", setup: "Alles ist dokumentiert.", lines: { chemielaborant: "Damit das Ergebnis stimmt.", pharmakant: "Damit der Prozess nachvollziehbar bleibt." } },
   ],
   "lokfuehrer__zugbegleiter": [
-    { time: "07:42", setup: "Der Zug faehrt.", lines: { lokfuehrer: "Du bist vorne allein mit Strecke und Signal.", zugbegleiter: "Du bist hinten mit Menschen und Stimmung." } },
-    { time: "13:18", setup: "Verspaetung.", lines: { lokfuehrer: "Du haeltst Ablauf und Sicherheit.", zugbegleiter: "Du haeltst Fragen und Frust." } },
+    { time: "07:42", setup: "Der Zug fährt.", lines: { lokfuehrer: "Du bist vorne allein mit Strecke und Signal.", zugbegleiter: "Du bist hinten mit Menschen und Stimmung." } },
+    { time: "13:18", setup: "Verspätung.", lines: { lokfuehrer: "Du hältst Ablauf und Sicherheit.", zugbegleiter: "Du hältst Fragen und Frust." } },
     { time: "16:18", setup: "Ankommen.", lines: { lokfuehrer: "Die Verantwortung war leise.", zugbegleiter: "Die Verantwortung hatte Gesichter." } },
   ],
   "bestattungsfachkraft__florist": [
     { time: "09:50", setup: "Ein Anlass ist schwer.", lines: { bestattungsfachkraft: "Du ordnest den Abschied.", florist: "Du suchst den Ton in Blumen." } },
-    { time: "12:05", setup: "Schlicht bitte.", lines: { bestattungsfachkraft: "Schlicht heisst wuerdevoll im Ablauf.", florist: "Schlicht heisst wuerdevoll im Strauß." } },
+    { time: "12:05", setup: "Schlicht bitte.", lines: { bestattungsfachkraft: "Schlicht heißt würdevoll im Ablauf.", florist: "Schlicht heißt würdevoll im Strauß." } },
     { time: "15:10", setup: "Der Raum soll stimmen.", lines: { bestattungsfachkraft: "Damit Menschen Halt finden.", florist: "Damit etwas unausgesprochenes sichtbar wird." } },
   ],
   "industriemechaniker__werkzeugmechaniker": [
     { time: "08:00", setup: "Metall stimmt fast.", lines: { industriemechaniker: "Die Anlage soll wieder laufen.", werkzeugmechaniker: "Das Werkzeug soll wiederholbar passen." } },
     { time: "11:40", setup: "Nochmal messen.", lines: { industriemechaniker: "Damit Bewegung sauber bleibt.", werkzeugmechaniker: "Damit später viele Teile sauber werden." } },
-    { time: "15:30", setup: "Es funktioniert.", lines: { industriemechaniker: "Man hoert es in der Halle.", werkzeugmechaniker: "Man merkt es im nächsten Prozess." } },
+    { time: "15:30", setup: "Es funktioniert.", lines: { industriemechaniker: "Man hört es in der Halle.", werkzeugmechaniker: "Man merkt es im nächsten Prozess." } },
   ],
   "anlagenmechaniker-shk__elektroniker": [
     { time: "08:40", setup: "Technik im Haus streikt.", lines: { "anlagenmechaniker-shk": "Du denkst an Wasser, Wärme, Druck.", elektroniker: "Du denkst an Leitung, Spannung, Sicherung." } },
-    { time: "12:10", setup: "Der Plan passt nicht.", lines: { "anlagenmechaniker-shk": "Vielleicht liegt ein Rohr anders.", elektroniker: "Vielleicht laeuft ein Kabel anders." } },
-    { time: "16:00", setup: "Es laeuft wieder.", lines: { "anlagenmechaniker-shk": "Jemand hat wieder Wärme oder Wasser.", elektroniker: "Jemand hat wieder Strom oder Licht." } },
+    { time: "12:10", setup: "Der Plan passt nicht.", lines: { "anlagenmechaniker-shk": "Vielleicht liegt ein Rohr anders.", elektroniker: "Vielleicht läuft ein Kabel anders." } },
+    { time: "16:00", setup: "Es läuft wieder.", lines: { "anlagenmechaniker-shk": "Jemand hat wieder Wärme oder Wasser.", elektroniker: "Jemand hat wieder Strom oder Licht." } },
   ],
   "fahrzeuglackierer__mediengestalter": [
     { time: "09:25", setup: "Farbe stimmt fast.", lines: { fahrzeuglackierer: "Das Licht auf Blech entscheidet.", mediengestalter: "Der Bildschirm und Eindruck entscheiden." } },
@@ -1431,22 +1431,22 @@ export const careerExpansionDifferenceMoments: Record<string, CareerDifferenceMo
   ],
   "operationstechnischer-assistent__pflegefachkraft": [
     { time: "07:20", setup: "Medizinische Nähe.", lines: { "operationstechnischer-assistent": "Du bereitest den ernsten Ablauf vor.", pflegefachkraft: "Du bleibst im laufenden Alltag nah dran." } },
-    { time: "10:50", setup: "Es muss ruhig bleiben.", lines: { "operationstechnischer-assistent": "Ruhe kommt aus Sterilitaet und Reihenfolge.", pflegefachkraft: "Ruhe kommt aus Beobachtung und Beziehung." } },
+    { time: "10:50", setup: "Es muss ruhig bleiben.", lines: { "operationstechnischer-assistent": "Ruhe kommt aus Sterilität und Reihenfolge.", pflegefachkraft: "Ruhe kommt aus Beobachtung und Beziehung." } },
     { time: "16:30", setup: "Der Tag bleibt im Körper.", lines: { "operationstechnischer-assistent": "Vom Stehen und der Konzentration.", pflegefachkraft: "Von Nähe, Wegen und vielen kleinen Hilfen." } },
   ],
   "anlagenmechaniker-shk__umwelttechnologe-abwasser": [
     { time: "09:00", setup: "Wasser ist das Problem.", lines: { "anlagenmechaniker-shk": "Du stehst im Haus eines Menschen.", "umwelttechnologe-abwasser": "Du stehst an einem System für viele." } },
-    { time: "13:10", setup: "Es riecht, tropft oder laeuft falsch.", lines: { "anlagenmechaniker-shk": "Die Loesung ist nah am Kunden.", "umwelttechnologe-abwasser": "Die Loesung ist nah an Infrastruktur." } },
+    { time: "13:10", setup: "Es riecht, tropft oder läuft falsch.", lines: { "anlagenmechaniker-shk": "Die Lösung ist nah am Kunden.", "umwelttechnologe-abwasser": "Die Lösung ist nah an Infrastruktur." } },
     { time: "16:25", setup: "Es funktioniert wieder.", lines: { "anlagenmechaniker-shk": "Der Haushalt merkt es sofort.", "umwelttechnologe-abwasser": "Die Stadt merkt es eher nicht." } },
   ],
   "bauzeichner__technischer-produktdesigner": [
     { time: "09:10", setup: "Ein Modell stimmt nicht.", lines: { bauzeichner: "Später könnte ein Raum falsch werden.", "technischer-produktdesigner": "Später könnte ein Produkt nicht funktionieren." } },
-    { time: "12:10", setup: "Sieht gut aus.", lines: { bauzeichner: "Aber das Mass muss zum Bau passen.", "technischer-produktdesigner": "Aber die Form muss zur Funktion passen." } },
+    { time: "12:10", setup: "Sieht gut aus.", lines: { bauzeichner: "Aber das Maß muss zum Bau passen.", "technischer-produktdesigner": "Aber die Form muss zur Funktion passen." } },
     { time: "15:35", setup: "Änderung kommt rein.", lines: { bauzeichner: "Wand, Schnitt, Version.", "technischer-produktdesigner": "Kante, Bohrung, Variante." } },
   ],
   "justizfachangestellter__kaufmann-bueromanagement": [
     { time: "09:00", setup: "Ein Vorgang ist offen.", lines: { justizfachangestellter: "Frist und Akte haben offiziellen Druck.", "kaufmann-bueromanagement": "Mail und Kalender haben organisatorischen Druck." } },
-    { time: "11:30", setup: "Ordnung verhindert Aerger.", lines: { justizfachangestellter: "Sonst kann es rechtlich ernst werden.", "kaufmann-bueromanagement": "Sonst sucht morgen das ganze Buero." } },
+    { time: "11:30", setup: "Ordnung verhindert Ärger.", lines: { justizfachangestellter: "Sonst kann es rechtlich ernst werden.", "kaufmann-bueromanagement": "Sonst sucht morgen das ganze Büro." } },
     { time: "15:55", setup: "Ein Schreiben geht raus.", lines: { justizfachangestellter: "Es klingt sachlich, weil es muss.", "kaufmann-bueromanagement": "Es klingt sachlich, weil es helfen soll." } },
   ],
   "fachkraft-lagerlogistik__gebaeudereiniger": [
@@ -1455,7 +1455,7 @@ export const careerExpansionDifferenceMoments: Record<string, CareerDifferenceMo
     { time: "16:05", setup: "Danach ist es anders.", lines: { "fachkraft-lagerlogistik": "Niemand sucht lange.", gebaeudereiniger: "Niemand merkt den Raum negativ." } },
   ],
   "fachkraft-schutz-sicherheit__zugbegleiter": [
-    { time: "10:10", setup: "Menschen werden unruhig.", lines: { "fachkraft-schutz-sicherheit": "Du beobachtest Grenzen im Raum.", zugbegleiter: "Du haeltst Stimmung unterwegs." } },
+    { time: "10:10", setup: "Menschen werden unruhig.", lines: { "fachkraft-schutz-sicherheit": "Du beobachtest Grenzen im Raum.", zugbegleiter: "Du hältst Stimmung unterwegs." } },
     { time: "13:18", setup: "Ein Satz muss klar sein.", lines: { "fachkraft-schutz-sicherheit": "Bitte hier warten.", zugbegleiter: "Der Anschluss wartet nicht." } },
     { time: "19:05", setup: "Nichts eskaliert.", lines: { "fachkraft-schutz-sicherheit": "Vielleicht war genau das die Arbeit.", zugbegleiter: "Vielleicht war genau das der Ton." } },
   ],
