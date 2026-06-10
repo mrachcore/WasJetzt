@@ -3475,7 +3475,7 @@ export const quizQuestions = [
   {
     id: "someone-needs-you",
     scene: "Jemand steht vor dir und braucht jetzt eine Antwort.",
-    prompt: "Was geht schneller bei dir?",
+    prompt: "Was machst du eher von selbst?",
     answers: [
       {
         label: "ruhig bleiben und zuhören",
@@ -3496,7 +3496,7 @@ export const quizQuestions = [
         ],
       },
       {
-        label: "praktisch helfen, Schritt für Schritt",
+        label: "Schritt für Schritt helfen",
         signals: {
           hands_on: 3,
           problem_solving: 3,
